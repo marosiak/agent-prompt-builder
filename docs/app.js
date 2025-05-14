@@ -13,7 +13,7 @@ var goappOnAppInstallChange = function () {
   goappAppInstallChangedBeforeWasmLoaded = true;
 };
 
-const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/makerworld-analytics","GOAPP_STATIC_RESOURCES_URL":"/makerworld-analytics/web","GOAPP_VERSION":"42b112d5869ac05d3d64b1cf6ee8de9e37cbcb42"};
+const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/makerworld-analytics","GOAPP_STATIC_RESOURCES_URL":"/makerworld-analytics/web","GOAPP_VERSION":"5cd80e5c324cbf67811d0abf4d54892791312ac9"};
 const goappLoadingLabel = "{progress}%";
 const goappWasmContentLength = "";
 const goappWasmContentLengthHeader = "";

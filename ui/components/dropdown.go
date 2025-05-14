@@ -39,7 +39,7 @@ func (d *DropdownComponent[T]) onClick(value any) func(ctx app.Context, e app.Ev
 
 func (d *DropdownComponent[T]) Render() app.UI {
 	return app.Div().Class(fmt.Sprintf("dropdown dropdown-hover %s", d.Class)).Body(
-		app.Div().TabIndex(0).Role("button").Class("btn m-1").Text(d.Text),
+		app.Div().TabIndex(0).Role("button").Class("btn").Text(d.Text),
 		app.Ul().TabIndex(0).Class("dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm").Body(
 			app.Range(d.OptionDataList).Slice(func(i int) app.UI {
 				return app.Li().OnClick(d.onClick(d.OptionDataList[i].Value)).Body(

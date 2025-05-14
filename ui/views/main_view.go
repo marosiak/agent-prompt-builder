@@ -126,11 +126,6 @@ func (m *MainView) renderTeam() *components.CardComponent {
 			),
 			app.Range(m.MasterPrompt.TeamPreset.Values).Slice(func(i int) app.UI {
 				var member = m.MasterPrompt.TeamPreset.Values[i]
-				var handleEmojiChange = func(ctx app.Context, e app.Event) {
-					newEmoji := ctx.JSSrc().Get("value").String()
-					m.MasterPrompt.TeamPreset.Values[i].EmojiIcon = newEmoji
-					state.SetMasterPrompt(ctx, m.MasterPrompt)
-				}
 
 				var handleNameChange = func(ctx app.Context, e app.Event) {
 					newName := ctx.JSSrc().Get("value").String()
@@ -143,11 +138,35 @@ func (m *MainView) renderTeam() *components.CardComponent {
 					m.MasterPrompt.TeamPreset.Values[i].Role = newRole
 					state.SetMasterPrompt(ctx, m.MasterPrompt)
 				}
+				emojisList := []components.OptionData{}
+
+				for _, emoji := range domain.EmojiList {
+					emojisList = append(emojisList, components.OptionData{
+						Label: emoji,
+						Value: emoji,
+					})
+				}
+
+				handleEmojiChange := func(ctx app.Context, value string) {
+					if value == "" {
+						return
+					}
+
+					m.MasterPrompt.TeamPreset.Values[i].EmojiIcon = value
+					state.SetMasterPrompt(ctx, m.MasterPrompt)
+				}
+
 				return &components.CardComponent{
 					Body: []app.UI{
 						app.Div().Class("flex flex-row align-center mb-6").Body(
-							app.Input().Class("input input-md w-18 mb-1 mr-2").Max(5).Type("text").Placeholder("emoji").
-								Value(member.EmojiIcon).OnChange(handleEmojiChange).OnKeyUp(handleEmojiChange),
+
+							&components.DropdownComponent[string]{
+								OptionDataList: emojisList,
+								Text:           member.EmojiIcon,
+								OnClick:        handleEmojiChange,
+								Class:          "mr-2",
+							},
+
 							app.Input().Class("input input-md w-full mb-1").Type("text").Placeholder("Put team member name here").
 								Value(member.Name).OnChange(handleNameChange).OnKeyUp(handleNameChange),
 							app.If(member.Name != "", func() app.UI {
