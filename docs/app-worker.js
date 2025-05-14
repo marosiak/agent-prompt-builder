@@ -1,12 +1,12 @@
 // -----------------------------------------------------------------------------
 // PWA
 // -----------------------------------------------------------------------------
-const cacheName = "app-" + "5cd80e5c324cbf67811d0abf4d54892791312ac9";
-const resourcesToCache = ["https://go-echarts.github.io/go-echarts-assets/assets/echarts.min.js","https://cdn.jsdelivr.net/npm/daisyui@5","https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4","/makerworld-analytics/web/icon_x512.png","/makerworld-analytics/web/icon_x192.png","/makerworld-analytics/web/app.wasm","/makerworld-analytics/wasm_exec.js","/makerworld-analytics/manifest.webmanifest","/makerworld-analytics/app.js","/makerworld-analytics/app.css","/makerworld-analytics"];
+const cacheName = "app-" + "1a4942c8447af7e430b0e0d0fd4752ff465b27a1";
+const resourcesToCache = ["https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png","https://cdn.jsdelivr.net/npm/daisyui@5","https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4","/agent-prompt-builder/web/app.wasm","/agent-prompt-builder/wasm_exec.js","/agent-prompt-builder/manifest.webmanifest","/agent-prompt-builder/app.js","/agent-prompt-builder/app.css","/agent-prompt-builder"];
 
 self.addEventListener("install", async (event) => {
   try {
-    console.log("installing app worker 5cd80e5c324cbf67811d0abf4d54892791312ac9");
+    console.log("installing app worker 1a4942c8447af7e430b0e0d0fd4752ff465b27a1");
     await installWorker();
     await self.skipWaiting();
   } catch (error) {
@@ -23,7 +23,7 @@ self.addEventListener("activate", async (event) => {
   try {
     await deletePreviousCaches(); // Await cache cleanup
     await self.clients.claim(); // Ensure the service worker takes control of the clients
-    console.log("app worker 5cd80e5c324cbf67811d0abf4d54892791312ac9 is activated");
+    console.log("app worker 1a4942c8447af7e430b0e0d0fd4752ff465b27a1 is activated");
   } catch (error) {
     console.error("error during activation:", error);
   }

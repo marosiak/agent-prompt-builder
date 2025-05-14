@@ -3,8 +3,8 @@ package views
 import (
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 	"log/slog"
-	"makerworld-analytics/domain"
-	"makerworld-analytics/state"
+	"github.com/marosiak/agent-prompt-builder/domain"
+	"github.com/marosiak/agent-prompt-builder/state"
 )
 
 type ImportView struct {

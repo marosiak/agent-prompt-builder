@@ -3,9 +3,9 @@ package views
 import (
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 	"log/slog"
-	"makerworld-analytics/domain"
-	"makerworld-analytics/state"
-	"makerworld-analytics/ui/components"
+	"github.com/marosiak/agent-prompt-builder/domain"
+	"github.com/marosiak/agent-prompt-builder/state"
+	"github.com/marosiak/agent-prompt-builder/ui/components"
 	"sort"
 	"strconv"
 )

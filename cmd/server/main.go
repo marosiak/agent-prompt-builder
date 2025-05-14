@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/marosiak/agent-prompt-builder/ui/views"
 	"log"
-	"makerworld-analytics/ui/views"
 	"net/http"
 
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
@@ -24,15 +24,8 @@ func main() {
 	http.Handle("/", &app.Handler{
 		Name:        "Master prompt builder",
 		Description: "Will help you with building agents",
-		Scripts:     []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4", "https://go-echarts.github.io/go-echarts-assets/assets/echarts.min.js"},
+		Scripts:     []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"},
 		Styles:      []string{"https://cdn.jsdelivr.net/npm/daisyui@5"},
-
-		Icon: app.Icon{
-			Default:  "/web/icon_x192.png",
-			Large:    "/web/icon_x512.png",
-			Maskable: "/web/icon_x512.png",
-			SVG:      "/web/icon_x512.svg",
-		},
 	})
 
 	if err := http.ListenAndServe(":8000", nil); err != nil {

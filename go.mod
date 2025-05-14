@@ -1,4 +1,4 @@
-module makerworld-analytics
+module github.com/marosiak/agent-prompt-builder
 
 go 1.23.4
 

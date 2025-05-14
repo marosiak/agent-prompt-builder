@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/marosiak/agent-prompt-builder/ui/views"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 	"log"
-	"makerworld-analytics/ui/views"
 )
 
 func main() {
@@ -12,20 +12,18 @@ func main() {
 		return &views.MainView{}
 	})
 
+	app.Route("/import", func() app.Composer {
+		return &views.ImportView{}
+	})
+
 	app.RunWhenOnBrowser()
 
 	err := app.GenerateStaticWebsite(".", &app.Handler{
 		Name:        "Master prompt builder",
 		Description: "Will help you with building agents",
-		Resources:   app.GitHubPages("makerworld-analytics"),
-		Scripts:     []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4", "https://go-echarts.github.io/go-echarts-assets/assets/echarts.min.js"},
+		Resources:   app.GitHubPages("agent-prompt-builder"),
+		Scripts:     []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"},
 		Styles:      []string{"https://cdn.jsdelivr.net/npm/daisyui@5"},
-		Icon: app.Icon{
-			Default:  "/web/icon_x192.png",
-			Large:    "/web/icon_x512.png",
-			Maskable: "/web/icon_x512.png",
-			SVG:      "/web/icon_x512.svg",
-		},
 	})
 
 	if err != nil {

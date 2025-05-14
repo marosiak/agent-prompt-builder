@@ -3,7 +3,7 @@ package state
 import (
 	"github.com/google/uuid"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
-	"makerworld-analytics/domain"
+	"github.com/marosiak/agent-prompt-builder/domain"
 	"reflect"
 )
 
