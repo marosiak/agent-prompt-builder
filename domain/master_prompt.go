@@ -1,9 +1,12 @@
 package domain
 
 import (
+	"bytes"
+	"compress/zlib"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log/slog"
 	"slices"
 	"strings"
@@ -108,28 +111,50 @@ type MasterPrompt struct {
 	RulePreset  RulePreset           `json:"rule_presets"`
 }
 
+
 func (m *MasterPrompt) ToBase64() (string, error) {
 	by, err := json.Marshal(m)
 	if err != nil {
 		return "", fmt.Errorf("failed to marshal master prompt: %w", err)
 	}
 
-	return base64.StdEncoding.EncodeToString(by), nil
+	var buf bytes.Buffer
+	zw := zlib.NewWriter(&buf)
+	_, err = zw.Write(by)
+	if err != nil {
+		return "", fmt.Errorf("failed to zlib compress: %w", err)
+	}
+	zw.Close()
+
+	return base64.RawURLEncoding.EncodeToString(buf.Bytes()), nil
 }
 
 func (m *MasterPrompt) FromBase64(input string) error {
-	by, err := base64.StdEncoding.DecodeString(input)
+	by, err := base64.RawURLEncoding.DecodeString(input)
 	if err != nil {
-		return fmt.Errorf("failed to decode input string: %w", err)
+		return fmt.Errorf("failed to decode base64 input: %w", err)
 	}
 
-	err = json.Unmarshal(by, m)
+	zr, err := zlib.NewReader(bytes.NewReader(by))
+	if err != nil {
+		return fmt.Errorf("failed to create zlib reader: %w", err)
+	}
+	defer zr.Close()
+
+	decompressed, err := io.ReadAll(zr)
+	if err != nil {
+		return fmt.Errorf("failed to decompress zlib data: %w", err)
+	}
+
+	// Unmarshal JSON
+	err = json.Unmarshal(decompressed, m)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal master prompt: %w", err)
 	}
 
 	return nil
 }
+
 
 // TODO: There are better ways to deal with it, first of all data should be stored by ID in order to identify it quicker
 func (m *MasterPrompt) UpdateValueByID(id string, name *string, weight *int) {

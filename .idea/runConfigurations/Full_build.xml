@@ -13,7 +13,7 @@
       </ENTRIES>
     </EXTENSION>
     <kind value="PACKAGE" />
-    <package value="makerworld-analytics/cmd/server" />
+    <package value="github.com/marosiak/agent-prompt-builder/cmd/server" />
     <directory value="$PROJECT_DIR$" />
     <filePath value="$PROJECT_DIR$/main.go" />
     <method v="2">
