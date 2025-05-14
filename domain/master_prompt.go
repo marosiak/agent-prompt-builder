@@ -123,8 +123,6 @@ func (m *MasterPrompt) FromBase64(input string) error {
 		return fmt.Errorf("failed to decode input string: %w", err)
 	}
 
-	slog.Info("Decoded input", slog.String("input", string(by)))
-
 	err = json.Unmarshal(by, m)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal master prompt: %w", err)

@@ -46,14 +46,11 @@ func (i *ImportView) importData() func(ctx app.Context, e app.Event) {
 	return func(ctx app.Context, e app.Event) {
 		defer i.redirectHome(ctx)
 		data := ctx.Page().URL().Query().Get("data")
-		slog.Info("Importing data", "data", data)
-		slog.Info("x1")
 		if data == "" {
 			// TODO: Handle error
 			slog.Error("No data provided for import")
 			return
 		}
-		slog.Info("x2")
 
 		i.MasterPrompt = new(domain.MasterPrompt)
 		err := i.MasterPrompt.FromBase64(data)

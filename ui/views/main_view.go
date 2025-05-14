@@ -21,12 +21,9 @@ func (m *MainView) OnAppUpdate(ctx app.Context) {
 }
 
 func (m *MainView) OnMount(ctx app.Context) {
-	src := ctx.Page().URL().Query().Get("src")
-	if src != "" {
-		slog.Info("aaaaaaaaaaaaaaaaaaaaasrc", "src", src)
-	}
 	ctx.Dispatch(func(ctx app.Context) {
-		m.MasterPrompt = state.GetMasterPrompt(ctx)
+		masterPromptCopy := state.GetMasterPrompt(ctx)
+		m.MasterPrompt = &masterPromptCopy
 	})
 }
 
@@ -100,10 +97,33 @@ func (m *MainView) copyLinkPressed() func(ctx app.Context, e app.Event) {
 }
 
 func (m *MainView) renderTeam() *components.CardComponent {
+	var presetsToSelect []components.OptionData
+	for name, template := range domain.TeamPresetsMap {
+		presetsToSelect = append(presetsToSelect, components.OptionData{
+			Label: name,
+			Value: template,
+		})
+	}
+	sort.Slice(presetsToSelect, func(i, j int) bool {
+		return len(presetsToSelect[i].Label) < len(presetsToSelect[j].Label)
+	})
 	return &components.CardComponent{
 		Body: []app.UI{
-			app.H2().Text("👨‍💻 Team").Class("text-xl font-bold mb-4"),
-			app.P().Class("text-md opacity-80 mb-12").Text("Describe your team members, their roles and features"),
+			app.Div().Class("flex flex-row justify-between mb-4").Body(
+				app.Div().Class("flex flex-col").Body(
+					app.H2().Text("👨‍💻 Team").Class("text-xl font-bold mb-4"),
+					app.P().Class("text-md opacity-80 mb-12").Text("Describe your team members, their roles and features"),
+				),
+				&components.DropdownComponent[domain.TeamPreset]{
+					OptionDataList: presetsToSelect,
+					Text:           "Select preset",
+					OnClick: func(ctx app.Context, value domain.TeamPreset) {
+						teamPreset := value
+						m.MasterPrompt.TeamPreset = teamPreset
+						state.SetMasterPrompt(ctx, m.MasterPrompt)
+					},
+				},
+			),
 			app.Range(m.MasterPrompt.TeamPreset.Values).Slice(func(i int) app.UI {
 				var member = m.MasterPrompt.TeamPreset.Values[i]
 				var handleEmojiChange = func(ctx app.Context, e app.Event) {
@@ -206,10 +226,35 @@ func (m *MainView) renderStyle() *components.CardComponent {
 }
 
 func (m *MainView) renderRules() *components.CardComponent {
+	var presetsToSelect []components.OptionData
+	for name, template := range domain.RulesPresetsMap {
+		presetsToSelect = append(presetsToSelect, components.OptionData{
+			Label: name,
+			Value: template,
+		})
+	}
+
+	sort.Slice(presetsToSelect, func(i, j int) bool {
+		return len(presetsToSelect[i].Label) < len(presetsToSelect[j].Label)
+	})
+
 	return &components.CardComponent{
 		Body: []app.UI{
-			app.H2().Text("📜 Rules").Class("text-xl font-bold mb-4"),
-			app.P().Class("text-md opacity-80 mb-12").Text("It's great to give positive rules instead negative, like 'do this' instead 'don't do this' "),
+			app.Div().Class("flex flex-row justify-between mb-4").Body(
+				app.Div().Class("flex flex-col").Body(
+					app.H2().Text("📜 Rules").Class("text-xl font-bold mb-4"),
+					app.P().Class("text-md opacity-80 mb-12").Text("It's great to give positive rules instead negative, like 'do this' instead 'don't do this' "),
+				),
+				&components.DropdownComponent[domain.RulePreset]{
+					OptionDataList: presetsToSelect,
+					Text:           "Select preset",
+					OnClick: func(ctx app.Context, value domain.RulePreset) {
+						rulesPreset := value
+						m.MasterPrompt.RulePreset = rulesPreset
+						state.SetMasterPrompt(ctx, m.MasterPrompt)
+					},
+				},
+			),
 
 			app.Div().Class("flex flex-row justify-between mb-6").Body(
 				app.H3().Class("text-xl").Text("Rule"),

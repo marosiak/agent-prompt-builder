@@ -4,73 +4,40 @@ import (
 	"github.com/google/uuid"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 	"makerworld-analytics/domain"
+	"reflect"
 )
 
 func Key() string {
 	return "master-prompt-recipe"
 }
 
-func SetMasterPrompt(ctx app.Context, masterPrompt *domain.MasterPrompt) {
-	addOneEmptyField(masterPrompt)
-	ctx.SetState(Key(), masterPrompt).Persist()
-}
-
 func DelMasterPrompt(ctx app.Context) {
 	ctx.DelState(Key())
 }
+func SetMasterPrompt(ctx app.Context, masterPrompt *domain.MasterPrompt) {
+	addOneEmptyField(masterPrompt)
+	ctx.SetState(Key(), *masterPrompt).Persist()
+}
 
-func GetMasterPrompt(ctx app.Context) *domain.MasterPrompt {
-	var masterPrompt *domain.MasterPrompt
+func GetMasterPrompt(ctx app.Context) domain.MasterPrompt {
+	var masterPrompt domain.MasterPrompt
 	ctx.GetState(Key(), &masterPrompt)
 
-	if masterPrompt == nil {
+	if reflect.DeepEqual(masterPrompt, domain.MasterPrompt{}) {
 		masterPrompt = getDefaultMasterPrompt()
-		SetMasterPrompt(ctx, masterPrompt)
+		SetMasterPrompt(ctx, &masterPrompt)
 	}
-
-	addOneEmptyField(masterPrompt) // adds empty field for each feature, like empty rule, empty style, empty team member - so it's easier to manage UI
+	addOneEmptyField(&masterPrompt) // <-- OK, bo &masterPrompt jest *domain.MasterPrompt
 	return masterPrompt
 }
 
 // possibly could be stored in domain
-func getDefaultMasterPrompt() *domain.MasterPrompt {
-	return &domain.MasterPrompt{
-		Template: domain.TestTemplate,
-		StylePreset: domain.StylePreset{
-			Values: []domain.Style{
-				{
-					ID:     uuid.New().String(),
-					Name:   "",
-					Weight: 100,
-				},
-			},
-		},
-		RulePreset: domain.RulePreset{
-			Values: []domain.Rule{
-				{
-					ID:     uuid.New().String(),
-					Name:   "",
-					Weight: 100,
-				},
-			},
-		},
-		TeamPreset: domain.TeamPreset{
-			Values: []domain.Person{
-				{
-					ID:        uuid.New().String(),
-					Name:      "",
-					EmojiIcon: "👨‍💻",
-					Role:      "",
-					Features: []domain.Feature{
-						{
-							ID:     uuid.New().String(),
-							Name:   "",
-							Weight: 100,
-						},
-					},
-				},
-			},
-		},
+func getDefaultMasterPrompt() domain.MasterPrompt {
+	return domain.MasterPrompt{
+		Template:    domain.MinimalisticTemplate,
+		StylePreset: domain.StylePresetShortAndLazy,
+		RulePreset:  domain.RulePresetPerformanceOptimization,
+		TeamPreset:  domain.TeamPresetResearchAndDevelopmentPod,
 	}
 }
 
