@@ -30,7 +30,7 @@ func (m *MainView) OnMount(ctx app.Context) {
 // Todo: Divide into more files
 func (m *MainView) Render() app.UI {
 	if m.MasterPrompt == nil {
-		return app.Div().Text("Loading...")
+		return app.Div().Text("Loading...").Class("flex flex-col items-center justify-center h-screen")
 	}
 
 	renderedMasterPrompt, err := m.MasterPrompt.String()
@@ -88,7 +88,7 @@ func (m *MainView) copyLinkPressed() func(ctx app.Context, e app.Event) {
 		if link.Path[len(link.Path)-1] != '/' {
 			link.Path += "/"
 		}
-		
+
 		link.Path += "import"
 		query := link.Query()           // Get a copy of the query parameters
 		query.Set("data", recipeBase64) // Modify the query parameters
