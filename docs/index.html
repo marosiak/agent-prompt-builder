@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="author" content>
+    <meta name="description" content="Extended stats for makerworld">
+    <meta content="#2d2c2c" name="theme-color">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta content="yes" name="mobile-web-app-capable">
+    <meta property="og:url" content="https:///makerworld-analytics">
+    <meta property="og:title" content>
+    <meta property="og:description" content="Extended stats for makerworld">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://">
+    <title></title>
+    <link rel="icon" href="/makerworld-analytics/web/icon_x512.svg">
+    <link rel="apple-touch-icon" href="/makerworld-analytics/web/icon_x512.png">
+    <link rel="manifest" href="/makerworld-analytics/manifest.webmanifest">
+    <link type="text/css" rel="stylesheet" href="/makerworld-analytics/app.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" type="text/css" rel="stylesheet">
+    <script defer src="/makerworld-analytics/wasm_exec.js"></script>
+    <script defer src="/makerworld-analytics/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://go-echarts.github.io/go-echarts-assets/assets/echarts.min.js"></script>
+  </head>
+  <body>
+    <div class="p-24">
+      <h1 class="text-2xl font-bold mb-8">Makerworld Analytics</h1>
+      <div class="flex flex-row mb-4">
+        <p>Visit </p>
+        <a class="text-blue-400 pr-1 pl-1" href="https://makerworld.com/api/v1/point-service/point-bill/my?offset=0&limit=9999999999&filter=incomes" target="_blank">this link</a>
+        <p> and copy all content</p>
+      </div>
+      <textarea placeholder="Paste JSON from link above" class="shadow appearance-none border rounded w-full m-0 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+      <button class="btn btn-soft btn-primary mt-4">Import test data</button>
+      <p class="text-xs opacity-40 mt-1">Basically my data, it may be old because I am not updating it often.</p>
+    </div>
+    <aside id="app-wasm-loader" class="goapp-app-info">
+      <img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" alt="wasm loader icon" src="/makerworld-analytics/web/icon_x192.png">
+      <p id="app-wasm-loader-label" class="goapp-label">0%</p>
+    </aside>
+  </body>
+</html>
