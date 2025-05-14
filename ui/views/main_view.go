@@ -1,11 +1,11 @@
 package views
 
 import (
-	"github.com/maxence-charriere/go-app/v10/pkg/app"
-	"log/slog"
 	"github.com/marosiak/agent-prompt-builder/domain"
 	"github.com/marosiak/agent-prompt-builder/state"
 	"github.com/marosiak/agent-prompt-builder/ui/components"
+	"github.com/maxence-charriere/go-app/v10/pkg/app"
+	"log/slog"
 	"sort"
 	"strconv"
 )
@@ -85,7 +85,7 @@ func (m *MainView) copyLinkPressed() func(ctx app.Context, e app.Event) {
 		}
 
 		link := ctx.Page().URL()
-		link.Path = "/import"
+		link.Path += "/import"
 		query := link.Query()           // Get a copy of the query parameters
 		query.Set("data", recipeBase64) // Modify the query parameters
 		link.RawQuery = query.Encode()

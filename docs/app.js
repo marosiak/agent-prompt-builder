@@ -13,7 +13,7 @@ var goappOnAppInstallChange = function () {
   goappAppInstallChangedBeforeWasmLoaded = true;
 };
 
-const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/agent-prompt-builder","GOAPP_STATIC_RESOURCES_URL":"/agent-prompt-builder/web","GOAPP_VERSION":"1a4942c8447af7e430b0e0d0fd4752ff465b27a1"};
+const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/agent-prompt-builder","GOAPP_STATIC_RESOURCES_URL":"/agent-prompt-builder/web","GOAPP_VERSION":"6b0f53fbb8d8b5c008b8c76d2b29e5f9b265cad7"};
 const goappLoadingLabel = "{progress}%";
 const goappWasmContentLength = "";
 const goappWasmContentLengthHeader = "";
