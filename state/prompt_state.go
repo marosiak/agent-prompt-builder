@@ -2,8 +2,8 @@ package state
 
 import (
 	"github.com/google/uuid"
-	"github.com/maxence-charriere/go-app/v10/pkg/app"
 	"github.com/marosiak/agent-prompt-builder/domain"
+	"github.com/maxence-charriere/go-app/v10/pkg/app"
 	"reflect"
 )
 
@@ -31,10 +31,9 @@ func GetMasterPrompt(ctx app.Context) domain.MasterPrompt {
 	return masterPrompt
 }
 
-// possibly could be stored in domain
 func getDefaultMasterPrompt() domain.MasterPrompt {
 	return domain.MasterPrompt{
-		Template:    domain.MinimalisticTemplate,
+		Template:    domain.CodingInUnityTemplate,
 		StylePreset: domain.StylePresetShortAndLazy,
 		RulePreset:  domain.RulePresetPerformanceOptimization,
 		TeamPreset:  domain.TeamPresetResearchAndDevelopmentPod,

@@ -15,6 +15,7 @@ var TeamPresetStartupFounders = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Alice",
+			Role:      "Chief Executive Officer",
 			EmojiIcon: "🚀",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Drives product vision and long-term strategy", Weight: 100},
@@ -25,6 +26,7 @@ var TeamPresetStartupFounders = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Bob",
+			Role:      "Chief Technology Officer",
 			EmojiIcon: "💻",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Rapidly prototypes solutions", Weight: 100},
@@ -35,6 +37,7 @@ var TeamPresetStartupFounders = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Carol",
+			Role:      "Chief Operations Officer",
 			EmojiIcon: "🛠️",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Builds scalable operational processes", Weight: 100},
@@ -45,6 +48,7 @@ var TeamPresetStartupFounders = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Dave",
+			Role:      "Chief Marketing Officer",
 			EmojiIcon: "🎨",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Creates viral marketing campaigns", Weight: 100},
@@ -60,6 +64,7 @@ var TeamPresetProductDeliverySquad = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Ethan",
+			Role:      "Product Owner",
 			EmojiIcon: "📋",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Prioritizes backlog by user value", Weight: 100},
@@ -70,6 +75,7 @@ var TeamPresetProductDeliverySquad = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Fiona",
+			Role:      "UI/UX Designer",
 			EmojiIcon: "✏️",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Conducts user research and personas", Weight: 100},
@@ -80,6 +86,7 @@ var TeamPresetProductDeliverySquad = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "George",
+			Role:      "Backend Engineer",
 			EmojiIcon: "🖥️",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Designs robust microservices", Weight: 100},
@@ -90,6 +97,7 @@ var TeamPresetProductDeliverySquad = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Hannah",
+			Role:      "Quality Assurance Engineer",
 			EmojiIcon: "🔍",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Finds edge-case bugs", Weight: 100},
@@ -105,6 +113,7 @@ var TeamPresetResearchAndDevelopmentPod = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Ivan",
+			Role:      "Lead Research Scientist",
 			EmojiIcon: "🔬",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Formulates research hypotheses", Weight: 100},
@@ -115,6 +124,7 @@ var TeamPresetResearchAndDevelopmentPod = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Julia",
+			Role:      "Data Scientist",
 			EmojiIcon: "📊",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Builds predictive models", Weight: 100},
@@ -125,6 +135,7 @@ var TeamPresetResearchAndDevelopmentPod = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Kevin",
+			Role:      "Hardware Engineer",
 			EmojiIcon: "⚙️",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Designs hardware-software experiments", Weight: 100},
@@ -135,6 +146,7 @@ var TeamPresetResearchAndDevelopmentPod = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Laura",
+			Role:      "Technical Writer",
 			EmojiIcon: "📝",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Converts research into clear docs", Weight: 100},
@@ -150,6 +162,7 @@ var TeamPresetGrowthMarketingSquad = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Mike",
+			Role:      "Growth Lead",
 			EmojiIcon: "🚀",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Defines growth milestones", Weight: 100},
@@ -160,6 +173,7 @@ var TeamPresetGrowthMarketingSquad = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Nora",
+			Role:      "Content Strategist",
 			EmojiIcon: "🖋️",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Writes engaging content", Weight: 100},
@@ -170,6 +184,7 @@ var TeamPresetGrowthMarketingSquad = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Oliver",
+			Role:      "Paid Acquisition Specialist",
 			EmojiIcon: "💰",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Optimizes ad campaign ROI", Weight: 100},
@@ -180,6 +195,7 @@ var TeamPresetGrowthMarketingSquad = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Paula",
+			Role:      "Data Analyst",
 			EmojiIcon: "📈",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Tracks funnel analytics", Weight: 100},
@@ -195,6 +211,7 @@ var TeamPresetDevOpsReliabilityTeam = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Quentin",
+			Role:      "Site Reliability Lead",
 			EmojiIcon: "🛡️",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Sets reliability objectives", Weight: 100},
@@ -205,6 +222,7 @@ var TeamPresetDevOpsReliabilityTeam = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Rachel",
+			Role:      "DevOps Engineer",
 			EmojiIcon: "🖥️",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Automates infrastructure provisioning", Weight: 100},
@@ -215,6 +233,7 @@ var TeamPresetDevOpsReliabilityTeam = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Sam",
+			Role:      "Automation Engineer",
 			EmojiIcon: "🤖",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Builds CI/CD pipelines", Weight: 100},
@@ -225,6 +244,7 @@ var TeamPresetDevOpsReliabilityTeam = TeamPreset{
 		{
 			ID:        uuid.New().String(),
 			Name:      "Tina",
+			Role:      "Incident Manager",
 			EmojiIcon: "🚑",
 			Features: []Feature{
 				{ID: uuid.New().String(), Name: "Leads incident response", Weight: 100},
