@@ -382,6 +382,7 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 			app.If(name != "", func() app.UI {
 				return app.Button().Class("btn btn-circle btn-error mr-2").OnClick(
 					func(ctx app.Context, e app.Event) {
+						slog.Info("Clicked remove button", slog.String("id", id))
 						m.MasterPrompt.RemoveFeatureByID(id)
 						state.SetMasterPrompt(ctx, m.MasterPrompt)
 					},

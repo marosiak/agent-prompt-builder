@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
 	"io"
 	"log/slog"
 	"slices"
@@ -212,6 +213,7 @@ func RemoveFromSliceByID[T any](slice []T, getID func(T) string, targetID string
 }
 
 func (m *MasterPrompt) RemoveFeatureByID(featureID string) {
+	slog.Info("Removing feature", slog.String("id", featureID))
 	m.StylePreset.Values = RemoveFromSliceByID(m.StylePreset.Values, func(v Style) string { return v.ID }, featureID)
 	m.RulePreset.Values = RemoveFromSliceByID(m.RulePreset.Values, func(v Rule) string { return v.ID }, featureID)
 	m.TeamPreset.Values = RemoveFromSliceByID(m.TeamPreset.Values, func(v Person) string { return v.ID }, featureID)
@@ -273,6 +275,56 @@ func (m *MasterPrompt) RemoveTeamMemberByID(id string) {
 		if person.ID == id {
 			m.TeamPreset.Values = slices.DeleteFunc(m.TeamPreset.Values, func(p Person) bool {
 				return p.ID == id
+			})
+		}
+	}
+}
+func (m *MasterPrompt) AddOneEmptyField() {
+	// --- Rules ---
+	if n := len(m.RulePreset.Values); n == 0 ||
+		m.RulePreset.Values[n-1].Name != "" {
+
+		m.RulePreset.Values = append(m.RulePreset.Values, Rule{
+			ID:     uuid.New().String(),
+			Name:   "",
+			Weight: 100,
+		})
+	}
+
+	// --- Styles ---
+	if n := len(m.StylePreset.Values); n == 0 ||
+		m.StylePreset.Values[n-1].Name != "" {
+
+		m.StylePreset.Values = append(m.StylePreset.Values, Style{
+			ID:     uuid.New().String(),
+			Name:   "",
+			Weight: 100,
+		})
+	}
+
+	if n := len(m.TeamPreset.Values); n == 0 ||
+		m.TeamPreset.Values[n-1].Name != "" {
+
+		m.TeamPreset.Values = append(m.TeamPreset.Values, Person{
+			ID:        uuid.New().String(),
+			Name:      "",
+			EmojiIcon: "👨‍💻",
+			Role:      "",
+			Features: []Feature{{
+				ID:     uuid.New().String(),
+				Name:   "",
+				Weight: 100,
+			}},
+		})
+	}
+
+	for i := range m.TeamPreset.Values {
+		feat := m.TeamPreset.Values[i].Features
+		if len(feat) == 0 || feat[len(feat)-1].Name != "" {
+			m.TeamPreset.Values[i].Features = append(feat, Feature{
+				ID:     uuid.New().String(),
+				Name:   "",
+				Weight: 100,
 			})
 		}
 	}
