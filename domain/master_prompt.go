@@ -111,7 +111,6 @@ type MasterPrompt struct {
 	RulePreset  RulePreset           `json:"rule_presets"`
 }
 
-
 func (m *MasterPrompt) ToBase64() (string, error) {
 	by, err := json.Marshal(m)
 	if err != nil {
@@ -154,7 +153,6 @@ func (m *MasterPrompt) FromBase64(input string) error {
 
 	return nil
 }
-
 
 // TODO: There are better ways to deal with it, first of all data should be stored by ID in order to identify it quicker
 func (m *MasterPrompt) UpdateValueByID(id string, name *string, weight *int) {
@@ -217,6 +215,14 @@ func (m *MasterPrompt) RemoveFeatureByID(featureID string) {
 	m.StylePreset.Values = RemoveFromSliceByID(m.StylePreset.Values, func(v Style) string { return v.ID }, featureID)
 	m.RulePreset.Values = RemoveFromSliceByID(m.RulePreset.Values, func(v Rule) string { return v.ID }, featureID)
 	m.TeamPreset.Values = RemoveFromSliceByID(m.TeamPreset.Values, func(v Person) string { return v.ID }, featureID)
+
+	// Also remove features from each Person object
+	for i := range m.TeamPreset.Values {
+		m.TeamPreset.Values[i].Features = RemoveFromSliceByID(
+			m.TeamPreset.Values[i].Features,
+			func(f Feature) string { return f.ID },
+			featureID)
+	}
 }
 
 func (m *MasterPrompt) String() (string, error) {

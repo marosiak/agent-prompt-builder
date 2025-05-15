@@ -9,23 +9,23 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta property="og:url" content="https:///agent-prompt-builder">
     <meta property="og:title" content>
-    <meta property="og:description" content="Will help you with building agents">
+    <meta content="Will help you with building agents" property="og:description">
     <meta content="website" property="og:type">
-    <meta content="https://" property="og:image">
+    <meta property="og:image" content="https://">
     <title></title>
     <link rel="icon" href="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.svg">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png">
-    <link href="/agent-prompt-builder/manifest.webmanifest" rel="manifest">
+    <link rel="manifest" href="/agent-prompt-builder/manifest.webmanifest">
     <link href="/agent-prompt-builder/app.css" type="text/css" rel="stylesheet">
-    <link href="/agent-prompt-builder/bundle.css" type="text/css" rel="stylesheet">
-    <script src="/agent-prompt-builder/wasm_exec.js" defer></script>
-    <script defer src="/agent-prompt-builder/app.js"></script>
+    <link type="text/css" rel="stylesheet" href="/agent-prompt-builder/bundle.css">
+    <script defer src="/agent-prompt-builder/wasm_exec.js"></script>
+    <script src="/agent-prompt-builder/app.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
   <body>
     <div class="flex flex-col items-center justify-center h-screen">Loading...</div>
     <aside id="app-wasm-loader" class="goapp-app-info">
-      <img alt="wasm loader icon" src="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png" id="app-wasm-loader-icon" class="goapp-logo goapp-spin">
+      <img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" alt="wasm loader icon" src="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png">
       <p id="app-wasm-loader-label" class="goapp-label">0%</p>
     </aside>
   </body>
