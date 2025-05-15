@@ -24,8 +24,8 @@ func main() {
 		Description: "Will help you with building agents",
 		Resources:   app.GitHubPages("agent-prompt-builder"),
 		Scripts:     []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"},
-		Styles:  []string{"/web/bundle.css"},
-		Version: uuid.New().String(),
+		Styles:      []string{"/bundle.css"},
+		Version:     uuid.New().String(),
 	})
 
 	if err != nil {
