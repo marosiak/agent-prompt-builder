@@ -12,6 +12,8 @@ release:
 		--remove-unused-module-elements \
 		--dce \
 		--output=./docs/web/app.wasm
+
+	./build-style.sh
 	cd docs && go run .././cmd/static/
 
 install_linter:

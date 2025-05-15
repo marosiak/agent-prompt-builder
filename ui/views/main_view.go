@@ -38,42 +38,71 @@ func (m *MainView) Render() app.UI {
 		slog.Error("Error rendering master prompt", err)
 	}
 
-	return app.Div().Class("p-24").Body(
-		app.If(m.updateAvailable, func() app.UI {
-			return app.Button().
-				Text("Update app!").
-				Class("bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded").
-				OnClick(m.onUpdateClick)
-		}),
+	return app.Div().Class().Attr("data-theme", "cupcake").Class("").Body(
+		app.Div().Class("p-12 bg-base-200").Body(
+			app.If(m.updateAvailable, func() app.UI {
+				return app.Button().
+					Text("Update app!").
+					Class("bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded").
+					OnClick(m.onUpdateClick)
+			}),
 
-		app.H1().Text("Master prompt generator").Class("text-2xl font-bold mb-4"),
-		app.P().Text("This is a tool to help you generate a master prompt for your LLM agent.").Class("text-md opacity-80 mb-1"),
-		app.P().Text("Data is stored in your browser, so you won't lose anything after refresh").Class("text-md opacity-80 mb-12"),
+			m.renderWelcomeCard(),
 
-		&CardComponent{
-			Body: []app.UI{
-				app.H2().Text("Sharing workspace").Class("text-xl font-bold mb-4"),
-				app.P().Class("text-md opacity-80 mb-4").Text("You can share your workspace with others by sending them a link. Just click copy and send it to your mate, you can also store it somewhere in notes and manage versions this way."),
-				app.Button().Class("btn btn-primary").Text("Copy link").OnClick(m.copyLinkPressed()),
-			},
-		},
+			m.renderMasterPromptTemplate(),
+			app.Div().Class("flex xl:flex-row lg:flex-col md:flex-col sm:flex-col justify-stretch mb-6 w-full").Body(
+				m.renderRules(),
+				m.renderStyle(),
+			),
+			m.renderTeam(),
 
-		m.renderMasterPromptTemplate(),
-		app.Div().Class("flex flex-row justify-stretch mb-6 w-full").Body(
-			m.renderRules(),
-			m.renderStyle(),
+			m.renderOutputSection(renderedMasterPrompt),
+			m.renderSharingFeature(),
 		),
-		m.renderTeam(),
+	)
+}
 
-		&CardComponent{
-			Body: []app.UI{
+func (m *MainView) renderWelcomeCard() *CardComponent {
+	return &CardComponent{
+		Body: []app.UI{
+			app.H1().Text("Master prompt generator").Class("text-2xl font-bold mb-4"),
+			app.P().Text("This is a tool to help you generate a master prompt for your LLM agent.").Class("text-md opacity-80 mb-1"),
+			app.P().Text("Data is stored in your browser, so you won't lose anything after refresh").Class("text-md opacity-80 mb-12"),
 
-				app.H2().Text("Output").Class("text-xl font-bold mb-4"),
-				app.P().Class("text-md opacity-80 mb-12").Text("Paste it into your chat gpt space, copilot or any other LLM"),
-				app.Textarea().Class("textarea textarea-bordered h-80 w-full").Text(renderedMasterPrompt).Placeholder("There should be your prompt"),
+			&StepsComponent{
+				IsVertical: true,
+				Steps: []Step{
+					{Title: "Think about your needs", Active: true, Complete: true},
+					{Title: "Establish 📜 Rules", Active: true},
+					{Title: "🤌🏻Style guidelines", Active: true},
+					{Title: "\"Hire\" your 👨‍💻 Team", Active: true},
+					{Title: "Copy output", Active: true},
+					{Title: "Paste into Chat GPT / other LLM", Active: true},
+				},
 			},
 		},
-	)
+	}
+}
+
+func (m *MainView) renderOutputSection(renderedMasterPrompt string) *CardComponent {
+	return &CardComponent{
+		Body: []app.UI{
+
+			app.H2().Text("Output").Class("text-xl font-bold mb-4"),
+			app.P().Class("text-md opacity-80 mb-12").Text("Paste it into your chat gpt space, copilot or any other LLM"),
+			app.Textarea().Class("textarea textarea-bordered h-80 w-full").Text(renderedMasterPrompt).Placeholder("There should be your prompt"),
+		},
+	}
+}
+
+func (m *MainView) renderSharingFeature() *CardComponent {
+	return &CardComponent{
+		Body: []app.UI{
+			app.H2().Text("Sharing workspace").Class("text-xl font-bold mb-4"),
+			app.P().Class("text-md opacity-80 mb-4").Text("You can share your workspace with others by sending them a link. Just click copy and send it to your mate, you can also store it somewhere in notes and manage versions this way."),
+			app.Button().Class("btn btn-primary").Text("Copy link").OnClick(m.copyLinkPressed()),
+		},
+	}
 }
 
 func (m *MainView) copyLinkPressed() func(ctx app.Context, e app.Event) {
@@ -128,78 +157,84 @@ func (m *MainView) renderTeam() *CardComponent {
 					},
 				},
 			),
-			app.Range(m.MasterPrompt.TeamPreset.Values).Slice(func(i int) app.UI {
-				var member = m.MasterPrompt.TeamPreset.Values[i]
 
-				var handleNameChange = func(ctx app.Context, e app.Event) {
-					newName := ctx.JSSrc().Get("value").String()
-					m.MasterPrompt.TeamPreset.Values[i].Name = newName
-					state.SetMasterPrompt(ctx, m.MasterPrompt)
-				}
+			app.Div().Class("flex flex-col justify-stretch pr-0  w-full overflow-x-scroll pb-6").
+				Body(
+					app.Range(m.MasterPrompt.TeamPreset.Values).Slice(func(i int) app.UI {
+						var member = m.MasterPrompt.TeamPreset.Values[i]
 
-				var handleRoleChange = func(ctx app.Context, e app.Event) {
-					newRole := ctx.JSSrc().Get("value").String()
-					m.MasterPrompt.TeamPreset.Values[i].Role = newRole
-					state.SetMasterPrompt(ctx, m.MasterPrompt)
-				}
-				emojisList := []OptionData{}
+						var handleNameChange = func(ctx app.Context, e app.Event) {
+							newName := ctx.JSSrc().Get("value").String()
+							m.MasterPrompt.TeamPreset.Values[i].Name = newName
+							state.SetMasterPrompt(ctx, m.MasterPrompt)
+						}
 
-				for _, emoji := range domain.EmojiList {
-					emojisList = append(emojisList, OptionData{
-						Label: emoji,
-						Value: emoji,
-					})
-				}
+						var handleRoleChange = func(ctx app.Context, e app.Event) {
+							newRole := ctx.JSSrc().Get("value").String()
+							m.MasterPrompt.TeamPreset.Values[i].Role = newRole
+							state.SetMasterPrompt(ctx, m.MasterPrompt)
+						}
+						emojisList := []OptionData{}
 
-				handleEmojiChange := func(ctx app.Context, value string) {
-					if value == "" {
-						return
-					}
+						for _, emoji := range domain.EmojiList {
+							emojisList = append(emojisList, OptionData{
+								Label: emoji,
+								Value: emoji,
+							})
+						}
 
-					m.MasterPrompt.TeamPreset.Values[i].EmojiIcon = value
-					state.SetMasterPrompt(ctx, m.MasterPrompt)
-				}
-
-				return &CardComponent{
-					Body: []app.UI{
-						app.Div().Class("flex flex-row align-center mb-6").Body(
-
-							&DropdownComponent[string]{
-								OptionDataList: emojisList,
-								Text:           member.EmojiIcon,
-								OnClick:        handleEmojiChange,
-								Class:          "mr-2",
-							},
-
-							app.Input().Class("input input-md w-full mb-1").Type("text").Placeholder("Put team member name here").
-								Value(member.Name).OnChange(handleNameChange).OnKeyUp(handleNameChange),
-							app.If(member.Name != "", func() app.UI {
-								return app.Button().Class("btn btn-error ml-2").Text("Remove person").OnClick(
-									func(ctx app.Context, e app.Event) {
-										m.MasterPrompt.RemoveTeamMemberByID(member.ID)
-										state.SetMasterPrompt(ctx, m.MasterPrompt)
-									})
-							}),
-						),
-
-						app.IfSlice(member.Name != "", func() []app.UI {
-							return []app.UI{
-								app.Input().Class("input input-md w-full mb-12").Type("text").Placeholder("Role = developer, customer, marketing specialist and etc..").
-									Value(member.Role).OnChange(handleRoleChange).OnKeyUp(handleRoleChange),
-
-								app.Div().Class("flex flex-row justify-between mb-6").Body(
-									app.H3().Class("text-xl").Text("Features"),
-									app.H3().Class("text-xl").Text("Weight"),
-								),
-								app.Range(member.Features).Slice(func(j int) app.UI {
-									return m.renderWeightControlledName(member.Features[j].ID, member.Features[j].Name, member.Features[j].Weight)
-								}),
+						handleEmojiChange := func(ctx app.Context, value string) {
+							if value == "" {
+								return
 							}
-						}),
-					},
-					Class: "mb-8 shadow-2xl",
-				}
-			}),
+
+							m.MasterPrompt.TeamPreset.Values[i].EmojiIcon = value
+							state.SetMasterPrompt(ctx, m.MasterPrompt)
+						}
+
+						return &CardComponent{
+							Class: "mr-4 w-full rounded-3xl p-8 shadow-sm border-1 border-black/15 mt-2 mb-2 bg-base-100 gap-2",
+							Body: []app.UI{
+								app.Div().Class("flex flex-row align-center mb-6").Body(
+
+									&DropdownComponent[string]{
+										OptionDataList: emojisList,
+										Text:           member.EmojiIcon,
+										OnClick:        handleEmojiChange,
+										Class:          "mr-2",
+									},
+
+									app.Input().Class("input input-md w-full mb-1").Type("text").Placeholder("Put team member name here").
+										Value(member.Name).OnChange(handleNameChange).OnKeyUp(handleNameChange),
+									app.If(member.Name != "", func() app.UI {
+										return app.Button().Class("btn btn-error ml-2").OnClick(
+											func(ctx app.Context, e app.Event) {
+												m.MasterPrompt.RemoveTeamMemberByID(member.ID)
+												state.SetMasterPrompt(ctx, m.MasterPrompt)
+											}).Body(
+											&SVGIcon{IconData: TrashIcon},
+											app.P().Class("text-md text-white").Text("Remove person"),
+										)
+									}),
+								),
+
+								app.IfSlice(member.Name != "", func() []app.UI {
+									return []app.UI{
+										app.Input().Class("input input-md w-full mb-12").Type("text").Placeholder("Role = developer, customer, marketing specialist and etc..").
+											Value(member.Role).OnChange(handleRoleChange).OnKeyUp(handleRoleChange),
+
+										app.Div().Class("flex flex-row justify-between mb-6").Body(
+											app.H3().Class("text-xl").Text("Features"),
+											app.H3().Class("text-xl").Text("Weight"),
+										),
+										app.Range(member.Features).Slice(func(j int) app.UI {
+											return m.renderWeightControlledName(member.Features[j].ID, member.Features[j].Name, member.Features[j].Weight)
+										}),
+									}
+								}),
+							},
+						}
+					})),
 		},
 	}
 }
@@ -316,7 +351,7 @@ func (m *MainView) renderMasterPromptTemplate() *CardComponent {
 		Body: []app.UI{
 			app.Div().Class("flex flex-row justify-between mb-4").Body(
 				app.Div().Class("flex flex-col").Body(
-					app.H2().Text("Master prompt template").Class("text-xl font-bold mb-4"),
+					app.H2().Text("Prompt template").Class("text-xl font-bold mb-4"),
 					app.P().Class("text-md opacity-80 mb-12").Text("This is the template that will be used to generate the master prompt."),
 				),
 				&DropdownComponent[string]{
@@ -345,23 +380,28 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 	return app.Div().Class("flex flex-row w-full justify-between items-center mb-2").Body(
 		app.Div().Class("flex flex-row w-full").Body(
 			app.If(name != "", func() app.UI {
-				return app.Button().Class("btn btn-error mr-2").Text("X").OnClick(
+				return app.Button().Class("btn btn-circle btn-error mr-2").OnClick(
 					func(ctx app.Context, e app.Event) {
 						m.MasterPrompt.RemoveFeatureByID(id)
 						state.SetMasterPrompt(ctx, m.MasterPrompt)
 					},
 				).Body(
 					&SVGIcon{
-						IconType: TrashIcon,
-						Color:   "white",
+						IconData: TrashIcon,
+						Color:    "white",
 					})
 			}),
-			app.Input().Type("text").Placeholder("Put rule here").Class("input input-md w-full").Value(name).OnChange(
-				func(ctx app.Context, e app.Event) {
-					newName := ctx.JSSrc().Get("value").String()
-					m.MasterPrompt.UpdateValueByID(id, &newName, nil)
-					state.SetMasterPrompt(ctx, m.MasterPrompt)
+			app.Div().Class("flex flex-col w-full").Body(
+				app.If(name == "", func() app.UI {
+					return &Spacer{Class: "mt-4 mb-8"}
 				}),
+				app.Input().Type("text").Placeholder("Create new").Class("input input-md w-full").Value(name).OnChange(
+					func(ctx app.Context, e app.Event) {
+						newName := ctx.JSSrc().Get("value").String()
+						m.MasterPrompt.UpdateValueByID(id, &newName, nil)
+						state.SetMasterPrompt(ctx, m.MasterPrompt)
+					}),
+			),
 		),
 
 		app.If(name != "", func() app.UI {

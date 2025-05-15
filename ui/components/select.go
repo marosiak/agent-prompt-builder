@@ -44,7 +44,7 @@ func (s *SelectComponent[T]) isCurrentlySelected(value any) bool {
 }
 
 func (s *SelectComponent[T]) Render() app.UI {
-	return app.Select().Class("select select-md ").Body(
+	return app.Select().Class("select select-md flex flex-row ").Body(
 		app.Range(s.OptionDataList).Slice(func(i int) app.UI {
 			value := s.OptionDataList[i].Value
 

@@ -1,13 +1,27 @@
 package components
 
-import "github.com/maxence-charriere/go-app/v10/pkg/app"
+import (
+	"fmt"
+	"github.com/maxence-charriere/go-app/v10/pkg/app"
+	"log/slog"
+)
 
 type CardComponent struct {
 	app.Compo
-	Body  []app.UI
-	Class string
+	Body    []app.UI
+	Class   string
+	Padding int
 }
 
 func (c *CardComponent) Render() app.UI {
-	return app.Div().Class(c.Class + " rounded-3xl p-8 shadow-sm border-1 border-black/15 mt-2 mb-2").Body(c.Body...)
+	if c.Padding == 0 {
+		c.Padding = 8
+	}
+
+	if c.Padding == -1 {
+		c.Padding = 0 // well.. ptr is difficult to use, and didn't want to create a lot of abstraction
+	}
+	class := fmt.Sprintf("%s rounded-3xl p-%d shadow-sm border-1 border-black/15 mt-2 mb-2 bg-base-100 gap-2", c.Class, c.Padding)
+	slog.Info(class)
+	return app.Div().Class(class).Body(c.Body...)
 }
