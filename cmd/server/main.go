@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/google/uuid"
 	"github.com/marosiak/agent-prompt-builder/ui/views"
 	"log"
 	"net/http"
@@ -26,6 +27,7 @@ func main() {
 		Description: "Will help you with building agents",
 		Scripts:     []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"},
 		Styles:      []string{"https://cdn.jsdelivr.net/npm/daisyui@5"},
+		Version:     uuid.New().String(),
 	})
 
 	if err := http.ListenAndServe(":8000", nil); err != nil {

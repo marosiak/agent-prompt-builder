@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/google/uuid"
 	"github.com/marosiak/agent-prompt-builder/ui/views"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 	"log"
@@ -24,6 +25,7 @@ func main() {
 		Resources:   app.GitHubPages("agent-prompt-builder"),
 		Scripts:     []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"},
 		Styles:      []string{"https://cdn.jsdelivr.net/npm/daisyui@5"},
+		Version:     uuid.New().String(),
 	})
 
 	if err != nil {
