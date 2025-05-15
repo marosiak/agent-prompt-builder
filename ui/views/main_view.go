@@ -158,7 +158,7 @@ func (m *MainView) renderTeam() *CardComponent {
 				},
 			),
 
-			app.Div().Class("flex flex-col justify-stretch pr-0  w-full overflow-x-scroll pb-6").
+			app.Div().Class("flex flex-col justify-stretch pr-0  w-full pb-6").
 				Body(
 					app.Range(m.MasterPrompt.TeamPreset.Values).Slice(func(i int) app.UI {
 						var member = m.MasterPrompt.TeamPreset.Values[i]

@@ -3,7 +3,6 @@ package components
 import (
 	"fmt"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
-	"log/slog"
 )
 
 type CardComponent struct {
@@ -22,6 +21,5 @@ func (c *CardComponent) Render() app.UI {
 		c.Padding = 0 // well.. ptr is difficult to use, and didn't want to create a lot of abstraction
 	}
 	class := fmt.Sprintf("%s rounded-3xl p-%d shadow-sm border-1 border-black/15 mt-2 mb-2 bg-base-100 gap-2", c.Class, c.Padding)
-	slog.Info(class)
 	return app.Div().Class(class).Body(c.Body...)
 }

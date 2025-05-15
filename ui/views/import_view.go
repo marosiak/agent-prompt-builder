@@ -1,10 +1,10 @@
 package views
 
 import (
-	"github.com/maxence-charriere/go-app/v10/pkg/app"
-	"log/slog"
 	"github.com/marosiak/agent-prompt-builder/domain"
 	"github.com/marosiak/agent-prompt-builder/state"
+	"github.com/maxence-charriere/go-app/v10/pkg/app"
+	"log/slog"
 )
 
 type ImportView struct {
@@ -14,7 +14,7 @@ type ImportView struct {
 
 func (i *ImportView) Render() app.UI {
 	// dialog if you want to import data and about consequences
-	return app.Div().Class("flex flex-col items-center justify-center h-screen").Body(
+	return app.Div().Attr("data-theme", "cupcake").Class("flex flex-col items-center justify-center h-screen").Body(
 		app.Div().Class("card w-96 bg-base-100 shadow-xl").Body(
 			app.Div().Class("card-body").Body(
 				app.H2().Class("card-title").Text("Import Data"),
