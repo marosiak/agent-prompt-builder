@@ -25,6 +25,12 @@ func (m *MainView) OnMount(ctx app.Context) {
 		masterPromptCopy := state.GetMasterPrompt(ctx)
 		m.MasterPrompt = &masterPromptCopy
 	})
+
+	var tmpMasterPrompt domain.MasterPrompt
+	ctx.ObserveState(state.Key(), &tmpMasterPrompt).OnChange(func() {
+		slog.Info("State changed in MainView")
+		m.MasterPrompt = &tmpMasterPrompt
+	})
 }
 
 // Todo: Divide into more files

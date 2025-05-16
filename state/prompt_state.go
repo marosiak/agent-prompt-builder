@@ -14,7 +14,7 @@ func DelMasterPrompt(ctx app.Context) {
 	ctx.DelState(Key())
 }
 func SetMasterPrompt(ctx app.Context, masterPrompt *domain.MasterPrompt) {
-	// We don't call AddOneEmptyField here anymore to avoid duplicate calls
+	masterPrompt.AddOneEmptyField()
 	ctx.SetState(Key(), *masterPrompt).Persist()
 }
 

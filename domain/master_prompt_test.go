@@ -803,3 +803,273 @@ func TestEmptyFieldAndIDConsistency(t *testing.T) {
 	}
 }
 
+func TestFeatureIdConsistencyAfterRemoval(t *testing.T) {
+	// Create a master prompt with a person that has multiple features
+	mp := &MasterPrompt{
+		TeamPreset: TeamPreset{
+			Values: []Person{
+				{
+					ID:   "person1",
+					Name: "Person1",
+					Features: []Feature{
+						{ID: "A", Name: "Feature A", Weight: 10},
+						{ID: "B", Name: "Feature B", Weight: 20},
+						{ID: "C", Name: "Feature C", Weight: 30},
+						{ID: "D", Name: "Feature D", Weight: 40},
+						{ID: "E", Name: "Feature E", Weight: 50},
+						{ID: "F", Name: "Feature F", Weight: 60},
+					},
+				},
+			},
+		},
+	}
+
+	// Store a map of [ID => Name] before removal to verify later
+	originalFeatures := make(map[string]string)
+	for _, feature := range mp.TeamPreset.Values[0].Features {
+		originalFeatures[feature.ID] = feature.Name
+	}
+
+	// STEP 1: Remove feature C (in the middle)
+	featureToRemove := "C"
+	mp.RemoveFeatureByID(featureToRemove)
+
+	// STEP 2: Call AddOneEmptyField which might be causing the issue
+	// This simulates what happens in the UI flow
+	mp.AddOneEmptyField()
+
+	// Verify features by ID - we need to ensure:
+	// 1. Feature C is gone
+	// 2. Features A, B, D, E, F still have the same IDs and correct data
+	remainingFeatures := make(map[string]bool)
+	for _, feature := range mp.TeamPreset.Values[0].Features {
+		// Skip empty feature that was added by AddOneEmptyField
+		if feature.Name == "" {
+			continue
+		}
+		
+		// Check that feature with this ID exists in original map
+		originalName, exists := originalFeatures[feature.ID]
+		if !exists {
+			t.Errorf("Feature with ID %s was not in the original set but appears now", feature.ID)
+			continue
+		}
+		
+		// Check that feature name matches the original
+		if originalName != feature.Name {
+			t.Errorf("Feature ID %s has name %s but originally had name %s", 
+				feature.ID, feature.Name, originalName)
+		}
+		
+		remainingFeatures[feature.ID] = true
+	}
+	
+	// Ensure feature C is gone
+	if remainingFeatures[featureToRemove] {
+		t.Errorf("Feature with ID %s should have been removed", featureToRemove)
+	}
+	
+	// Ensure all other original features still exist (except C)
+	for id, name := range originalFeatures {
+		if id != featureToRemove && !remainingFeatures[id] {
+			t.Errorf("Feature with ID %s and name %s is missing after removal", id, name)
+		}
+	}
+}
+
+func TestConsistencyWithMultipleRemovals(t *testing.T) {
+	// Create a master prompt with multiple people/features
+	mp := &MasterPrompt{
+		TeamPreset: TeamPreset{
+			Values: []Person{
+				{
+					ID:   "person1",
+					Name: "Person1",
+					Features: []Feature{
+						{ID: "feature1_A", Name: "Person1 Feature A", Weight: 10},
+						{ID: "feature1_B", Name: "Person1 Feature B", Weight: 20},
+						{ID: "feature1_C", Name: "Person1 Feature C", Weight: 30},
+					},
+				},
+				{
+					ID:   "person2",
+					Name: "Person2",
+					Features: []Feature{
+						{ID: "feature2_A", Name: "Person2 Feature A", Weight: 40},
+						{ID: "feature2_B", Name: "Person2 Feature B", Weight: 50},
+						{ID: "feature2_C", Name: "Person2 Feature C", Weight: 60},
+					},
+				},
+			},
+		},
+	}
+
+	// Store all feature information before removal
+	type FeatureInfo struct {
+		PersonIndex int
+		Name        string
+		Weight      int
+	}
+	originalFeatureInfo := make(map[string]FeatureInfo)
+	
+	for personIndex, person := range mp.TeamPreset.Values {
+		for _, feature := range person.Features {
+			originalFeatureInfo[feature.ID] = FeatureInfo{
+				PersonIndex: personIndex,
+				Name:        feature.Name,
+				Weight:      feature.Weight,
+			}
+		}
+	}
+
+	// Remove features in a specific order
+	removalOrder := []string{"feature1_B", "feature2_A", "feature1_C"}
+	for _, featureID := range removalOrder {
+		mp.RemoveFeatureByID(featureID)
+		// Simulate UI behavior by calling AddOneEmptyField after each removal
+		mp.AddOneEmptyField()
+	}
+
+	// Check all remaining features have consistent data
+	for personIndex, person := range mp.TeamPreset.Values {
+		for _, feature := range person.Features {
+			// Skip empty features
+			if feature.Name == "" {
+				continue
+			}
+			
+			// Verify feature exists in original map
+			info, exists := originalFeatureInfo[feature.ID]
+			if !exists {
+				t.Errorf("Feature with ID %s was not in original set but appears now", feature.ID)
+				continue
+			}
+			
+			// Verify feature is associated with the correct person
+			if info.PersonIndex != personIndex {
+				t.Errorf("Feature with ID %s moved from person %d to person %d",
+					feature.ID, info.PersonIndex, personIndex)
+			}
+			
+			// Verify feature data matches original
+			if info.Name != feature.Name {
+				t.Errorf("Feature ID %s has name %s but originally had name %s",
+					feature.ID, feature.Name, info.Name)
+			}
+			
+			if info.Weight != feature.Weight {
+				t.Errorf("Feature ID %s has weight %d but originally had weight %d",
+					feature.ID, feature.Weight, info.Weight)
+			}
+		}
+	}
+
+	// Verify removed features are actually gone
+	removedIds := make(map[string]bool)
+	for _, id := range removalOrder {
+		removedIds[id] = true
+	}
+	
+	for personIndex, person := range mp.TeamPreset.Values {
+		for _, feature := range person.Features {
+			if removedIds[feature.ID] && feature.Name != "" {
+				t.Errorf("Feature with ID %s should have been removed but still exists in person %d",
+					feature.ID, personIndex)
+			}
+		}
+	}
+}
+
+func TestRenderingWithRemoval(t *testing.T) {
+	// This test simulates the UI rendering behavior
+	mp := &MasterPrompt{
+		TeamPreset: TeamPreset{
+			Values: []Person{
+				{
+					ID:   "person1",
+					Name: "Person1",
+					Features: []Feature{
+						{ID: "A", Name: "Feature A", Weight: 10},
+						{ID: "B", Name: "Feature B", Weight: 20},
+						{ID: "C", Name: "Feature C", Weight: 30},
+						{ID: "D", Name: "Feature D", Weight: 40},
+					},
+				},
+			},
+		},
+	}
+
+	// Record original data
+	type FeatureData struct {
+		ID     string
+		Name   string
+		Weight int
+	}
+	originalFeatures := make([]FeatureData, 0)
+	for _, feature := range mp.TeamPreset.Values[0].Features {
+		originalFeatures = append(originalFeatures, FeatureData{
+			ID:     feature.ID,
+			Name:   feature.Name,
+			Weight: feature.Weight,
+		})
+	}
+
+	// Remove the feature in the middle (C)
+	mp.RemoveFeatureByID("C")
+	
+	// Simulate UI rendering by iterating through features like in the UI code
+	renderedFeatures := make([]FeatureData, 0)
+	for j := range mp.TeamPreset.Values[0].Features {
+		// This mimics the go-app rendering iteration pattern
+		feature := mp.TeamPreset.Values[0].Features[j]
+		renderedFeatures = append(renderedFeatures, FeatureData{
+			ID:     feature.ID,
+			Name:   feature.Name,
+			Weight: feature.Weight,
+		})
+	}
+	
+	// Verify each remaining feature has correct data
+	expectedRemainingIDs := []string{"A", "B", "D"}
+	for _, id := range expectedRemainingIDs {
+		found := false
+		for _, feature := range renderedFeatures {
+			if feature.ID == id {
+				found = true
+				
+				// Find original data for this ID
+				var originalData FeatureData
+				for _, orig := range originalFeatures {
+					if orig.ID == id {
+						originalData = orig
+						break
+					}
+				}
+				
+				// Verify data matches
+				if feature.Name != originalData.Name {
+					t.Errorf("Feature %s has name %s but originally had %s after removal of C",
+						id, feature.Name, originalData.Name)
+				}
+				
+				if feature.Weight != originalData.Weight {
+					t.Errorf("Feature %s has weight %d but originally had %d after removal of C",
+						id, feature.Weight, originalData.Weight)
+				}
+				
+				break
+			}
+		}
+		
+		if !found {
+			t.Errorf("Feature with ID %s not found after rendering", id)
+		}
+	}
+	
+	// Verify C is gone
+	for _, feature := range renderedFeatures {
+		if feature.ID == "C" && feature.Name != "" {
+			t.Errorf("Feature C should have been removed but still exists with name: %s", feature.Name)
+		}
+	}
+}
