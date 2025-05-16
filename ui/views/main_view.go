@@ -280,8 +280,16 @@ func (m *MainView) renderStyle() *CardComponent {
 				app.H3().Class("text-xl").Text("Weight"),
 			),
 			app.Div().Class("w-full").Body(
-				app.Range(m.MasterPrompt.StylePreset.Values).Slice(func(i int) app.UI {
-					return m.renderWeightControlledName(m.MasterPrompt.StylePreset.Values[i].ID, m.MasterPrompt.StylePreset.Values[i].Name, m.MasterPrompt.StylePreset.Values[i].Weight)
+				// FIXED: Create a safe copy of values to render to prevent index issues
+				app.Range(func() []domain.Style {
+					// Make a copy of the styles to prevent issues when elements are removed
+					styles := make([]domain.Style, len(m.MasterPrompt.StylePreset.Values))
+					copy(styles, m.MasterPrompt.StylePreset.Values)
+					return styles
+				}()).Slice(func(i int) app.UI {
+					// Use a local reference to the style to avoid index issues
+					style := m.MasterPrompt.StylePreset.Values[i]
+					return m.renderWeightControlledName(style.ID, style.Name, style.Weight)
 				}),
 			),
 		},
@@ -325,8 +333,15 @@ func (m *MainView) renderRules() *CardComponent {
 				app.H3().Class("text-xl").Text("Weight"),
 			),
 			app.Div().Class("w-full").Body(
-				app.Range(m.MasterPrompt.RulePreset.Values).Slice(func(i int) app.UI {
-					return m.renderWeightControlledName(m.MasterPrompt.RulePreset.Values[i].ID, m.MasterPrompt.RulePreset.Values[i].Name, m.MasterPrompt.RulePreset.Values[i].Weight)
+				// FIXED: Create a safe copy of values for rendering
+				app.Range(func() []domain.Rule {
+					rules := make([]domain.Rule, len(m.MasterPrompt.RulePreset.Values))
+					copy(rules, m.MasterPrompt.RulePreset.Values)
+					return rules
+				}()).Slice(func(i int) app.UI {
+					// Use the rule from the original array but with the correct index
+					rule := m.MasterPrompt.RulePreset.Values[i]
+					return m.renderWeightControlledName(rule.ID, rule.Name, rule.Weight)
 				}),
 			),
 		},
@@ -389,8 +404,12 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 				return app.Button().Class("btn btn-circle btn-error mr-2").OnClick(
 					func(ctx app.Context, e app.Event) {
 						slog.Info("Clicked remove button", slog.String("id", id))
+						// FIXED: First remove the feature
 						m.MasterPrompt.RemoveFeatureByID(id)
+						// FIXED: Then save state WITHOUT automatically adding empty fields
 						state.SetMasterPrompt(ctx, m.MasterPrompt)
+						// FIXED: Finally, add empty field explicitly after removal is complete
+						m.MasterPrompt.AddOneEmptyField()
 					},
 				).Body(
 					&SVGIcon{
@@ -402,11 +421,13 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 				app.If(name == "", func() app.UI {
 					return &Spacer{Class: "mt-4 mb-8"}
 				}),
+				app.P().Text(id),
 				app.Input().Type("text").Placeholder("Create new").Class("input input-md w-full").Value(name).OnChange(
 					func(ctx app.Context, e app.Event) {
 						newName := ctx.JSSrc().Get("value").String()
 						m.MasterPrompt.UpdateValueByID(id, &newName, nil)
-						state.SetMasterPrompt(ctx, m.MasterPrompt)
+						// For normal updates, we can use the version that adds empty fields
+						state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 					}),
 			),
 		),
@@ -419,7 +440,7 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 					return
 				}
 				m.MasterPrompt.UpdateValueByID(id, nil, &newWeight)
-				state.SetMasterPrompt(ctx, m.MasterPrompt)
+				state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 			}
 			return app.Input().Class("w-96 ml-4").Type("range").Min(0).Max(100).Class("range").Value(weight).
 				OnChange(handleSliderInput).

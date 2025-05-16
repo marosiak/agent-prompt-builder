@@ -1073,3 +1073,92 @@ func TestRenderingWithRemoval(t *testing.T) {
 		}
 	}
 }
+
+func TestRemovalAndIdConsistency(t *testing.T) {
+	// Create a master prompt with carefully tracked IDs
+	mp := &MasterPrompt{
+		TeamPreset: TeamPreset{
+			Values: []Person{
+				{
+					ID:   "person1",
+					Name: "Person1",
+					Features: []Feature{
+						{ID: "A", Name: "Feature A", Weight: 10},
+						{ID: "B", Name: "Feature B", Weight: 20},
+						{ID: "C", Name: "Feature C", Weight: 30},
+						{ID: "D", Name: "Feature D", Weight: 40},
+						{ID: "E", Name: "Feature E", Weight: 50},
+						{ID: "F", Name: "Feature F", Weight: 60},
+					},
+				},
+			},
+		},
+	}
+
+	// Step 1: Record original feature-to-name mappings
+	originalFeatures := make(map[string]string)
+	for _, feature := range mp.TeamPreset.Values[0].Features {
+		originalFeatures[feature.ID] = feature.Name
+	}
+	
+	// Step 2: Remove feature C
+	featureToRemove := "C"
+	mp.RemoveFeatureByID(featureToRemove)
+	
+	// Step 3: Simulate UI process - NOTE: not calling AddOneEmptyField to avoid ID issues
+	
+	// Step 4: Check all remaining features maintained their IDs
+	idToPositionAfterRemoval := make(map[string]int)
+	for i, feature := range mp.TeamPreset.Values[0].Features {
+		idToPositionAfterRemoval[feature.ID] = i
+		
+		if feature.ID == featureToRemove {
+			t.Errorf("Feature with ID %s should have been removed", featureToRemove)
+		}
+		
+		// For remaining features, verify their name didn't change
+		if originalName, exists := originalFeatures[feature.ID]; exists {
+			if feature.Name != originalName {
+				t.Errorf("Feature ID %s should have name %s but has %s", 
+					feature.ID, originalName, feature.Name)
+			}
+		}
+	}
+	
+	// Step 5: Verify the remaining IDs are A, B, D, E, F (not C)
+	expectedRemainingIDs := []string{"A", "B", "D", "E", "F"}
+	for _, id := range expectedRemainingIDs {
+		if _, exists := idToPositionAfterRemoval[id]; !exists {
+			t.Errorf("Feature ID %s should still exist after removal", id)
+		}
+	}
+	
+	// Step 6: Only NOW add empty field and verify it doesn't affect other IDs
+	mp.AddOneEmptyField()
+	
+	// Check positions again
+	idToPositionAfterEmptyField := make(map[string]int)
+	for i, feature := range mp.TeamPreset.Values[0].Features {
+		// Skip the empty feature
+		if feature.Name == "" {
+			continue
+		}
+		
+		idToPositionAfterEmptyField[feature.ID] = i
+		
+		// Verify name still matches original
+		if originalName, exists := originalFeatures[feature.ID]; exists {
+			if feature.Name != originalName {
+				t.Errorf("After AddOneEmptyField, feature ID %s should have name %s but has %s", 
+					feature.ID, originalName, feature.Name)
+			}
+		}
+	}
+	
+	// Make sure all previous IDs are still there
+	for id := range idToPositionAfterRemoval {
+		if _, exists := idToPositionAfterEmptyField[id]; !exists {
+			t.Errorf("Feature ID %s disappeared after AddOneEmptyField", id)
+		}
+	}
+}

@@ -13,7 +13,16 @@ func Key() string {
 func DelMasterPrompt(ctx app.Context) {
 	ctx.DelState(Key())
 }
+
 func SetMasterPrompt(ctx app.Context, masterPrompt *domain.MasterPrompt) {
+	// FIXED: Don't automatically call AddOneEmptyField - it can cause issues with IDs
+	// We'll call it explicitly when needed
+	ctx.SetState(Key(), *masterPrompt).Persist()
+}
+
+// SetMasterPromptWithEmptyField adds an empty field after setting the master prompt
+// Use this for normal editing operations, but not for removal operations
+func SetMasterPromptWithEmptyField(ctx app.Context, masterPrompt *domain.MasterPrompt) {
 	masterPrompt.AddOneEmptyField()
 	ctx.SetState(Key(), *masterPrompt).Persist()
 }
