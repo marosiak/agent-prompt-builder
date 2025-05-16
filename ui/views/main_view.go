@@ -421,7 +421,6 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 				app.If(name == "", func() app.UI {
 					return &Spacer{Class: "mt-4 mb-8"}
 				}),
-				app.P().Text(id), // This shows the correct ID
 				app.Input().Type("text").Placeholder("Create new").Class("input input-md w-full").Value(name).OnChange(
 					func(capturedID string) func(ctx app.Context, e app.Event) {
 						return func(ctx app.Context, e app.Event) {
