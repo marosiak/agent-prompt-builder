@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"sort"
 	"strconv"
+	"strings"
 )
 
 type MainView struct {
@@ -401,17 +402,16 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 	return app.Div().Class("flex flex-row w-full justify-between items-center mb-2").Body(
 		app.Div().Class("flex flex-row w-full").Body(
 			app.If(name != "", func() app.UI {
-				return app.Button().Class("btn btn-circle btn-error mr-2").OnClick(
-					func(ctx app.Context, e app.Event) {
-						slog.Info("Clicked remove button", slog.String("id", id))
-						// FIXED: First remove the feature
-						m.MasterPrompt.RemoveFeatureByID(id)
-						// FIXED: Then save state WITHOUT automatically adding empty fields
-						state.SetMasterPrompt(ctx, m.MasterPrompt)
-						// FIXED: Finally, add empty field explicitly after removal is complete
-						m.MasterPrompt.AddOneEmptyField()
-					},
-				).Body(
+
+				return app.Button().ID("btn-feature-"+id).Attr("featureId", id).Class("btn btn-circle btn-error mr-2").OnClick(func(ctx app.Context, e app.Event) {
+					theId := ctx.JSSrc().Get("id").String()
+					theId = strings.ReplaceAll(theId, "btn-feature-", "")
+
+					slog.Info("Clicked remove button", slog.String("id", theId))
+					m.MasterPrompt.RemoveFeatureByID(theId)
+					state.SetMasterPrompt(ctx, m.MasterPrompt)
+					m.MasterPrompt.AddOneEmptyField()
+				}).Body(
 					&SVGIcon{
 						IconData: TrashIcon,
 						Color:    "white",
@@ -421,27 +421,32 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 				app.If(name == "", func() app.UI {
 					return &Spacer{Class: "mt-4 mb-8"}
 				}),
-				app.P().Text(id),
+				app.P().Text(id), // This shows the correct ID
 				app.Input().Type("text").Placeholder("Create new").Class("input input-md w-full").Value(name).OnChange(
-					func(ctx app.Context, e app.Event) {
-						newName := ctx.JSSrc().Get("value").String()
-						m.MasterPrompt.UpdateValueByID(id, &newName, nil)
-						// For normal updates, we can use the version that adds empty fields
-						state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
-					}),
+					func(capturedID string) func(ctx app.Context, e app.Event) {
+						return func(ctx app.Context, e app.Event) {
+							newName := ctx.JSSrc().Get("value").String()
+							m.MasterPrompt.UpdateValueByID(capturedID, &newName, nil)
+							state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
+						}
+					}(id)),
 			),
 		),
 
 		app.If(name != "", func() app.UI {
-			handleSliderInput := func(ctx app.Context, e app.Event) {
-				newWeight, err := strconv.Atoi(ctx.JSSrc().Get("value").String())
-				if err != nil {
-					slog.Error("Error converting weight to int", err)
-					return
+			// FIXED: Create a closure for the slider handlers too
+			handleSliderInput := func(capturedID string) func(ctx app.Context, e app.Event) {
+				return func(ctx app.Context, e app.Event) {
+					newWeight, err := strconv.Atoi(ctx.JSSrc().Get("value").String())
+					if err != nil {
+						slog.Error("Error converting weight to int", err)
+						return
+					}
+					m.MasterPrompt.UpdateValueByID(capturedID, nil, &newWeight)
+					state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 				}
-				m.MasterPrompt.UpdateValueByID(id, nil, &newWeight)
-				state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
-			}
+			}(id)
+
 			return app.Input().Class("w-96 ml-4").Type("range").Min(0).Max(100).Class("range").Value(weight).
 				OnChange(handleSliderInput).
 				OnPaste(handleSliderInput).
