@@ -13,12 +13,22 @@ func GetAppHandler(isStatic bool) *app.Handler {
 		Title:       "Master Prompt Builder",
 		Name:        "Master prompt builder",
 		Description: "Will help you with building agents",
-		Styles:      []string{"/web/bundle.css"},
 		Version:     uuid.New().String(),
 	}
+
+	styles := []string{"/bundle.css"}
+
 	if isStatic {
 		handler.Resources = app.GitHubPages("agent-prompt-builder")
+	} else {
+		var tmpStyles []string
+		for _, style := range handler.Styles {
+			tmpStyles = append(tmpStyles, "/web"+style)
+		}
+
+		styles = tmpStyles
 	}
+	handler.Styles = styles
 	return handler
 }
 
