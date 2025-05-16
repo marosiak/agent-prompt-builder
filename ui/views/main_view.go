@@ -9,12 +9,16 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type MainView struct {
 	app.Compo
-	updateAvailable bool
-	MasterPrompt    *domain.MasterPrompt
+	updateAvailable    bool
+	MasterPrompt       *domain.MasterPrompt
+	CurrentPageIndex   int
+	ctx                app.Context
+	KeystrokePressedAt *time.Time
 }
 
 func (m *MainView) OnAppUpdate(ctx app.Context) {
@@ -22,15 +26,29 @@ func (m *MainView) OnAppUpdate(ctx app.Context) {
 }
 
 func (m *MainView) OnMount(ctx app.Context) {
+	m.ctx = ctx
 	ctx.Dispatch(func(ctx app.Context) {
 		masterPromptCopy := state.GetMasterPrompt(ctx)
 		m.MasterPrompt = &masterPromptCopy
+		m.CurrentPageIndex = state.GetCurrentPageIndex(ctx)
 	})
 
 	var tmpMasterPrompt domain.MasterPrompt
 	ctx.ObserveState(state.Key(), &tmpMasterPrompt).OnChange(func() {
 		m.MasterPrompt = &tmpMasterPrompt
 	})
+
+	var tmpPageIndex int
+	ctx.ObserveState(state.PageStateKey(), &tmpPageIndex).OnChange(func() {
+		slog.Info("Loaded page state", slog.Int("index", tmpPageIndex))
+		m.CurrentPageIndex = tmpPageIndex
+	})
+}
+
+func (m *MainView) OnNav(ctx app.Context) {
+	// This is called when the user navigates to a different page
+	// We can use this to update the current page index
+	m.ctx = ctx
 }
 
 // Todo: Divide into more files
@@ -44,29 +62,75 @@ func (m *MainView) Render() app.UI {
 		slog.Error("Error rendering master prompt", err)
 	}
 
-	return app.Div().Class().Attr("data-theme", "cupcake").Class("").Body(
-		app.Div().Class("p-12 bg-base-200").Body(
-			app.If(m.updateAvailable, func() app.UI {
-				return app.Button().
-					Text("Update app!").
-					Class("bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded").
-					OnClick(m.onUpdateClick)
-			}),
+	onClickBreadCrumb := func(ctx app.Context, index int) {
+		state.SetCurrentPageIndex(ctx, index)
+		//ctx.Dispatch(func(ctx app.Context) {
+		//	m.CurrentPageIndex = index
+		//})
+	}
+	pagesAmount := 6
 
-			m.renderScrollToBottomButton(),
+	if m.KeystrokePressedAt != nil {
+		slog.Info("[MAIN VIEW] Key pressed at", slog.Time("time", *m.KeystrokePressedAt))
+	}
 
-			m.renderWelcomeCard(),
-			&Spacer{Size: SpacerSizeHuge},
-			m.renderMasterPromptTemplate(),
-			app.Div().Class("flex xl:flex-row lg:flex-col md:flex-col sm:flex-col flex-col justify-stretch mb-2 w-full").Body(
+	return app.Div().Class("bg-base-200 h-full min-h-dvh vw-100 p-12").Attr("data-theme", "cupcake").Class("").Body(
+		app.Div().Class("w-1 h-1"), // no idea why it gets broken without it, doesnt look very harmfully
+		&NavbarComponent{
+			Class:          "py-2 mb-12",
+			StartComponent: app.P().Text("Agent Prompt Builder").Class("font-bold text-accent-content text-md hidden xl:inline"),
+			CenterComponent: &BreadcrumbsComponent{
+				Breadcrumbs: []Breadcrumb{
+					{Title: "Introduction", OnClick: func(ctx app.Context, e app.Event) { onClickBreadCrumb(ctx, 0) }, Active: m.CurrentPageIndex == 0, Completed: true},
+					{Title: "Template", OnClick: func(ctx app.Context, e app.Event) { onClickBreadCrumb(ctx, 1) }, Active: m.CurrentPageIndex == 1, Completed: m.CurrentPageIndex >= 1},
+					{Title: "Style", OnClick: func(ctx app.Context, e app.Event) { onClickBreadCrumb(ctx, 2) }, Active: m.CurrentPageIndex == 2, Completed: m.CurrentPageIndex >= 2},
+					{Title: "Rules", OnClick: func(ctx app.Context, e app.Event) { onClickBreadCrumb(ctx, 3) }, Active: m.CurrentPageIndex == 3, Completed: m.CurrentPageIndex >= 3},
+					{Title: "Team", OnClick: func(ctx app.Context, e app.Event) { onClickBreadCrumb(ctx, 4) }, Active: m.CurrentPageIndex == 4, Completed: m.CurrentPageIndex >= 4},
+					{Title: "Prompt ready", OnClick: func(ctx app.Context, e app.Event) { onClickBreadCrumb(ctx, 5) }, Active: m.CurrentPageIndex == 5, Completed: m.CurrentPageIndex >= 5},
+				},
+			},
+			EndComponent: app.Div().Class("flex flex-row hidden xl:inline").Body(
+				m.renderShareButton("Share workspace"),
+			),
+		},
+
+		&PageViewComponent{
+			CurrentIndex: m.CurrentPageIndex,
+			Pages: []app.UI{
+				m.renderWelcomeCard(),
+				m.renderMasterPromptTemplate(),
 				m.renderRules(),
 				m.renderStyle(),
-			),
-			m.renderTeam(),
-			&Spacer{Size: SpacerSizeHuge},
-			m.renderOutputSection(renderedMasterPrompt),
-			m.renderSharingFeature(),
-		),
+				m.renderTeam(),
+				app.Div().Body(
+					m.renderOutputSection(renderedMasterPrompt),
+					m.renderSharingFeature(),
+				),
+			},
+		},
+
+		&KeyListenerComponent{
+			IgnoreInsideTextFields: true,
+			KeyPressedAt:           m.KeystrokePressedAt,
+			OnKeyUp: func(key string) {
+				if key == "ArrowLeft" {
+					if m.CurrentPageIndex > 0 {
+						state.SetCurrentPageIndex(m.ctx, m.CurrentPageIndex-1)
+					}
+				}
+				if key == "ArrowRight" {
+					if m.CurrentPageIndex < pagesAmount-1 {
+						state.SetCurrentPageIndex(m.ctx, m.CurrentPageIndex+1)
+					}
+				}
+			},
+		},
+		app.If(m.updateAvailable, func() app.UI {
+			return app.Button().
+				Text("Update app!").
+				Class("bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded").
+				OnClick(m.onUpdateClick)
+		}),
 	)
 }
 
@@ -99,13 +163,15 @@ func (m *MainView) renderScrollToBottomButton() app.HTMLButton {
 func (m *MainView) renderWelcomeCard() *CardComponent {
 	return &CardComponent{
 		Body: []app.UI{
-			app.H1().Text("Master prompt generator").Class("text-2xl font-bold mb-4"),
+			app.H2().Text("Tutorial").Class("text-xl font-bold mb-4"),
 			app.P().Text("This is a tool to help you generate a master prompt for your LLM agent.").Class("text-md opacity-80 mb-1"),
 			app.P().Text("Data is stored in your browser, so you won't lose anything after refresh").Class("text-md opacity-80 mb-12"),
+			app.P().Text("Navigate by clicking links at top").Class("text-md opacity-80 mb-2"),
+			app.P().Text("You can also use arrows via your keyboard!").Class("text-md opacity-80 font-bold mb-6"),
 			&StepsComponent{
 				IsVertical: true,
 				Steps: []Step{
-					{Title: "Think about your needs", Active: true, Complete: true},
+					{Title: "Think about your needs", Active: true},
 					{Title: "Create 📜 Rules", Active: true},
 					{Title: "Define 🤌🏻Style guidelines", Active: true},
 					{Title: "Assign virtual 👨‍💻 Team", Active: true},
@@ -143,12 +209,16 @@ func (m *MainView) renderSharingFeature() *CardComponent {
 		Body: []app.UI{
 			app.H2().Text("Sharing workspace").Class("text-xl font-bold mb-4"),
 			app.P().Class("text-md opacity-80 mb-4").Text("You can share your workspace with others by sending them a link. Just click copy and send it to your mate, you can also store it somewhere in notes and manage versions this way."),
-			app.Button().Class("btn btn-secondary flex flex-row align-center").Body(
-				&SVGIcon{IconData: LinkIcon, Color: "black", IconSize: IconSizeBig, OpacityPercent: 30},
-				app.P().Class("text-md").Text("Copy link"),
-			).OnClick(m.copyLinkPressed()),
+			m.renderShareButton("Copy link"),
 		},
 	}
+}
+
+func (m *MainView) renderShareButton(text string) app.HTMLButton {
+	return app.Button().Class("btn btn-secondary flex flex-row align-center").Body(
+		&SVGIcon{IconData: LinkIcon, Color: "black", IconSize: IconSizeBig, OpacityPercent: 30},
+		app.P().Class("text-md").Text(text),
+	).OnClick(m.copyLinkPressed())
 }
 
 func (m *MainView) copyOutputPressed() func(ctx app.Context, e app.Event) {
@@ -182,6 +252,9 @@ func (m *MainView) copyLinkPressed() func(ctx app.Context, e app.Event) {
 
 		// set clipboard
 		app.Window().Get("navigator").Get("clipboard").Call("writeText", link.String())
+
+		//alert
+		app.Window().Get("alert").Invoke("Link copied to clipboard! You can now share it with your friends. or save for later")
 
 	}
 }
@@ -252,7 +325,7 @@ func (m *MainView) renderTeam() *CardComponent {
 						}
 
 						return &CardComponent{
-							Class: "mr-4 w-full rounded-3xl p-8 shadow-sm border-1 border-black/15 mt-2 mb-2 bg-base-100 gap-2",
+							Class: "mr-4 w-full rounded-3xl p-8 shadow-md border-1 border-black/15 mt-2 mb-2 bg-base-100 gap-2 mb-8",
 							Body: []app.UI{
 								app.Div().Class("flex flex-row align-center mb-6").Body(
 
