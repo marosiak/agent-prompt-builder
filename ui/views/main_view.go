@@ -18,7 +18,7 @@ type MainView struct {
 }
 
 func (m *MainView) OnAppUpdate(ctx app.Context) {
-	m.updateAvailable = ctx.AppUpdateAvailable() // Reports that an app update is available.
+	m.updateAvailable = ctx.AppUpdateAvailable()
 }
 
 func (m *MainView) OnMount(ctx app.Context) {
@@ -29,7 +29,6 @@ func (m *MainView) OnMount(ctx app.Context) {
 
 	var tmpMasterPrompt domain.MasterPrompt
 	ctx.ObserveState(state.Key(), &tmpMasterPrompt).OnChange(func() {
-		slog.Info("State changed in MainView")
 		m.MasterPrompt = &tmpMasterPrompt
 	})
 }
@@ -54,19 +53,47 @@ func (m *MainView) Render() app.UI {
 					OnClick(m.onUpdateClick)
 			}),
 
-			m.renderWelcomeCard(),
+			m.renderScrollToBottomButton(),
 
+			m.renderWelcomeCard(),
+			&Spacer{Size: SpacerSizeHuge},
 			m.renderMasterPromptTemplate(),
-			app.Div().Class("flex xl:flex-row lg:flex-col md:flex-col sm:flex-col justify-stretch mb-6 w-full").Body(
+			app.Div().Class("flex xl:flex-row lg:flex-col md:flex-col sm:flex-col flex-col justify-stretch mb-2 w-full").Body(
 				m.renderRules(),
 				m.renderStyle(),
 			),
 			m.renderTeam(),
-
+			&Spacer{Size: SpacerSizeHuge},
 			m.renderOutputSection(renderedMasterPrompt),
 			m.renderSharingFeature(),
 		),
 	)
+}
+
+func (m *MainView) renderScrollToBottomButton() app.HTMLButton {
+	return app.Button().
+		Class("btn btn-circle btn-xl btn-accent bottom-5 right-5 fixed shadow-xl").
+		OnClick(func(ctx app.Context, e app.Event) {
+			var outputSection = app.Window().Get("document").Call("getElementById", "output-section")
+
+			if outputSection == nil {
+				slog.Error("Unable to find output-section")
+				return
+			}
+
+			outputSection.Call("scrollIntoView", map[string]interface{}{
+				"behavior": "smooth",
+				"block":    "start",
+				"inline":   "nearest",
+			})
+		}).
+		Body(
+			&SVGIcon{
+				IconData:       AngleDownIcon,
+				Color:          "black",
+				OpacityPercent: 45,
+			},
+		)
 }
 
 func (m *MainView) renderWelcomeCard() *CardComponent {
@@ -75,14 +102,13 @@ func (m *MainView) renderWelcomeCard() *CardComponent {
 			app.H1().Text("Master prompt generator").Class("text-2xl font-bold mb-4"),
 			app.P().Text("This is a tool to help you generate a master prompt for your LLM agent.").Class("text-md opacity-80 mb-1"),
 			app.P().Text("Data is stored in your browser, so you won't lose anything after refresh").Class("text-md opacity-80 mb-12"),
-
 			&StepsComponent{
 				IsVertical: true,
 				Steps: []Step{
 					{Title: "Think about your needs", Active: true, Complete: true},
-					{Title: "Establish 📜 Rules", Active: true},
-					{Title: "🤌🏻Style guidelines", Active: true},
-					{Title: "\"Hire\" your 👨‍💻 Team", Active: true},
+					{Title: "Create 📜 Rules", Active: true},
+					{Title: "Define 🤌🏻Style guidelines", Active: true},
+					{Title: "Assign virtual 👨‍💻 Team", Active: true},
 					{Title: "Copy output", Active: true},
 					{Title: "Paste into Chat GPT / other LLM", Active: true},
 				},
@@ -93,10 +119,20 @@ func (m *MainView) renderWelcomeCard() *CardComponent {
 
 func (m *MainView) renderOutputSection(renderedMasterPrompt string) *CardComponent {
 	return &CardComponent{
+		Class: "mb-4",
 		Body: []app.UI{
 
-			app.H2().Text("Output").Class("text-xl font-bold mb-4"),
-			app.P().Class("text-md opacity-80 mb-12").Text("Paste it into your chat gpt space, copilot or any other LLM"),
+			app.Div().Class("mb-4 flex flex-row").ID("output-section").Body(
+
+				&SVGIcon{IconData: MagicWandIcon, Color: "green", IconSize: IconSizeLarge, OpacityPercent: 30},
+				app.H2().Text("Your prompt").Class("ml-2 text-xl font-bold mb-1"),
+			),
+			app.P().Class("text-md opacity-80 mb-6").Text("Paste it into your chat gpt space, copilot or any other LLM"),
+
+			app.Button().Class("btn btn-primary flex flex-row align-center mb-4").Body(
+				&SVGIcon{IconData: CopyIcon, Color: "black", IconSize: IconSizeBig, OpacityPercent: 25},
+				app.P().Class("text-md").Text("Copy"),
+			).OnClick(m.copyOutputPressed()),
 			app.Textarea().Class("textarea textarea-bordered h-80 w-full").Text(renderedMasterPrompt).Placeholder("There should be your prompt"),
 		},
 	}
@@ -107,8 +143,22 @@ func (m *MainView) renderSharingFeature() *CardComponent {
 		Body: []app.UI{
 			app.H2().Text("Sharing workspace").Class("text-xl font-bold mb-4"),
 			app.P().Class("text-md opacity-80 mb-4").Text("You can share your workspace with others by sending them a link. Just click copy and send it to your mate, you can also store it somewhere in notes and manage versions this way."),
-			app.Button().Class("btn btn-primary").Text("Copy link").OnClick(m.copyLinkPressed()),
+			app.Button().Class("btn btn-secondary flex flex-row align-center").Body(
+				&SVGIcon{IconData: LinkIcon, Color: "black", IconSize: IconSizeBig, OpacityPercent: 30},
+				app.P().Class("text-md").Text("Copy link"),
+			).OnClick(m.copyLinkPressed()),
 		},
+	}
+}
+
+func (m *MainView) copyOutputPressed() func(ctx app.Context, e app.Event) {
+	return func(ctx app.Context, e app.Event) {
+		out, err := m.MasterPrompt.String()
+		if err != nil {
+			return
+		}
+
+		app.Window().Get("navigator").Get("clipboard").Call("writeText", out)
 	}
 }
 
@@ -156,7 +206,9 @@ func (m *MainView) renderTeam() *CardComponent {
 				),
 				&DropdownComponent[domain.TeamPreset]{
 					OptionDataList: presetsToSelect,
-					Text:           "Select preset",
+					Text:           "Preset",
+					Icon:           &SVGIcon{IconData: SlidersIcon, Color: "black", IconSize: IconSizeMedium, OpacityPercent: 55},
+					Position:       DropdownPositionLeft,
 					OnClick: func(ctx app.Context, value domain.TeamPreset) {
 						teamPreset := value
 						m.MasterPrompt.TeamPreset = teamPreset
@@ -173,7 +225,7 @@ func (m *MainView) renderTeam() *CardComponent {
 						var handleNameChange = func(ctx app.Context, e app.Event) {
 							newName := ctx.JSSrc().Get("value").String()
 							m.MasterPrompt.TeamPreset.Values[i].Name = newName
-							state.SetMasterPrompt(ctx, m.MasterPrompt)
+							state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 						}
 
 						var handleRoleChange = func(ctx app.Context, e app.Event) {
@@ -214,12 +266,14 @@ func (m *MainView) renderTeam() *CardComponent {
 									app.Input().Class("input input-md w-full mb-1").Type("text").Placeholder("Put team member name here").
 										Value(member.Name).OnChange(handleNameChange).OnKeyUp(handleNameChange),
 									app.If(member.Name != "", func() app.UI {
-										return app.Button().Class("btn btn-error ml-2").OnClick(
+										return app.Button().ID("btn-feature-"+member.ID).Class("btn btn-error ml-2").OnClick(
 											func(ctx app.Context, e app.Event) {
-												m.MasterPrompt.RemoveTeamMemberByID(member.ID)
-												state.SetMasterPrompt(ctx, m.MasterPrompt)
+												theId := ctx.JSSrc().Get("id").String()
+												theId = strings.ReplaceAll(theId, "btn-feature-", "")
+												m.MasterPrompt.RemoveTeamMemberByID(theId)
+												state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 											}).Body(
-											&SVGIcon{IconData: TrashIcon},
+											&SVGIcon{IconData: TrashIcon, OpacityPercent: 90},
 											app.P().Class("text-md text-white").Text("Remove person"),
 										)
 									}),
@@ -227,12 +281,15 @@ func (m *MainView) renderTeam() *CardComponent {
 
 								app.IfSlice(member.Name != "", func() []app.UI {
 									return []app.UI{
-										app.Input().Class("input input-md w-full mb-12").Type("text").Placeholder("Role = developer, customer, marketing specialist and etc..").
+										app.Input().Class("input input-md w-full mb-2").Type("text").Placeholder("Role = developer, customer, marketing specialist and etc..").
 											Value(member.Role).OnChange(handleRoleChange).OnKeyUp(handleRoleChange),
 
+										&Spacer{
+											Size: SpacerSizeMedium,
+										},
 										app.Div().Class("flex flex-row justify-between mb-6").Body(
-											app.H3().Class("text-xl").Text("Features"),
-											app.H3().Class("text-xl").Text("Weight"),
+											app.H3().Class("text-xl opacity-80").Text("Features"),
+											app.H3().Class("text-xl opacity-80").Text("Weight"),
 										),
 										app.Range(member.Features).Slice(func(j int) app.UI {
 											return m.renderWeightControlledName(member.Features[j].ID, member.Features[j].Name, member.Features[j].Weight)
@@ -267,11 +324,13 @@ func (m *MainView) renderStyle() *CardComponent {
 				),
 				&DropdownComponent[domain.StylePreset]{
 					OptionDataList: presetsToSelect,
-					Text:           "Select preset",
+					Text:           "Preset",
+					Icon:           &SVGIcon{IconData: SlidersIcon, Color: "black", IconSize: IconSizeMedium, OpacityPercent: 55},
+					Position:       DropdownPositionLeft,
 					OnClick: func(ctx app.Context, value domain.StylePreset) {
 						stylePreset := value
 						m.MasterPrompt.StylePreset = stylePreset
-						state.SetMasterPrompt(ctx, m.MasterPrompt)
+						state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 					},
 				},
 			),
@@ -281,14 +340,11 @@ func (m *MainView) renderStyle() *CardComponent {
 				app.H3().Class("text-xl").Text("Weight"),
 			),
 			app.Div().Class("w-full").Body(
-				// FIXED: Create a safe copy of values to render to prevent index issues
 				app.Range(func() []domain.Style {
-					// Make a copy of the styles to prevent issues when elements are removed
 					styles := make([]domain.Style, len(m.MasterPrompt.StylePreset.Values))
 					copy(styles, m.MasterPrompt.StylePreset.Values)
 					return styles
 				}()).Slice(func(i int) app.UI {
-					// Use a local reference to the style to avoid index issues
 					style := m.MasterPrompt.StylePreset.Values[i]
 					return m.renderWeightControlledName(style.ID, style.Name, style.Weight)
 				}),
@@ -320,11 +376,13 @@ func (m *MainView) renderRules() *CardComponent {
 				),
 				&DropdownComponent[domain.RulePreset]{
 					OptionDataList: presetsToSelect,
-					Text:           "Select preset",
+					Text:           "Preset",
+					Icon:           &SVGIcon{IconData: SlidersIcon, Color: "black", IconSize: IconSizeMedium, OpacityPercent: 55},
+					Position:       DropdownPositionLeft,
 					OnClick: func(ctx app.Context, value domain.RulePreset) {
 						rulesPreset := value
 						m.MasterPrompt.RulePreset = rulesPreset
-						state.SetMasterPrompt(ctx, m.MasterPrompt)
+						state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 					},
 				},
 			),
@@ -334,13 +392,11 @@ func (m *MainView) renderRules() *CardComponent {
 				app.H3().Class("text-xl").Text("Weight"),
 			),
 			app.Div().Class("w-full").Body(
-				// FIXED: Create a safe copy of values for rendering
 				app.Range(func() []domain.Rule {
 					rules := make([]domain.Rule, len(m.MasterPrompt.RulePreset.Values))
 					copy(rules, m.MasterPrompt.RulePreset.Values)
 					return rules
 				}()).Slice(func(i int) app.UI {
-					// Use the rule from the original array but with the correct index
 					rule := m.MasterPrompt.RulePreset.Values[i]
 					return m.renderWeightControlledName(rule.ID, rule.Name, rule.Weight)
 				}),
@@ -366,7 +422,7 @@ func (m *MainView) renderMasterPromptTemplate() *CardComponent {
 	onMasterPromptTemplateChanged := func(ctx app.Context, e app.Event) {
 		newTemplate := ctx.JSSrc().Get("value").String()
 		m.MasterPrompt.Template = domain.MasterPromptTemplate(newTemplate)
-		state.SetMasterPrompt(ctx, m.MasterPrompt)
+		state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 	}
 
 	return &CardComponent{
@@ -378,14 +434,16 @@ func (m *MainView) renderMasterPromptTemplate() *CardComponent {
 				),
 				&DropdownComponent[string]{
 					OptionDataList: presetsToSelect,
-					Text:           "Select preset",
+					Text:           "Preset",
+					Icon:           &SVGIcon{IconData: SlidersIcon, Color: "black", IconSize: IconSizeMedium, OpacityPercent: 55},
+					Position:       DropdownPositionLeft,
 					OnClick: func(ctx app.Context, value string) {
 						if value == "" {
 							return
 						}
 
 						m.MasterPrompt.Template = domain.MasterPromptTemplate(value)
-						state.SetMasterPrompt(ctx, m.MasterPrompt)
+						state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 					},
 				},
 			),
@@ -403,25 +461,25 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 		app.Div().Class("flex flex-row w-full").Body(
 			app.If(name != "", func() app.UI {
 
-				return app.Button().ID("btn-feature-"+id).Attr("featureId", id).Class("btn btn-circle btn-error mr-2").OnClick(func(ctx app.Context, e app.Event) {
+				return app.Button().ID("btn-feature-" + id).Class("btn btn-circle btn-error mr-2").OnClick(func(ctx app.Context, e app.Event) {
 					theId := ctx.JSSrc().Get("id").String()
 					theId = strings.ReplaceAll(theId, "btn-feature-", "")
 
 					slog.Info("Clicked remove button", slog.String("id", theId))
 					m.MasterPrompt.RemoveFeatureByID(theId)
-					state.SetMasterPrompt(ctx, m.MasterPrompt)
-					m.MasterPrompt.AddOneEmptyField()
+					state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 				}).Body(
 					&SVGIcon{
-						IconData: TrashIcon,
-						Color:    "white",
+						IconData:       TrashIcon,
+						Color:          "white",
+						OpacityPercent: 90,
 					})
 			}),
 			app.Div().Class("flex flex-col w-full").Body(
 				app.If(name == "", func() app.UI {
-					return &Spacer{Class: "mt-4 mb-8"}
+					return &Spacer{Size: SpacerSizeMedium}
 				}),
-				app.Input().Type("text").Placeholder("Create new").Class("input input-md w-full").Value(name).OnChange(
+				app.Input().Type("text").Placeholder("Create new feature / rule").Class("input input-md w-full").Value(name).OnChange(
 					func(capturedID string) func(ctx app.Context, e app.Event) {
 						return func(ctx app.Context, e app.Event) {
 							newName := ctx.JSSrc().Get("value").String()
@@ -433,7 +491,6 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 		),
 
 		app.If(name != "", func() app.UI {
-			// FIXED: Create a closure for the slider handlers too
 			handleSliderInput := func(capturedID string) func(ctx app.Context, e app.Event) {
 				return func(ctx app.Context, e app.Event) {
 					newWeight, err := strconv.Atoi(ctx.JSSrc().Get("value").String())

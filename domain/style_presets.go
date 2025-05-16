@@ -3,6 +3,7 @@ package domain
 import "github.com/google/uuid"
 
 var StylePresetsMap = map[string]StylePreset{
+	"Empty":                       StylePresetEmpty,
 	"Short and Lazy":              StylePresetShortAndLazy,
 	"Formal and Professional":     StylePresetFormalAndProfessional,
 	"Friendly and Conversational": StylePresetFriendlyAndConversational,
@@ -12,6 +13,8 @@ var StylePresetsMap = map[string]StylePreset{
 	"Persuasive and Marketing":    StylePresetPersuasiveAndMarketing,
 	"Research and Exploratory":    StylePresetResearchAndExploratory,
 }
+
+var StylePresetEmpty = StylePreset{Values: []Style{}}
 
 var StylePresetShortAndLazy = StylePreset{
 	Values: []Style{

@@ -1,0 +1,25 @@
+/* ...existing code... */
+
+.scroll-to-bottom-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1976d2; /* Material primary blue */
+    transition: all 0.2s ease-in-out;
+}
+
+.scroll-to-bottom-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    background-color: #1565c0; /* Slightly darker blue on hover */
+}
+
+/* ...existing code... */

@@ -3,6 +3,7 @@ package domain
 import "github.com/google/uuid"
 
 var TeamPresetsMap = map[string]TeamPreset{
+	"Empty":                        TeamPresetEmpty,
 	"Startup Founders":             TeamPresetStartupFounders,
 	"Product Delivery Squad":       TeamPresetProductDeliverySquad,
 	"Research and Development Pod": TeamPresetResearchAndDevelopmentPod,
@@ -10,6 +11,7 @@ var TeamPresetsMap = map[string]TeamPreset{
 	"DevOps Reliability Team":      TeamPresetDevOpsReliabilityTeam,
 }
 
+var TeamPresetEmpty = TeamPreset{Values: []Person{}}
 var TeamPresetStartupFounders = TeamPreset{
 	Values: []Person{
 		{

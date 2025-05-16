@@ -3,6 +3,7 @@ package domain
 import "github.com/google/uuid"
 
 var RulesPresetsMap = map[string]RulePreset{
+	"Empty":                        RulePresetEmpty,
 	"Clarity and Conciseness":      RulePresetClarityAndConciseness,
 	"Audience Alignment":           RulePresetAudienceAlignment,
 	"Ethical and Inclusive":        RulePresetEthicalAndInclusive,
@@ -11,6 +12,8 @@ var RulesPresetsMap = map[string]RulePreset{
 	"SEO and Discoverability":      RulePresetSEOAndDiscoverability,
 	"Experimentation and Feedback": RulePresetExperimentationAndFeedback,
 }
+
+var RulePresetEmpty = RulePreset{Values: []Rule{}}
 
 var RulePresetClarityAndConciseness = RulePreset{
 	Values: []Rule{

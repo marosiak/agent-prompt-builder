@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/google/uuid"
+	"github.com/marosiak/agent-prompt-builder/config"
 	"github.com/marosiak/agent-prompt-builder/ui/views"
 	"log"
 	"net/http"
@@ -21,16 +21,12 @@ func main() {
 		return &views.ImportView{}
 	})
 
-	app.RunWhenOnBrowser()
-	http.Handle("/", &app.Handler{
-		Name:        "Master prompt builder",
-		Description: "Will help you with building agents",
-		Scripts:     []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"},
-		Styles:  []string{"/web/bundle.css"},
-		Version: uuid.New().String(),
-	})
+	config.RegisterRoutes()
 
-	if err := http.ListenAndServe(":8000", nil); err != nil {
+	app.RunWhenOnBrowser()
+	http.Handle("/", config.GetAppHandler(false))
+
+	if err := http.ListenAndServe(config.PORT, nil); err != nil {
 		log.Fatal(err)
 	}
 }
