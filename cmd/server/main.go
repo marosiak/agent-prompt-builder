@@ -24,7 +24,7 @@ func main() {
 	config.RegisterRoutes()
 
 	app.RunWhenOnBrowser()
-	http.Handle("/", config.GetAppHandler(true))
+	http.Handle("/", config.GetAppHandler(false))
 
 	if err := http.ListenAndServe(config.PORT, nil); err != nil {
 		log.Fatal(err)

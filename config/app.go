@@ -22,7 +22,7 @@ func GetAppHandler(isStatic bool) *app.Handler {
 		handler.Resources = app.GitHubPages("agent-prompt-builder")
 	} else {
 		var tmpStyles []string
-		for _, style := range handler.Styles {
+		for _, style := range styles {
 			tmpStyles = append(tmpStyles, "/web"+style)
 		}
 

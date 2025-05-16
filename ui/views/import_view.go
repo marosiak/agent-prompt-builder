@@ -5,6 +5,7 @@ import (
 	"github.com/marosiak/agent-prompt-builder/state"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 	"log/slog"
+	"strings"
 )
 
 type ImportView struct {
@@ -35,10 +36,10 @@ func (i *ImportView) Render() app.UI {
 
 func (i *ImportView) redirectHome(ctx app.Context) {
 	link := ctx.Page().URL()
-	link.Path = "/"
 	query := link.Query() // Get a copy of the query parameters
 	query.Del("data")     // Modify the query parameters
 	link.RawQuery = query.Encode()
+	link.Path = strings.ReplaceAll(link.Path, "/import", "/")
 	ctx.NavigateTo(link) // Navigate to the new URL
 }
 
