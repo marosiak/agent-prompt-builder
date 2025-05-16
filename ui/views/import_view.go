@@ -15,18 +15,17 @@ type ImportView struct {
 
 func (i *ImportView) Render() app.UI {
 	// dialog if you want to import data and about consequences
-	return app.Div().Attr("data-theme", "cupcake").Class("flex flex-col items-center justify-center h-screen").Body(
+	return app.Div().Attr("data-theme", "cupcake").Class("flex flex-col items-center justify-center h-screen bg-base-200").Body(
 		app.Div().Class("card w-96 bg-base-100 shadow-xl").Body(
 			app.Div().Class("card-body").Body(
 				app.H2().Class("card-title").Text("Import Data"),
 				app.P().Text("Importing data will overwrite any existing data. Please ensure you have a backup before proceeding."),
 				app.B().Text("Do you want to proceed?"),
 				app.Div().Class("card-actions justify-end").Body(
-					app.Button().Class("btn btn-primary").Text("Yes").OnClick(i.importData()),
-					app.Button().Class("btn btn-secondary").Text("No").OnClick(func(ctx app.Context, e app.Event) {
+					app.Button().Class("btn btn-primary").Text("No").OnClick(func(ctx app.Context, e app.Event) {
 						i.redirectHome(ctx)
-					},
-					),
+					}),
+					app.Button().Class("btn btn-secondary").Text("Yes").OnClick(i.importData()),
 				),
 			),
 		),
@@ -63,5 +62,6 @@ func (i *ImportView) importData() func(ctx app.Context, e app.Event) {
 
 		state.DelMasterPrompt(ctx)
 		state.SetMasterPrompt(ctx, i.MasterPrompt)
+		app.Window().Get("alert").Invoke("Data imported successfully")
 	}
 }

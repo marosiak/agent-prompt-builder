@@ -94,6 +94,12 @@ func (m *MainView) Render() app.UI {
 			),
 		},
 
+		app.If(m.updateAvailable, func() app.UI {
+			return app.Button().
+				Text("Update app!").
+				Class("bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded").
+				OnClick(m.onUpdateClick)
+		}),
 		&PageViewComponent{
 			CurrentIndex: m.CurrentPageIndex,
 			Pages: []app.UI{
@@ -125,12 +131,6 @@ func (m *MainView) Render() app.UI {
 				}
 			},
 		},
-		app.If(m.updateAvailable, func() app.UI {
-			return app.Button().
-				Text("Update app!").
-				Class("bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded").
-				OnClick(m.onUpdateClick)
-		}),
 	)
 }
 

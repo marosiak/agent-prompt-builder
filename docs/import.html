@@ -5,7 +5,7 @@
     <meta name="author" content>
     <meta name="description" content="Will help you with building agents">
     <meta name="theme-color" content="#2d2c2c">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
     <meta name="mobile-web-app-capable" content="yes">
     <meta property="og:url" content="https:///agent-prompt-builder/import">
     <meta property="og:title" content="Master Prompt Builder">
@@ -14,29 +14,29 @@
     <meta property="og:image" content="https://">
     <title>Master Prompt Builder</title>
     <link rel="icon" href="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.svg">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png">
-    <link rel="manifest" href="/agent-prompt-builder/manifest.webmanifest">
+    <link href="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png" rel="apple-touch-icon">
+    <link href="/agent-prompt-builder/manifest.webmanifest" rel="manifest">
     <link href="/agent-prompt-builder/app.css" type="text/css" rel="stylesheet">
-    <link rel="stylesheet" href="/agent-prompt-builder/bundle.css" type="text/css">
+    <link href="/agent-prompt-builder/bundle.css" type="text/css" rel="stylesheet">
     <script defer src="/agent-prompt-builder/wasm_exec.js"></script>
     <script defer src="/agent-prompt-builder/app.js"></script>
   </head>
   <body>
-    <div data-theme="cupcake" class="flex flex-col items-center justify-center h-screen">
+    <div data-theme="cupcake" class="flex flex-col items-center justify-center h-screen bg-base-200">
       <div class="card w-96 bg-base-100 shadow-xl">
         <div class="card-body">
           <h2 class="card-title">Import Data</h2>
           <p>Importing data will overwrite any existing data. Please ensure you have a backup before proceeding.</p>
           <b>Do you want to proceed?</b>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary">Yes</button>
-            <button class="btn btn-secondary">No</button>
+            <button class="btn btn-primary">No</button>
+            <button class="btn btn-secondary">Yes</button>
           </div>
         </div>
       </div>
     </div>
     <aside id="app-wasm-loader" class="goapp-app-info">
-      <img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" alt="wasm loader icon" src="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png">
+      <img alt="wasm loader icon" src="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png" id="app-wasm-loader-icon" class="goapp-logo goapp-spin">
       <p id="app-wasm-loader-label" class="goapp-label">0%</p>
     </aside>
   </body>
