@@ -105,8 +105,8 @@ func (m *MainView) Render() app.UI {
 			Pages: []app.UI{
 				m.renderWelcomeCard(),
 				m.renderMasterPromptTemplate(),
-				m.renderRules(),
 				m.renderStyle(),
+				m.renderRules(),
 				m.renderTeam(),
 				app.Div().Body(
 					m.renderOutputSection(renderedMasterPrompt),
