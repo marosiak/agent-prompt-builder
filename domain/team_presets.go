@@ -471,14 +471,14 @@ var universalPersonaList = []Person{
 }
 
 var GroupedTeamMembersPresets = map[string][]Person{
-	"Developers":        developersPersonaList,
-	"⭐ Universal":       universalPersonaList,
-	"Marketing":         marketingPersonaList,
-	"Sales":             salesPersonaList,
-	"CustomerSupport":   customerSupportPersonaList,
-	"Finance":           financePersonaList,
-	"ProductManagement": productManagementPersonaList,
-	"DataScience":       dataSciencePersonaList,
-	"Content Creation":  contentCreationPersonaList,
-	"Design":            designPersonaList,
+	"💻 Developers":         developersPersonaList,
+	"⭐ Universal":          universalPersonaList,
+	"📣 Marketing":          marketingPersonaList,
+	"💼 Sales":              salesPersonaList,
+	"🎧 Customer Support":   customerSupportPersonaList,
+	"💰 Finance":            financePersonaList,
+	"🧠 Product Management": productManagementPersonaList,
+	"📊 Data Science":       dataSciencePersonaList,
+	"🎥 Content Creation":   contentCreationPersonaList,
+	"🎨 Design":             designPersonaList,
 }
