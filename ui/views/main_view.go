@@ -1,11 +1,13 @@
 package views
 
 import (
+	"github.com/marosiak/agent-prompt-builder/actions"
 	"github.com/marosiak/agent-prompt-builder/domain"
 	"github.com/marosiak/agent-prompt-builder/state"
 	. "github.com/marosiak/agent-prompt-builder/ui/components"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 	"log/slog"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -19,6 +21,8 @@ type MainView struct {
 	CurrentPageIndex   int
 	ctx                app.Context
 	KeystrokePressedAt *time.Time
+
+	TeamPresetsModal *TeamPresetsModal
 }
 
 func (m *MainView) OnAppUpdate(ctx app.Context) {
@@ -34,20 +38,34 @@ func (m *MainView) OnMount(ctx app.Context) {
 	})
 
 	var tmpMasterPrompt domain.MasterPrompt
-	ctx.ObserveState(state.Key(), &tmpMasterPrompt).OnChange(func() {
+	ctx.ObserveState(state.MasterPromptKey(), &tmpMasterPrompt).OnChange(func() {
 		m.MasterPrompt = &tmpMasterPrompt
 	})
 
 	var tmpPageIndex int
 	ctx.ObserveState(state.PageStateKey(), &tmpPageIndex).OnChange(func() {
-		slog.Info("Loaded page state", slog.Int("index", tmpPageIndex))
 		m.CurrentPageIndex = tmpPageIndex
 	})
+
+	ctx.Handle(actions.ActionOpenTeamPresetsModal, m.HandleOpenTeamPresetsModal)
+	ctx.Handle(actions.AddPerson, m.HandleAddPerson)
+	ctx.Handle(actions.RemovePerson, m.HandleRemovePerson)
+}
+
+func (m *MainView) HandleOpenTeamPresetsModal(ctx app.Context, a app.Action) {
+	if m.TeamPresetsModal == nil {
+		m.TeamPresetsModal = &TeamPresetsModal{
+			masterPrompt: m.MasterPrompt,
+		}
+	} else {
+		m.TeamPresetsModal.masterPrompt = m.MasterPrompt
+		m.TeamPresetsModal.modal.Show()
+	}
+
+	//})
 }
 
 func (m *MainView) OnNav(ctx app.Context) {
-	// This is called when the user navigates to a different page
-	// We can use this to update the current page index
 	m.ctx = ctx
 }
 
@@ -64,15 +82,8 @@ func (m *MainView) Render() app.UI {
 
 	onClickBreadCrumb := func(ctx app.Context, index int) {
 		state.SetCurrentPageIndex(ctx, index)
-		//ctx.Dispatch(func(ctx app.Context) {
-		//	m.CurrentPageIndex = index
-		//})
 	}
 	pagesAmount := 6
-
-	if m.KeystrokePressedAt != nil {
-		slog.Info("[MAIN VIEW] Key pressed at", slog.Time("time", *m.KeystrokePressedAt))
-	}
 
 	return app.Div().Class("bg-base-200 h-full min-h-dvh vw-100 p-12").Attr("data-theme", "cupcake").Class("").Body(
 		app.Div().Class("w-1 h-1"), // no idea why it gets broken without it, doesnt look very harmfully
@@ -114,6 +125,10 @@ func (m *MainView) Render() app.UI {
 				),
 			},
 		},
+
+		app.If(m.TeamPresetsModal != nil, func() app.UI {
+			return m.TeamPresetsModal
+		}),
 
 		&KeyListenerComponent{
 			IgnoreInsideTextFields: true,
@@ -260,16 +275,6 @@ func (m *MainView) copyLinkPressed() func(ctx app.Context, e app.Event) {
 }
 
 func (m *MainView) renderTeam() *CardComponent {
-	var presetsToSelect []OptionData
-	for name, template := range domain.TeamPresetsMap {
-		presetsToSelect = append(presetsToSelect, OptionData{
-			Label: name,
-			Value: template,
-		})
-	}
-	sort.Slice(presetsToSelect, func(i, j int) bool {
-		return len(presetsToSelect[i].Label) < len(presetsToSelect[j].Label)
-	})
 	return &CardComponent{
 		Body: []app.UI{
 			app.Div().Class("flex flex-row justify-between mb-4").Body(
@@ -277,17 +282,12 @@ func (m *MainView) renderTeam() *CardComponent {
 					app.H2().Text("👨‍💻 Team").Class("text-xl font-bold mb-4"),
 					app.P().Class("text-md opacity-80 mb-12").Text("Describe your team members, their roles and features"),
 				),
-				&DropdownComponent[domain.TeamPreset]{
-					OptionDataList: presetsToSelect,
-					Text:           "Preset",
-					Icon:           &SVGIcon{IconData: SlidersIcon, Color: "black", IconSize: IconSizeMedium, OpacityPercent: 55},
-					Position:       DropdownPositionLeft,
-					OnClick: func(ctx app.Context, value domain.TeamPreset) {
-						teamPreset := value
-						m.MasterPrompt.TeamPreset = teamPreset
-						state.SetMasterPrompt(ctx, m.MasterPrompt)
-					},
-				},
+				app.Button().Class("btn btn-primary flex align-center mb-4").Body(
+					&SVGIcon{IconData: MagicWandIcon, Color: "black", IconSize: IconSizeBig, OpacityPercent: 30},
+					app.P().Class("text-md").Text("Compose team"),
+				).OnClick(func(ctx app.Context, e app.Event) {
+					ctx.NewActionWithValue(actions.ActionOpenTeamPresetsModal, nil)
+				}),
 			),
 
 			app.Div().Class("flex flex-col justify-stretch pr-0  w-full pb-6").
@@ -538,7 +538,6 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 					theId := ctx.JSSrc().Get("id").String()
 					theId = strings.ReplaceAll(theId, "btn-feature-", "")
 
-					slog.Info("Clicked remove button", slog.String("id", theId))
 					m.MasterPrompt.RemoveFeatureByID(theId)
 					state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
 				}).Body(
@@ -586,4 +585,31 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 
 func (m *MainView) onUpdateClick(ctx app.Context, e app.Event) {
 	ctx.Reload()
+}
+
+func (m *MainView) HandleAddPerson(ctx app.Context, action app.Action) {
+	value := action.Value
+	if reflect.TypeOf(value) == reflect.TypeOf(domain.Person{}) {
+		person := action.Value.(domain.Person)
+		m.MasterPrompt.TeamPreset.Values = append(m.MasterPrompt.TeamPreset.Values, person)
+		state.SetMasterPromptWithEmptyField(ctx, m.MasterPrompt)
+		m.TeamPresetsModal.masterPrompt = m.MasterPrompt
+	} else {
+		slog.Error("Invalid type for value", "type", reflect.TypeOf(value))
+		return
+	}
+}
+func (m *MainView) HandleRemovePerson(context app.Context, action app.Action) {
+	value := action.Value
+	if reflect.TypeOf(value) == reflect.TypeOf(domain.Person{}) {
+		person := action.Value.(domain.Person)
+
+		m.MasterPrompt.RemoveTeamMemberByID(person.ID)
+
+		state.SetMasterPromptWithEmptyField(context, m.MasterPrompt)
+		m.TeamPresetsModal.masterPrompt = m.MasterPrompt
+	} else {
+		slog.Error("Invalid type for value", "type", reflect.TypeOf(value))
+		return
+	}
 }

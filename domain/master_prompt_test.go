@@ -291,17 +291,17 @@ func TestRemoveFeatureByID_WithEmptyField(t *testing.T) {
 			checkAfterwards: func(t *testing.T, mp *MasterPrompt) {
 				// Person1: should have 2 regular + 1 empty
 				if len(mp.TeamPreset.Values[0].Features) != 3 {
-					t.Errorf("Person1 - expected 3 features (2 regular + 1 empty), got %d", 
+					t.Errorf("Person1 - expected 3 features (2 regular + 1 empty), got %d",
 						len(mp.TeamPreset.Values[0].Features))
 				}
-				
+
 				// Verify the correct feature was removed
 				for _, f := range mp.TeamPreset.Values[0].Features {
 					if f.ID == "f1_2" && f.Name != "" {
 						t.Errorf("Feature f1_2 should have been removed")
 					}
 				}
-				
+
 				// Verify last feature is empty
 				lastFeature := mp.TeamPreset.Values[0].Features[len(mp.TeamPreset.Values[0].Features)-1]
 				if lastFeature.Name != "" {
@@ -315,13 +315,13 @@ func TestRemoveFeatureByID_WithEmptyField(t *testing.T) {
 			checkAfterwards: func(t *testing.T, mp *MasterPrompt) {
 				// Person1: should have 0 regular + 1 empty
 				if len(mp.TeamPreset.Values[0].Features) != 1 {
-					t.Errorf("Person1 - expected 1 feature (0 regular + 1 empty), got %d", 
+					t.Errorf("Person1 - expected 1 feature (0 regular + 1 empty), got %d",
 						len(mp.TeamPreset.Values[0].Features))
 				}
-				
-				 // Verify that feature is empty
+
+				// Verify that feature is empty
 				if mp.TeamPreset.Values[0].Features[0].Name != "" {
-					t.Errorf("Feature should be empty, got name: %q", 
+					t.Errorf("Feature should be empty, got name: %q",
 						mp.TeamPreset.Values[0].Features[0].Name)
 				}
 			},
@@ -332,19 +332,19 @@ func TestRemoveFeatureByID_WithEmptyField(t *testing.T) {
 			checkAfterwards: func(t *testing.T, mp *MasterPrompt) {
 				// Person2: should have 0 regular + 1 empty
 				if len(mp.TeamPreset.Values[1].Features) != 1 {
-					t.Errorf("Person2 - expected 1 feature (0 regular + 1 empty), got %d", 
+					t.Errorf("Person2 - expected 1 feature (0 regular + 1 empty), got %d",
 						len(mp.TeamPreset.Values[1].Features))
 				}
-				
+
 				// Verify that feature is empty
 				if mp.TeamPreset.Values[1].Features[0].Name != "" {
-					t.Errorf("Feature should be empty, got name: %q", 
+					t.Errorf("Feature should be empty, got name: %q",
 						mp.TeamPreset.Values[1].Features[0].Name)
 				}
-				
+
 				// Person1: should still have 0 regular + 1 empty
 				if len(mp.TeamPreset.Values[0].Features) != 1 {
-					t.Errorf("Person1 - expected 1 feature (0 regular + 1 empty), got %d", 
+					t.Errorf("Person1 - expected 1 feature (0 regular + 1 empty), got %d",
 						len(mp.TeamPreset.Values[0].Features))
 				}
 			},
@@ -355,17 +355,17 @@ func TestRemoveFeatureByID_WithEmptyField(t *testing.T) {
 			checkAfterwards: func(t *testing.T, mp *MasterPrompt) {
 				// Person3: should have 2 regular + 1 empty
 				if len(mp.TeamPreset.Values[2].Features) != 3 {
-					t.Errorf("Person3 - expected 3 features (2 regular + 1 empty), got %d", 
+					t.Errorf("Person3 - expected 3 features (2 regular + 1 empty), got %d",
 						len(mp.TeamPreset.Values[2].Features))
 				}
-				
+
 				// Verify correct features were removed
 				for _, f := range mp.TeamPreset.Values[2].Features {
 					if (f.ID == "f3_2" || f.ID == "f3_4") && f.Name != "" {
 						t.Errorf("Feature %s should have been removed", f.ID)
 					}
 				}
-				
+
 				// Verify last feature is empty
 				lastFeature := mp.TeamPreset.Values[2].Features[len(mp.TeamPreset.Values[2].Features)-1]
 				if lastFeature.Name != "" {
@@ -379,13 +379,13 @@ func TestRemoveFeatureByID_WithEmptyField(t *testing.T) {
 			checkAfterwards: func(t *testing.T, mp *MasterPrompt) {
 				// Person3: should have 0 regular + 1 empty
 				if len(mp.TeamPreset.Values[2].Features) != 1 {
-					t.Errorf("Person3 - expected 1 feature (0 regular + 1 empty), got %d", 
+					t.Errorf("Person3 - expected 1 feature (0 regular + 1 empty), got %d",
 						len(mp.TeamPreset.Values[2].Features))
 				}
-				
+
 				// Verify that feature is empty
 				if mp.TeamPreset.Values[2].Features[0].Name != "" {
-					t.Errorf("Feature should be empty, got name: %q", 
+					t.Errorf("Feature should be empty, got name: %q",
 						mp.TeamPreset.Values[2].Features[0].Name)
 				}
 			},
@@ -396,15 +396,15 @@ func TestRemoveFeatureByID_WithEmptyField(t *testing.T) {
 			checkAfterwards: func(t *testing.T, mp *MasterPrompt) {
 				// All persons should still have the same feature counts as before
 				if len(mp.TeamPreset.Values[0].Features) != 1 {
-					t.Errorf("Person1 - expected 1 feature, got %d", 
+					t.Errorf("Person1 - expected 1 feature, got %d",
 						len(mp.TeamPreset.Values[0].Features))
 				}
 				if len(mp.TeamPreset.Values[1].Features) != 1 {
-					t.Errorf("Person2 - expected 1 feature, got %d", 
+					t.Errorf("Person2 - expected 1 feature, got %d",
 						len(mp.TeamPreset.Values[1].Features))
 				}
 				if len(mp.TeamPreset.Values[2].Features) != 1 {
-					t.Errorf("Person3 - expected 1 feature, got %d", 
+					t.Errorf("Person3 - expected 1 feature, got %d",
 						len(mp.TeamPreset.Values[2].Features))
 				}
 			},
@@ -416,15 +416,15 @@ func TestRemoveFeatureByID_WithEmptyField(t *testing.T) {
 				// All persons should still have the same feature counts as before
 				// (f1_1 was already removed in a previous test case)
 				if len(mp.TeamPreset.Values[0].Features) != 1 {
-					t.Errorf("Person1 - expected 1 feature, got %d", 
+					t.Errorf("Person1 - expected 1 feature, got %d",
 						len(mp.TeamPreset.Values[0].Features))
 				}
 				if len(mp.TeamPreset.Values[1].Features) != 1 {
-					t.Errorf("Person2 - expected 1 feature, got %d", 
+					t.Errorf("Person2 - expected 1 feature, got %d",
 						len(mp.TeamPreset.Values[1].Features))
 				}
 				if len(mp.TeamPreset.Values[2].Features) != 1 {
-					t.Errorf("Person3 - expected 1 feature, got %d", 
+					t.Errorf("Person3 - expected 1 feature, got %d",
 						len(mp.TeamPreset.Values[2].Features))
 				}
 			},
@@ -438,10 +438,10 @@ func TestRemoveFeatureByID_WithEmptyField(t *testing.T) {
 			for _, id := range tt.featureIDs {
 				mp.RemoveFeatureByID(id)
 			}
-			
+
 			// Add empty field after all removals
 			mp.AddOneEmptyField()
-			
+
 			// Run the check function
 			tt.checkAfterwards(t, mp)
 		})
@@ -482,7 +482,7 @@ func TestFeatureIDConsistency(t *testing.T) {
 		},
 	}
 
-	// PART 1: Test ID preservation after serialization and deserialization
+	// PART 1: Test id preservation after serialization and deserialization
 	t.Run("Serialization preserves IDs", func(t *testing.T) {
 		// Serialize
 		serialized, err := json.Marshal(mp)
@@ -499,12 +499,12 @@ func TestFeatureIDConsistency(t *testing.T) {
 
 		// Check all IDs are preserved
 		if deserialized.TeamPreset.Values[0].ID != fixedIDs["person1"] {
-			t.Errorf("Person1 ID mismatch: expected %s, got %s", 
+			t.Errorf("Person1 id mismatch: expected %s, got %s",
 				fixedIDs["person1"], deserialized.TeamPreset.Values[0].ID)
 		}
-		
+
 		if deserialized.TeamPreset.Values[0].Features[0].ID != fixedIDs["feature1_1"] {
-			t.Errorf("Feature1_1 ID mismatch: expected %s, got %s", 
+			t.Errorf("Feature1_1 id mismatch: expected %s, got %s",
 				fixedIDs["feature1_1"], deserialized.TeamPreset.Values[0].Features[0].ID)
 		}
 	})
@@ -513,34 +513,34 @@ func TestFeatureIDConsistency(t *testing.T) {
 	t.Run("AddOneEmptyField preserves existing IDs", func(t *testing.T) {
 		// Make a copy to avoid affecting other tests
 		mpCopy := *mp
-		
+
 		// Store original feature counts
 		person1FeatureCount := len(mpCopy.TeamPreset.Values[0].Features)
 		person2FeatureCount := len(mpCopy.TeamPreset.Values[1].Features)
-		
+
 		// Add an empty field
 		mpCopy.AddOneEmptyField()
-		
+
 		// Check existing IDs are preserved
 		if mpCopy.TeamPreset.Values[0].ID != fixedIDs["person1"] {
-			t.Errorf("Person1 ID changed after AddOneEmptyField")
+			t.Errorf("Person1 id changed after AddOneEmptyField")
 		}
-		
+
 		if mpCopy.TeamPreset.Values[0].Features[0].ID != fixedIDs["feature1_1"] {
-			t.Errorf("Feature1_1 ID changed after AddOneEmptyField")
+			t.Errorf("Feature1_1 id changed after AddOneEmptyField")
 		}
-		
+
 		// Check new empty features were added
 		if len(mpCopy.TeamPreset.Values[0].Features) != person1FeatureCount+1 {
-			t.Errorf("Expected %d features for Person1, got %d", 
+			t.Errorf("Expected %d features for Person1, got %d",
 				person1FeatureCount+1, len(mpCopy.TeamPreset.Values[0].Features))
 		}
-		
+
 		if len(mpCopy.TeamPreset.Values[1].Features) != person2FeatureCount+1 {
-			t.Errorf("Expected %d features for Person2, got %d", 
+			t.Errorf("Expected %d features for Person2, got %d",
 				person2FeatureCount+1, len(mpCopy.TeamPreset.Values[1].Features))
 		}
-		
+
 		// Check last feature is empty
 		lastFeature1 := mpCopy.TeamPreset.Values[0].Features[len(mpCopy.TeamPreset.Values[0].Features)-1]
 		if lastFeature1.Name != "" {
@@ -552,17 +552,17 @@ func TestFeatureIDConsistency(t *testing.T) {
 	t.Run("RemoveFeatureByID preserves other feature IDs", func(t *testing.T) {
 		// Make a copy to avoid affecting other tests
 		mpCopy := *mp
-		
+
 		// Remove a feature
 		mpCopy.RemoveFeatureByID(fixedIDs["feature1_2"])
-		
+
 		// Check feature was removed
 		for _, feature := range mpCopy.TeamPreset.Values[0].Features {
 			if feature.ID == fixedIDs["feature1_2"] {
 				t.Errorf("Feature should have been removed but still exists")
 			}
 		}
-		
+
 		// Check other feature IDs are preserved
 		found := false
 		for _, feature := range mpCopy.TeamPreset.Values[0].Features {
@@ -572,7 +572,7 @@ func TestFeatureIDConsistency(t *testing.T) {
 			}
 		}
 		if !found {
-			t.Errorf("Feature1_1 ID disappeared after removing Feature1_2")
+			t.Errorf("Feature1_1 id disappeared after removing Feature1_2")
 		}
 	})
 
@@ -580,40 +580,40 @@ func TestFeatureIDConsistency(t *testing.T) {
 	t.Run("Complex sequence preserves correct IDs", func(t *testing.T) {
 		// Make a copy to avoid affecting other tests
 		mpCopy := *mp
-		
+
 		// 1. Add empty field
 		mpCopy.AddOneEmptyField()
-		
-		// Capture ID of the new empty field
+
+		// Capture id of the new empty field
 		emptyFeatureID := mpCopy.TeamPreset.Values[0].Features[len(mpCopy.TeamPreset.Values[0].Features)-1].ID
-		
+
 		// 2. Update this empty field
 		newName := "Updated Feature"
 		newWeight := 50
 		mpCopy.UpdateValueByID(emptyFeatureID, &newName, &newWeight)
-		
+
 		// 3. Add another empty field
 		mpCopy.AddOneEmptyField()
-		
+
 		// 4. Remove a different feature
 		mpCopy.RemoveFeatureByID(fixedIDs["feature1_1"])
-		
-		// 5. Verify the updated (previously empty) feature still has the same ID and updated values
+
+		// 5. Verify the updated (previously empty) feature still has the same id and updated values
 		found := false
 		for _, feature := range mpCopy.TeamPreset.Values[0].Features {
 			if feature.ID == emptyFeatureID {
 				found = true
 				if feature.Name != newName || feature.Weight != newWeight {
-					t.Errorf("Updated feature lost its values: got name=%q, weight=%d", 
+					t.Errorf("Updated feature lost its values: got name=%q, weight=%d",
 						feature.Name, feature.Weight)
 				}
 				break
 			}
 		}
 		if !found {
-			t.Errorf("Updated feature ID (%s) disappeared after sequence of operations", emptyFeatureID)
+			t.Errorf("Updated feature id (%s) disappeared after sequence of operations", emptyFeatureID)
 		}
-		
+
 		// 6. Verify the removed feature is gone
 		for _, feature := range mpCopy.TeamPreset.Values[0].Features {
 			if feature.ID == fixedIDs["feature1_1"] {
@@ -622,22 +622,22 @@ func TestFeatureIDConsistency(t *testing.T) {
 		}
 	})
 
-	// PART 5: Test for ID duplication issue
+	// PART 5: Test for id duplication issue
 	t.Run("No duplicate IDs created", func(t *testing.T) {
 		// Make a copy to avoid affecting other tests
 		mpCopy := *mp
-		
+
 		// Add multiple empty fields
 		for i := 0; i < 5; i++ {
 			mpCopy.AddOneEmptyField()
 		}
-		
+
 		// Collect all feature IDs
 		allIDs := make(map[string]bool)
 		for _, person := range mpCopy.TeamPreset.Values {
 			for _, feature := range person.Features {
 				if allIDs[feature.ID] {
-					t.Errorf("Duplicate ID found: %s", feature.ID)
+					t.Errorf("Duplicate id found: %s", feature.ID)
 				}
 				allIDs[feature.ID] = true
 			}
@@ -668,10 +668,10 @@ func TestFeatureIDConsistency(t *testing.T) {
 				},
 			},
 		}
-		
-		// Remove a feature and see if ID handling behaves differently with pattern IDs
+
+		// Remove a feature and see if id handling behaves differently with pattern IDs
 		suspiciousMp.RemoveFeatureByID("feature-1-1")
-		
+
 		// Check if feature was removed properly
 		found := false
 		for _, feature := range suspiciousMp.TeamPreset.Values[0].Features {
@@ -679,15 +679,15 @@ func TestFeatureIDConsistency(t *testing.T) {
 				found = true
 			}
 		}
-		
+
 		if found {
-			t.Errorf("Feature with pattern ID wasn't properly removed")
+			t.Errorf("Feature with pattern id wasn't properly removed")
 		}
 	})
 
 	// PART 7: Test UUID generation in AddOneEmptyField
 	t.Run("UUID generation in AddOneEmptyField", func(t *testing.T) {
-			// Create a fresh master prompt
+		// Create a fresh master prompt
 		freshMp := &MasterPrompt{
 			TeamPreset: TeamPreset{
 				Values: []Person{
@@ -699,32 +699,32 @@ func TestFeatureIDConsistency(t *testing.T) {
 				},
 			},
 		}
-		
+
 		// Add empty field and verify it generates a valid UUID
 		freshMp.AddOneEmptyField()
-		
-		// Check if the ID has the UUID format
+
+		// Check if the id has the UUID format
 		if len(freshMp.TeamPreset.Values[0].Features) == 0 {
 			t.Errorf("No feature was added")
 			return
 		}
-		
+
 		featureID := freshMp.TeamPreset.Values[0].Features[0].ID
-		
+
 		// Check if it's a valid UUID
 		_, err := uuid.Parse(featureID)
 		if err != nil {
 			t.Errorf("Expected valid UUID, got %s which produced error: %v", featureID, err)
 		}
-		
+
 		// Check if it has the expected format (8-4-4-4-12)
 		parts := strings.Split(featureID, "-")
-		if len(parts) != 5 || 
-		   len(parts[0]) != 8 || 
-		   len(parts[1]) != 4 || 
-		   len(parts[2]) != 4 || 
-		   len(parts[3]) != 4 || 
-		   len(parts[4]) != 12 {
+		if len(parts) != 5 ||
+			len(parts[0]) != 8 ||
+			len(parts[1]) != 4 ||
+			len(parts[2]) != 4 ||
+			len(parts[3]) != 4 ||
+			len(parts[4]) != 12 {
 			t.Errorf("UUID does not have the expected format: %s", featureID)
 		}
 	})
@@ -745,60 +745,60 @@ func TestEmptyFieldAndIDConsistency(t *testing.T) {
 			},
 		},
 	}
-	
+
 	// CASE 1: Test that AddOneEmptyField adds exactly one empty field
 	// when there isn't one already
-	
+
 	// First call should add an empty field
 	mp.AddOneEmptyField()
-	
-	// Capture the ID of the empty field
+
+	// Capture the id of the empty field
 	if len(mp.TeamPreset.Values[0].Features) != 2 { // Original + 1 empty
-		t.Errorf("Expected 2 features (1 original + 1 empty), got %d", 
+		t.Errorf("Expected 2 features (1 original + 1 empty), got %d",
 			len(mp.TeamPreset.Values[0].Features))
 	}
-	
+
 	emptyFeatureID1 := mp.TeamPreset.Values[0].Features[len(mp.TeamPreset.Values[0].Features)-1].ID
-	
+
 	// Second call shouldn't add another empty field since there's already one
 	mp.AddOneEmptyField()
-	
+
 	// Should still have 2 features (1 original + 1 empty)
 	if len(mp.TeamPreset.Values[0].Features) != 2 {
-		t.Errorf("Expected 2 features (1 original + 1 empty), got %d", 
+		t.Errorf("Expected 2 features (1 original + 1 empty), got %d",
 			len(mp.TeamPreset.Values[0].Features))
 	}
-	
-	// The empty field ID should remain the same
+
+	// The empty field id should remain the same
 	emptyFeatureID2 := mp.TeamPreset.Values[0].Features[len(mp.TeamPreset.Values[0].Features)-1].ID
 	if emptyFeatureID1 != emptyFeatureID2 {
-		t.Errorf("Empty feature IDs should be the same when already present, got %s and %s", 
+		t.Errorf("Empty feature IDs should be the same when already present, got %s and %s",
 			emptyFeatureID1, emptyFeatureID2)
 	}
-	
+
 	// CASE 2: Test behavior after removing a feature
-	
+
 	// Remove the original feature
 	mp.RemoveFeatureByID("feature1")
-	
+
 	// Should now have 1 empty feature
 	if len(mp.TeamPreset.Values[0].Features) != 1 {
-		t.Errorf("Expected 1 feature (the empty one), got %d", 
+		t.Errorf("Expected 1 feature (the empty one), got %d",
 			len(mp.TeamPreset.Values[0].Features))
 	}
-	
+
 	// Add an empty field, shouldn't add another since one already exists
 	mp.AddOneEmptyField()
-	
+
 	// Should still have just 1 empty feature
 	if len(mp.TeamPreset.Values[0].Features) != 1 {
-		t.Errorf("Expected 1 feature (empty), got %d", 
+		t.Errorf("Expected 1 feature (empty), got %d",
 			len(mp.TeamPreset.Values[0].Features))
 	}
-	
+
 	// The feature should be empty
 	if mp.TeamPreset.Values[0].Features[0].Name != "" {
-		t.Errorf("Feature should be empty, got name: %q", 
+		t.Errorf("Feature should be empty, got name: %q",
 			mp.TeamPreset.Values[0].Features[0].Name)
 	}
 }
@@ -824,7 +824,7 @@ func TestFeatureIdConsistencyAfterRemoval(t *testing.T) {
 		},
 	}
 
-	// Store a map of [ID => Name] before removal to verify later
+	// Store a map of [id => Name] before removal to verify later
 	originalFeatures := make(map[string]string)
 	for _, feature := range mp.TeamPreset.Values[0].Features {
 		originalFeatures[feature.ID] = feature.Name
@@ -838,7 +838,7 @@ func TestFeatureIdConsistencyAfterRemoval(t *testing.T) {
 	// This simulates what happens in the UI flow
 	mp.AddOneEmptyField()
 
-	// Verify features by ID - we need to ensure:
+	// Verify features by id - we need to ensure:
 	// 1. Feature C is gone
 	// 2. Features A, B, D, E, F still have the same IDs and correct data
 	remainingFeatures := make(map[string]bool)
@@ -847,32 +847,32 @@ func TestFeatureIdConsistencyAfterRemoval(t *testing.T) {
 		if feature.Name == "" {
 			continue
 		}
-		
-		// Check that feature with this ID exists in original map
+
+		// Check that feature with this id exists in original map
 		originalName, exists := originalFeatures[feature.ID]
 		if !exists {
-			t.Errorf("Feature with ID %s was not in the original set but appears now", feature.ID)
+			t.Errorf("Feature with id %s was not in the original set but appears now", feature.ID)
 			continue
 		}
-		
+
 		// Check that feature name matches the original
 		if originalName != feature.Name {
-			t.Errorf("Feature ID %s has name %s but originally had name %s", 
+			t.Errorf("Feature id %s has name %s but originally had name %s",
 				feature.ID, feature.Name, originalName)
 		}
-		
+
 		remainingFeatures[feature.ID] = true
 	}
-	
+
 	// Ensure feature C is gone
 	if remainingFeatures[featureToRemove] {
-		t.Errorf("Feature with ID %s should have been removed", featureToRemove)
+		t.Errorf("Feature with id %s should have been removed", featureToRemove)
 	}
-	
+
 	// Ensure all other original features still exist (except C)
 	for id, name := range originalFeatures {
 		if id != featureToRemove && !remainingFeatures[id] {
-			t.Errorf("Feature with ID %s and name %s is missing after removal", id, name)
+			t.Errorf("Feature with id %s and name %s is missing after removal", id, name)
 		}
 	}
 }
@@ -911,7 +911,7 @@ func TestConsistencyWithMultipleRemovals(t *testing.T) {
 		Weight      int
 	}
 	originalFeatureInfo := make(map[string]FeatureInfo)
-	
+
 	for personIndex, person := range mp.TeamPreset.Values {
 		for _, feature := range person.Features {
 			originalFeatureInfo[feature.ID] = FeatureInfo{
@@ -937,28 +937,28 @@ func TestConsistencyWithMultipleRemovals(t *testing.T) {
 			if feature.Name == "" {
 				continue
 			}
-			
+
 			// Verify feature exists in original map
 			info, exists := originalFeatureInfo[feature.ID]
 			if !exists {
-				t.Errorf("Feature with ID %s was not in original set but appears now", feature.ID)
+				t.Errorf("Feature with id %s was not in original set but appears now", feature.ID)
 				continue
 			}
-			
+
 			// Verify feature is associated with the correct person
 			if info.PersonIndex != personIndex {
-				t.Errorf("Feature with ID %s moved from person %d to person %d",
+				t.Errorf("Feature with id %s moved from person %d to person %d",
 					feature.ID, info.PersonIndex, personIndex)
 			}
-			
+
 			// Verify feature data matches original
 			if info.Name != feature.Name {
-				t.Errorf("Feature ID %s has name %s but originally had name %s",
+				t.Errorf("Feature id %s has name %s but originally had name %s",
 					feature.ID, feature.Name, info.Name)
 			}
-			
+
 			if info.Weight != feature.Weight {
-				t.Errorf("Feature ID %s has weight %d but originally had weight %d",
+				t.Errorf("Feature id %s has weight %d but originally had weight %d",
 					feature.ID, feature.Weight, info.Weight)
 			}
 		}
@@ -969,11 +969,11 @@ func TestConsistencyWithMultipleRemovals(t *testing.T) {
 	for _, id := range removalOrder {
 		removedIds[id] = true
 	}
-	
+
 	for personIndex, person := range mp.TeamPreset.Values {
 		for _, feature := range person.Features {
 			if removedIds[feature.ID] && feature.Name != "" {
-				t.Errorf("Feature with ID %s should have been removed but still exists in person %d",
+				t.Errorf("Feature with id %s should have been removed but still exists in person %d",
 					feature.ID, personIndex)
 			}
 		}
@@ -1016,7 +1016,7 @@ func TestRenderingWithRemoval(t *testing.T) {
 
 	// Remove the feature in the middle (C)
 	mp.RemoveFeatureByID("C")
-	
+
 	// Simulate UI rendering by iterating through features like in the UI code
 	renderedFeatures := make([]FeatureData, 0)
 	for j := range mp.TeamPreset.Values[0].Features {
@@ -1028,7 +1028,7 @@ func TestRenderingWithRemoval(t *testing.T) {
 			Weight: feature.Weight,
 		})
 	}
-	
+
 	// Verify each remaining feature has correct data
 	expectedRemainingIDs := []string{"A", "B", "D"}
 	for _, id := range expectedRemainingIDs {
@@ -1036,8 +1036,8 @@ func TestRenderingWithRemoval(t *testing.T) {
 		for _, feature := range renderedFeatures {
 			if feature.ID == id {
 				found = true
-				
-				// Find original data for this ID
+
+				// Find original data for this id
 				var originalData FeatureData
 				for _, orig := range originalFeatures {
 					if orig.ID == id {
@@ -1045,27 +1045,27 @@ func TestRenderingWithRemoval(t *testing.T) {
 						break
 					}
 				}
-				
+
 				// Verify data matches
 				if feature.Name != originalData.Name {
 					t.Errorf("Feature %s has name %s but originally had %s after removal of C",
 						id, feature.Name, originalData.Name)
 				}
-				
+
 				if feature.Weight != originalData.Weight {
 					t.Errorf("Feature %s has weight %d but originally had %d after removal of C",
 						id, feature.Weight, originalData.Weight)
 				}
-				
+
 				break
 			}
 		}
-		
+
 		if !found {
-			t.Errorf("Feature with ID %s not found after rendering", id)
+			t.Errorf("Feature with id %s not found after rendering", id)
 		}
 	}
-	
+
 	// Verify C is gone
 	for _, feature := range renderedFeatures {
 		if feature.ID == "C" && feature.Name != "" {
@@ -1100,42 +1100,42 @@ func TestRemovalAndIdConsistency(t *testing.T) {
 	for _, feature := range mp.TeamPreset.Values[0].Features {
 		originalFeatures[feature.ID] = feature.Name
 	}
-	
+
 	// Step 2: Remove feature C
 	featureToRemove := "C"
 	mp.RemoveFeatureByID(featureToRemove)
-	
-	// Step 3: Simulate UI process - NOTE: not calling AddOneEmptyField to avoid ID issues
-	
+
+	// Step 3: Simulate UI process - NOTE: not calling AddOneEmptyField to avoid id issues
+
 	// Step 4: Check all remaining features maintained their IDs
 	idToPositionAfterRemoval := make(map[string]int)
 	for i, feature := range mp.TeamPreset.Values[0].Features {
 		idToPositionAfterRemoval[feature.ID] = i
-		
+
 		if feature.ID == featureToRemove {
-			t.Errorf("Feature with ID %s should have been removed", featureToRemove)
+			t.Errorf("Feature with id %s should have been removed", featureToRemove)
 		}
-		
+
 		// For remaining features, verify their name didn't change
 		if originalName, exists := originalFeatures[feature.ID]; exists {
 			if feature.Name != originalName {
-				t.Errorf("Feature ID %s should have name %s but has %s", 
+				t.Errorf("Feature id %s should have name %s but has %s",
 					feature.ID, originalName, feature.Name)
 			}
 		}
 	}
-	
+
 	// Step 5: Verify the remaining IDs are A, B, D, E, F (not C)
 	expectedRemainingIDs := []string{"A", "B", "D", "E", "F"}
 	for _, id := range expectedRemainingIDs {
 		if _, exists := idToPositionAfterRemoval[id]; !exists {
-			t.Errorf("Feature ID %s should still exist after removal", id)
+			t.Errorf("Feature id %s should still exist after removal", id)
 		}
 	}
-	
+
 	// Step 6: Only NOW add empty field and verify it doesn't affect other IDs
 	mp.AddOneEmptyField()
-	
+
 	// Check positions again
 	idToPositionAfterEmptyField := make(map[string]int)
 	for i, feature := range mp.TeamPreset.Values[0].Features {
@@ -1143,22 +1143,182 @@ func TestRemovalAndIdConsistency(t *testing.T) {
 		if feature.Name == "" {
 			continue
 		}
-		
+
 		idToPositionAfterEmptyField[feature.ID] = i
-		
+
 		// Verify name still matches original
 		if originalName, exists := originalFeatures[feature.ID]; exists {
 			if feature.Name != originalName {
-				t.Errorf("After AddOneEmptyField, feature ID %s should have name %s but has %s", 
+				t.Errorf("After AddOneEmptyField, feature id %s should have name %s but has %s",
 					feature.ID, originalName, feature.Name)
 			}
 		}
 	}
-	
+
 	// Make sure all previous IDs are still there
 	for id := range idToPositionAfterRemoval {
 		if _, exists := idToPositionAfterEmptyField[id]; !exists {
-			t.Errorf("Feature ID %s disappeared after AddOneEmptyField", id)
+			t.Errorf("Feature id %s disappeared after AddOneEmptyField", id)
 		}
+	}
+}
+
+func TestMasterPrompt_AddOneEmptyField_TableDriven(t *testing.T) {
+	tests := []struct {
+		name                 string
+		initialTeamMembers   []Person
+		initialStyleValues   []Style
+		initialRuleValues    []Rule
+		expectedTeamCount    int
+		expectedRuleCount    int
+		expectedStyleCount   int
+		validateEmptyEntries bool // whether to check for empty entries at the end
+	}{
+		{
+			name: "All empty team members",
+			initialTeamMembers: []Person{
+				{ID: "person1", Name: ""},
+				{ID: "person2", Name: ""},
+				{ID: "person3", Name: ""},
+			},
+			initialStyleValues:   []Style{},
+			initialRuleValues:    []Rule{},
+			expectedTeamCount:    1, // should consolidate to just one empty team member
+			expectedRuleCount:    1, // should add one empty rule
+			expectedStyleCount:   1, // should add one empty style
+			validateEmptyEntries: true,
+		},
+		{
+			name: "Mix of empty and non-empty team members",
+			initialTeamMembers: []Person{
+				{ID: "person1", Name: "Alice"},
+				{ID: "person2", Name: ""},
+				{ID: "person3", Name: "Bob"},
+			},
+			initialStyleValues:   []Style{},
+			initialRuleValues:    []Rule{},
+			expectedTeamCount:    3, // two non-empty plus one empty
+			expectedRuleCount:    1,
+			expectedStyleCount:   1,
+			validateEmptyEntries: true,
+		},
+		{
+			name: "All non-empty team members",
+			initialTeamMembers: []Person{
+				{ID: "person1", Name: "Alice"},
+				{ID: "person2", Name: "Bob"},
+				{ID: "person3", Name: "Charlie"},
+			},
+			initialStyleValues:   []Style{},
+			initialRuleValues:    []Rule{},
+			expectedTeamCount:    4, // three non-empty plus one empty
+			expectedRuleCount:    1,
+			expectedStyleCount:   1,
+			validateEmptyEntries: true,
+		},
+		{
+			name:                 "No entries in all presets",
+			initialTeamMembers:   []Person{},
+			initialStyleValues:   []Style{},
+			initialRuleValues:    []Rule{},
+			expectedTeamCount:    1, // should add one empty team member
+			expectedRuleCount:    1, // should add one empty rule
+			expectedStyleCount:   1, // should add one empty style
+			validateEmptyEntries: true,
+		},
+		{
+			name: "Already has empty rules and styles",
+			initialTeamMembers: []Person{
+				{ID: "person1", Name: "Alice"},
+			},
+			initialStyleValues: []Style{
+				{ID: "style1", Name: "Bold"},
+				{ID: "style2", Name: ""},
+			},
+			initialRuleValues: []Rule{
+				{ID: "rule1", Name: "Be consistent"},
+				{ID: "rule2", Name: ""},
+			},
+			expectedTeamCount:    2, // one non-empty plus one empty
+			expectedRuleCount:    2, // one non-empty plus existing empty
+			expectedStyleCount:   2, // one non-empty plus existing empty
+			validateEmptyEntries: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mp := &MasterPrompt{
+				TeamPreset: TeamPreset{
+					Values: tt.initialTeamMembers,
+				},
+				StylePreset: StylePreset{
+					Values: tt.initialStyleValues,
+				},
+				RulePreset: RulePreset{
+					Values: tt.initialRuleValues,
+				},
+			}
+
+			mp.AddOneEmptyField()
+
+			// Check team preset count
+			if len(mp.TeamPreset.Values) != tt.expectedTeamCount {
+				t.Errorf("TeamPreset - expected %d members, got %d",
+					tt.expectedTeamCount, len(mp.TeamPreset.Values))
+			}
+
+			// Check rule preset count
+			if len(mp.RulePreset.Values) != tt.expectedRuleCount {
+				t.Errorf("RulePreset - expected %d rules, got %d",
+					tt.expectedRuleCount, len(mp.RulePreset.Values))
+			}
+
+			// Check style preset count
+			if len(mp.StylePreset.Values) != tt.expectedStyleCount {
+				t.Errorf("StylePreset - expected %d styles, got %d",
+					tt.expectedStyleCount, len(mp.StylePreset.Values))
+			}
+
+			// Validate that last entries are empty if requested
+			if tt.validateEmptyEntries {
+				// Check team has an empty entry as the last item
+				if len(mp.TeamPreset.Values) > 0 {
+					lastTeamMember := mp.TeamPreset.Values[len(mp.TeamPreset.Values)-1]
+					if lastTeamMember.Name != "" {
+						t.Errorf("Last team member should be empty, got name: %q", lastTeamMember.Name)
+					}
+				}
+
+				// Check rules has an empty entry as the last item
+				if len(mp.RulePreset.Values) > 0 {
+					lastRule := mp.RulePreset.Values[len(mp.RulePreset.Values)-1]
+					if lastRule.Name != "" {
+						t.Errorf("Last rule should be empty, got name: %q", lastRule.Name)
+					}
+				}
+
+				// Check styles has an empty entry as the last item
+				if len(mp.StylePreset.Values) > 0 {
+					lastStyle := mp.StylePreset.Values[len(mp.StylePreset.Values)-1]
+					if lastStyle.Name != "" {
+						t.Errorf("Last style should be empty, got name: %q", lastStyle.Name)
+					}
+				}
+
+				// Check each team member has an empty feature at the end
+				for i, person := range mp.TeamPreset.Values {
+					if len(person.Features) == 0 {
+						t.Errorf("Team member at index %d should have at least one feature", i)
+					} else {
+						lastFeature := person.Features[len(person.Features)-1]
+						if lastFeature.Name != "" {
+							t.Errorf("Last feature of team member at index %d should be empty, got name: %q",
+								i, lastFeature.Name)
+						}
+					}
+				}
+			}
+		})
 	}
 }

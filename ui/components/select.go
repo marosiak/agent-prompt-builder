@@ -48,7 +48,7 @@ func (s *SelectComponent[T]) Render() app.UI {
 		app.Range(s.OptionDataList).Slice(func(i int) app.UI {
 			value := s.OptionDataList[i].Value
 
-			id := "option-id-"
+			id := "option-ID-"
 			if value != nil {
 				id += fmt.Sprintf("%s", value)
 			} else {

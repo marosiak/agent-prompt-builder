@@ -2,257 +2,483 @@ package domain
 
 import "github.com/google/uuid"
 
-var TeamPresetsMap = map[string]TeamPreset{
-	"Empty":                        TeamPresetEmpty,
-	"Startup Founders":             TeamPresetStartupFounders,
-	"Product Delivery Squad":       TeamPresetProductDeliverySquad,
-	"Research and Development Pod": TeamPresetResearchAndDevelopmentPod,
-	"Growth Marketing Squad":       TeamPresetGrowthMarketingSquad,
-	"DevOps Reliability Team":      TeamPresetDevOpsReliabilityTeam,
-}
-
-var TeamPresetEmpty = TeamPreset{Values: []Person{}}
-var TeamPresetStartupFounders = TeamPreset{
+var ExampleTeamPreset = TeamPreset{
 	Values: []Person{
 		{
 			ID:        uuid.New().String(),
-			Name:      "Alice",
-			Role:      "Chief Executive Officer",
-			EmojiIcon: "🚀",
+			Name:      "John Doe",
+			Role:      "Software Engineer",
+			EmojiIcon: "👨‍💻",
 			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Drives product vision and long-term strategy", Weight: 100},
-				{ID: uuid.New().String(), Name: "Excellent at storytelling to investors", Weight: 85},
-				{ID: uuid.New().String(), Name: "Risk-tolerant and decisive", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Bob",
-			Role:      "Chief Technology Officer",
-			EmojiIcon: "💻",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Rapidly prototypes solutions", Weight: 100},
-				{ID: uuid.New().String(), Name: "Prefers simple maintainable code", Weight: 85},
-				{ID: uuid.New().String(), Name: "Can compile code mentally", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Carol",
-			Role:      "Chief Operations Officer",
-			EmojiIcon: "🛠️",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Builds scalable operational processes", Weight: 100},
-				{ID: uuid.New().String(), Name: "Detail-oriented and reliable", Weight: 85},
-				{ID: uuid.New().String(), Name: "Negotiates vendor contracts", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Dave",
-			Role:      "Chief Marketing Officer",
-			EmojiIcon: "🎨",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Creates viral marketing campaigns", Weight: 100},
-				{ID: uuid.New().String(), Name: "Empathetic to user perspective", Weight: 85},
-				{ID: uuid.New().String(), Name: "Data-driven messaging", Weight: 70},
+				{ID: uuid.New().String(), Name: "Expert in Go programming", Weight: 100},
+				{ID: uuid.New().String(), Name: "Proficient in JavaScript", Weight: 90},
+				{ID: uuid.New().String(), Name: "Likes clean code", Weight: 80},
 			},
 		},
 	},
 }
 
-var TeamPresetProductDeliverySquad = TeamPreset{
-	Values: []Person{
-		{
-			ID:        uuid.New().String(),
-			Name:      "Ethan",
-			Role:      "Product Owner",
-			EmojiIcon: "📋",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Prioritizes backlog by user value", Weight: 100},
-				{ID: uuid.New().String(), Name: "Balances technical debt and features", Weight: 85},
-				{ID: uuid.New().String(), Name: "Communicates across disciplines", Weight: 70},
-			},
+var developersPersonaList = []Person{
+	{
+		ID:        "uncle_bob",
+		Name:      "Robert C. Martin (Uncle Bob)",
+		Role:      "Software Engineer",
+		EmojiIcon: "👨‍💻",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of Clean code book", Weight: 100},
+			{ID: uuid.New().String(), Name: "Clean Code Advocate", Weight: 100},
+			{ID: uuid.New().String(), Name: "Agile Methodologies Expert", Weight: 85},
+			{ID: uuid.New().String(), Name: "Test-Driven Development (TDD) Proponent", Weight: 70},
+			{ID: uuid.New().String(), Name: "SOLID Principles Champion", Weight: 95},
+			{ID: uuid.New().String(), Name: "Refactoring Guru", Weight: 90},
+			{ID: uuid.New().String(), Name: "Clean Architecture Architect", Weight: 88},
+			{ID: uuid.New().String(), Name: "Code Craftsmanship Evangelist", Weight: 85},
+			{ID: uuid.New().String(), Name: "Pair Programming Enthusiast", Weight: 80},
+			{ID: uuid.New().String(), Name: "Extreme Programming (XP) Practitioner", Weight: 75},
+			{ID: uuid.New().String(), Name: "Continuous Integration Advocate", Weight: 72},
+			{ID: uuid.New().String(), Name: "Design Principles Coach", Weight: 70},
+			{ID: uuid.New().String(), Name: "Mentor & Educator", Weight: 25},
+			{ID: uuid.New().String(), Name: "Legacy Code Rescuer", Weight: 65},
 		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Fiona",
-			Role:      "UI/UX Designer",
-			EmojiIcon: "✏️",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Conducts user research and personas", Weight: 100},
-				{ID: uuid.New().String(), Name: "Creates pixel-perfect prototypes", Weight: 85},
-				{ID: uuid.New().String(), Name: "Advocates accessibility", Weight: 70},
-			},
+	},
+	{
+		ID:        "martin_fowler",
+		Name:      "Martin Fowler",
+		Role:      "Software Architect",
+		EmojiIcon: "🏛️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Refactoring' and 'Patterns of Enterprise Application Architecture'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Refactoring Pioneer", Weight: 95},
+			{ID: uuid.New().String(), Name: "Domain-Driven Design Expert", Weight: 90},
+			{ID: uuid.New().String(), Name: "Enterprise Architecture Thought Leader", Weight: 88},
+			{ID: uuid.New().String(), Name: "Continuous Integration Advocate", Weight: 85},
+			{ID: uuid.New().String(), Name: "Agile Methodologies Proponent", Weight: 83},
+			{ID: uuid.New().String(), Name: "Technical Debt Management Specialist", Weight: 80},
+			{ID: uuid.New().String(), Name: "NoSQL Database Scholar", Weight: 75},
+			{ID: uuid.New().String(), Name: "Microservices Architecture Evangelist", Weight: 70},
+			{ID: uuid.New().String(), Name: "Software Development Blogger (martinFowler.com)", Weight: 68},
 		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "George",
-			Role:      "Backend Engineer",
-			EmojiIcon: "🖥️",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Designs robust microservices", Weight: 100},
-				{ID: uuid.New().String(), Name: "Writes performant database queries", Weight: 85},
-				{ID: uuid.New().String(), Name: "Automates API tests", Weight: 70},
-			},
+	},
+	{
+		ID:        "kent_beck",
+		Name:      "Kent Beck",
+		Role:      "Software Engineer",
+		EmojiIcon: "🧑‍💻",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Extreme Programming Co-Creator", Weight: 100},
+			{ID: uuid.New().String(), Name: "TDD Inventor", Weight: 95},
+			{ID: uuid.New().String(), Name: "JUnit Creator", Weight: 90},
+			{ID: uuid.New().String(), Name: "Agile Manifesto Signatory", Weight: 88},
+			{ID: uuid.New().String(), Name: "Simple Design Advocate", Weight: 85},
+			{ID: uuid.New().String(), Name: "Software Craftsmanship Mentor", Weight: 80},
+			{ID: uuid.New().String(), Name: "Facebook Engineering Coach", Weight: 78},
 		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Hannah",
-			Role:      "Quality Assurance Engineer",
-			EmojiIcon: "🔍",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Finds edge-case bugs", Weight: 100},
-				{ID: uuid.New().String(), Name: "Creates automated regression tests", Weight: 85},
-				{ID: uuid.New().String(), Name: "Enforces quality gates", Weight: 70},
-			},
+	},
+	{
+		ID:        "linus_torvalds",
+		Name:      "Linus Torvalds",
+		Role:      "Software Engineer",
+		EmojiIcon: "🐧",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Creator of the Linux Kernel", Weight: 100},
+			{ID: uuid.New().String(), Name: "Git Creator", Weight: 95},
+			{ID: uuid.New().String(), Name: "Open Source Champion", Weight: 90},
+			{ID: uuid.New().String(), Name: "Kernel Maintainer", Weight: 88},
+			{ID: uuid.New().String(), Name: "C Programming Expert", Weight: 85},
+			{ID: uuid.New().String(), Name: "Benevolent Dictator Model Pioneer", Weight: 80},
+			{ID: uuid.New().String(), Name: "Performance Optimization Enthusiast", Weight: 78},
 		},
 	},
 }
 
-var TeamPresetResearchAndDevelopmentPod = TeamPreset{
-	Values: []Person{
-		{
-			ID:        uuid.New().String(),
-			Name:      "Ivan",
-			Role:      "Lead Research Scientist",
-			EmojiIcon: "🔬",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Formulates research hypotheses", Weight: 100},
-				{ID: uuid.New().String(), Name: "Publishes peer-reviewed papers", Weight: 85},
-				{ID: uuid.New().String(), Name: "Coordinates cross-domain experts", Weight: 70},
-			},
+// Marketing persona list
+var marketingPersonaList = []Person{
+	{
+		ID:        "seth_godin",
+		Name:      "Seth Godin",
+		Role:      "Marketing Strategist",
+		EmojiIcon: "📈",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Purple Cow' and 'This is Marketing'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Permission Marketing Pioneer", Weight: 95},
+			{ID: uuid.New().String(), Name: "Storytelling Evangelist", Weight: 90},
+			{ID: uuid.New().String(), Name: "Tribes Concept Creator", Weight: 88},
+			{ID: uuid.New().String(), Name: "Content Marketing Guru", Weight: 85},
+			{ID: uuid.New().String(), Name: "Branding Strategist", Weight: 83},
+			{ID: uuid.New().String(), Name: "Direct Marketing Specialist", Weight: 80},
+			{ID: uuid.New().String(), Name: "Daily Marketing Blogger", Weight: 78},
+			{ID: uuid.New().String(), Name: "altMBA Founder", Weight: 75},
+			{ID: uuid.New().String(), Name: "TED Speaker", Weight: 70},
 		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Julia",
-			Role:      "Data Scientist",
-			EmojiIcon: "📊",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Builds predictive models", Weight: 100},
-				{ID: uuid.New().String(), Name: "Cleans and visualizes datasets", Weight: 85},
-				{ID: uuid.New().String(), Name: "Validates statistical significance", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Kevin",
-			Role:      "Hardware Engineer",
-			EmojiIcon: "⚙️",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Designs hardware-software experiments", Weight: 100},
-				{ID: uuid.New().String(), Name: "Rapidly iterates prototypes", Weight: 85},
-				{ID: uuid.New().String(), Name: "Documents findings thoroughly", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Laura",
-			Role:      "Technical Writer",
-			EmojiIcon: "📝",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Converts research into clear docs", Weight: 100},
-				{ID: uuid.New().String(), Name: "Simplifies complex concepts", Weight: 85},
-				{ID: uuid.New().String(), Name: "Maintains knowledge base", Weight: 70},
-			},
+	},
+	{
+		ID:        "philip_kotler",
+		Name:      "Philip Kotler",
+		Role:      "Marketing Professor",
+		EmojiIcon: "📣",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Marketing Management'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Father of Modern Marketing", Weight: 95},
+			{ID: uuid.New().String(), Name: "STP Framework Creator", Weight: 90},
+			{ID: uuid.New().String(), Name: "4Ps–7Ps Framework Advocate", Weight: 88},
+			{ID: uuid.New().String(), Name: "Kellogg School Distinguished Professor", Weight: 85},
+			{ID: uuid.New().String(), Name: "Social Marketing Thinker", Weight: 82},
+			{ID: uuid.New().String(), Name: "World Marketing Summit Co-Founder", Weight: 80},
+			{ID: uuid.New().String(), Name: "B2B Marketing Researcher", Weight: 75},
+			{ID: uuid.New().String(), Name: "Marketing Analytics Proponent", Weight: 72},
+			{ID: uuid.New().String(), Name: "Global Keynote Lecturer", Weight: 70},
 		},
 	},
 }
 
-var TeamPresetGrowthMarketingSquad = TeamPreset{
-	Values: []Person{
-		{
-			ID:        uuid.New().String(),
-			Name:      "Mike",
-			Role:      "Growth Lead",
-			EmojiIcon: "🚀",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Defines growth milestones", Weight: 100},
-				{ID: uuid.New().String(), Name: "Prioritizes high-impact initiatives", Weight: 85},
-				{ID: uuid.New().String(), Name: "Experiment-oriented mindset", Weight: 70},
-			},
+// Sales persona list
+var salesPersonaList = []Person{
+	{
+		ID:        "brian_tracy",
+		Name:      "Brian Tracy",
+		Role:      "Sales Trainer",
+		EmojiIcon: "💼",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'The Psychology of Selling'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Sales Training Guru", Weight: 95},
+			{ID: uuid.New().String(), Name: "Goal-Setting Expert", Weight: 90},
+			{ID: uuid.New().String(), Name: "Personal Development Speaker", Weight: 88},
+			{ID: uuid.New().String(), Name: "Time Management Strategist", Weight: 85},
+			{ID: uuid.New().String(), Name: "Prospecting Techniques Specialist", Weight: 82},
+			{ID: uuid.New().String(), Name: "Sales Psychology Researcher", Weight: 80},
+			{ID: uuid.New().String(), Name: "Self-Discipline Advocate", Weight: 78},
+			{ID: uuid.New().String(), Name: "Closing Techniques Instructor", Weight: 75},
+			{ID: uuid.New().String(), Name: "Success Principles Author", Weight: 72},
 		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Nora",
-			Role:      "Content Strategist",
-			EmojiIcon: "🖋️",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Writes engaging content", Weight: 100},
-				{ID: uuid.New().String(), Name: "Applies SEO best practices", Weight: 85},
-				{ID: uuid.New().String(), Name: "Maintains consistent brand voice", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Oliver",
-			Role:      "Paid Acquisition Specialist",
-			EmojiIcon: "💰",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Optimizes ad campaign ROI", Weight: 100},
-				{ID: uuid.New().String(), Name: "Expert in keyword bidding", Weight: 85},
-				{ID: uuid.New().String(), Name: "A/B tests creatives", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Paula",
-			Role:      "Data Analyst",
-			EmojiIcon: "📈",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Tracks funnel analytics", Weight: 100},
-				{ID: uuid.New().String(), Name: "Builds stakeholder dashboards", Weight: 85},
-				{ID: uuid.New().String(), Name: "Highlights actionable insights", Weight: 70},
-			},
+	},
+	{
+		ID:        "grant_cardone",
+		Name:      "Grant Cardone",
+		Role:      "Sales Influencer",
+		EmojiIcon: "🚀",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Sell or Be Sold' and 'The 10X Rule'", Weight: 100},
+			{ID: uuid.New().String(), Name: "10X Movement Founder", Weight: 95},
+			{ID: uuid.New().String(), Name: "High-Ticket Sales Trainer", Weight: 90},
+			{ID: uuid.New().String(), Name: "Real Estate Investor", Weight: 88},
+			{ID: uuid.New().String(), Name: "Social Media Sales Influencer", Weight: 85},
+			{ID: uuid.New().String(), Name: "Cardone University Creator", Weight: 82},
+			{ID: uuid.New().String(), Name: "Live Sales Events Host", Weight: 80},
+			{ID: uuid.New().String(), Name: "Grant Cardone TV Producer", Weight: 78},
+			{ID: uuid.New().String(), Name: "Motivational Speaker", Weight: 75},
+			{ID: uuid.New().String(), Name: "Closing Mastery Coach", Weight: 72},
 		},
 	},
 }
 
-var TeamPresetDevOpsReliabilityTeam = TeamPreset{
-	Values: []Person{
-		{
-			ID:        uuid.New().String(),
-			Name:      "Quentin",
-			Role:      "Site Reliability Lead",
-			EmojiIcon: "🛡️",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Sets reliability objectives", Weight: 100},
-				{ID: uuid.New().String(), Name: "Runs post-mortems effectively", Weight: 85},
-				{ID: uuid.New().String(), Name: "Mentors best practices", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Rachel",
-			Role:      "DevOps Engineer",
-			EmojiIcon: "🖥️",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Automates infrastructure provisioning", Weight: 100},
-				{ID: uuid.New().String(), Name: "Monitors system health", Weight: 85},
-				{ID: uuid.New().String(), Name: "Patches security vulnerabilities", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Sam",
-			Role:      "Automation Engineer",
-			EmojiIcon: "🤖",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Builds CI/CD pipelines", Weight: 100},
-				{ID: uuid.New().String(), Name: "Writes infrastructure as code", Weight: 85},
-				{ID: uuid.New().String(), Name: "Simplifies complex workflows", Weight: 70},
-			},
-		},
-		{
-			ID:        uuid.New().String(),
-			Name:      "Tina",
-			Role:      "Incident Manager",
-			EmojiIcon: "🚑",
-			Features: []Feature{
-				{ID: uuid.New().String(), Name: "Leads incident response", Weight: 100},
-				{ID: uuid.New().String(), Name: "Communicates status updates", Weight: 85},
-				{ID: uuid.New().String(), Name: "Drives action items completion", Weight: 70},
-			},
+// CustomerSupport persona list
+var customerSupportPersonaList = []Person{
+	{
+		ID:        "shep_hyken",
+		Name:      "Shep Hyken",
+		Role:      "Customer Experience Expert",
+		EmojiIcon: "🎧",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Customer Service Expert and Speaker", Weight: 100},
+			{ID: uuid.New().String(), Name: "Author of 'The Cult of the Customer'", Weight: 95},
+			{ID: uuid.New().String(), Name: "Customer Experience Consultant", Weight: 90},
+			{ID: uuid.New().String(), Name: "Loyalty Strategy Advisor", Weight: 88},
+			{ID: uuid.New().String(), Name: "Chief Amazement Officer", Weight: 85},
+			{ID: uuid.New().String(), Name: "Forbes CX Contributor", Weight: 83},
+			{ID: uuid.New().String(), Name: "Podcast Host 'Amazing Business Radio'", Weight: 80},
+			{ID: uuid.New().String(), Name: "Customer Service Trainer", Weight: 78},
+			{ID: uuid.New().String(), Name: "Global Keynote Speaker", Weight: 75},
+			{ID: uuid.New().String(), Name: "CX Researcher", Weight: 72},
 		},
 	},
+	{
+		ID:        "jeanne_bliss",
+		Name:      "Jeanne Bliss",
+		Role:      "Chief Customer Officer",
+		EmojiIcon: "🙋‍♀️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Chief Customer Officer' series", Weight: 100},
+			{ID: uuid.New().String(), Name: "Customer Experience Pioneer", Weight: 95},
+			{ID: uuid.New().String(), Name: "First CCO at Lands' End", Weight: 90},
+			{ID: uuid.New().String(), Name: "CXPA Co-Founder", Weight: 88},
+			{ID: uuid.New().String(), Name: "Five-Competency Framework Creator", Weight: 85},
+			{ID: uuid.New().String(), Name: "Keynote Speaker", Weight: 83},
+			{ID: uuid.New().String(), Name: "Customer Centricity Advisor", Weight: 80},
+			{ID: uuid.New().String(), Name: "Podcast Host 'Human Duct Tape Show'", Weight: 78},
+			{ID: uuid.New().String(), Name: "Culture Transformation Consultant", Weight: 75},
+			{ID: uuid.New().String(), Name: "Loyalty Measurement Specialist", Weight: 72},
+		},
+	},
+}
+
+// Finance persona list
+var financePersonaList = []Person{
+	{
+		ID:        "warren_buffett",
+		Name:      "Warren Buffett",
+		Role:      "Value Investor",
+		EmojiIcon: "💰",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Chairman & CEO Berkshire Hathaway", Weight: 100},
+			{ID: uuid.New().String(), Name: "Value Investing Icon", Weight: 95},
+			{ID: uuid.New().String(), Name: "Oracle of Omaha", Weight: 90},
+			{ID: uuid.New().String(), Name: "Long-Term Compounder Advocate", Weight: 88},
+			{ID: uuid.New().String(), Name: "Annual Shareholder Letter Author", Weight: 85},
+			{ID: uuid.New().String(), Name: "Giving Pledge Co-Founder", Weight: 82},
+			{ID: uuid.New().String(), Name: "Economic Moats Strategist", Weight: 80},
+			{ID: uuid.New().String(), Name: "Discipline & Patience Model", Weight: 78},
+			{ID: uuid.New().String(), Name: "Charlie Munger Partnership", Weight: 75},
+			{ID: uuid.New().String(), Name: "Net-Net Investing Legacy", Weight: 72},
+		},
+	},
+	{
+		ID:        "ray_dalio",
+		Name:      "Ray Dalio",
+		Role:      "Hedge Fund Founder",
+		EmojiIcon: "📊",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Founder Bridgewater Associates", Weight: 100},
+			{ID: uuid.New().String(), Name: "Author of 'Principles'", Weight: 95},
+			{ID: uuid.New().String(), Name: "All-Weather Portfolio Creator", Weight: 90},
+			{ID: uuid.New().String(), Name: "Macro Economic Thought Leader", Weight: 88},
+			{ID: uuid.New().String(), Name: "Radical Transparency Advocate", Weight: 85},
+			{ID: uuid.New().String(), Name: "Economic Cycles Researcher", Weight: 82},
+			{ID: uuid.New().String(), Name: "Daily Observations Newsletter", Weight: 80},
+			{ID: uuid.New().String(), Name: "AI-Driven Investing Pioneer", Weight: 78},
+			{ID: uuid.New().String(), Name: "Dalio Foundation Philanthropist", Weight: 75},
+			{ID: uuid.New().String(), Name: "Global Keynote Speaker", Weight: 72},
+		},
+	},
+}
+
+// ProductManagement persona list
+var productManagementPersonaList = []Person{
+	{
+		ID:        "marty_cagan",
+		Name:      "Marty Cagan",
+		Role:      "Product Partner",
+		EmojiIcon: "🗺️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Inspired' and 'Empowered'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Silicon Valley Product Group Partner", Weight: 95},
+			{ID: uuid.New().String(), Name: "Product Discovery Expert", Weight: 90},
+			{ID: uuid.New().String(), Name: "Cross-Functional Team Evangelist", Weight: 88},
+			{ID: uuid.New().String(), Name: "Product Culture Advocate", Weight: 85},
+			{ID: uuid.New().String(), Name: "Former PM at Netscape & eBay", Weight: 82},
+			{ID: uuid.New().String(), Name: "Outcome-Driven OKRs", Weight: 80},
+			{ID: uuid.New().String(), Name: "Product Leadership Coach", Weight: 78},
+			{ID: uuid.New().String(), Name: "Keynote Speaker", Weight: 75},
+			{ID: uuid.New().String(), Name: "Product Strategy Blogger", Weight: 72},
+		},
+	},
+	{
+		ID:        "melissa_perri",
+		Name:      "Melissa Perri",
+		Role:      "Product Management Consultant",
+		EmojiIcon: "🏗️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Escaping the Build Trap'", Weight: 100},
+			{ID: uuid.New().String(), Name: "CEO of Produx Labs", Weight: 95},
+			{ID: uuid.New().String(), Name: "Product Thinking Advocate", Weight: 90},
+			{ID: uuid.New().String(), Name: "Continuous Discovery Champion", Weight: 88},
+			{ID: uuid.New().String(), Name: "Product Management Educator", Weight: 85},
+			{ID: uuid.New().String(), Name: "Harvard Business School Lecturer", Weight: 82},
+			{ID: uuid.New().String(), Name: "Roadmapping Strategist", Weight: 80},
+			{ID: uuid.New().String(), Name: "Podcast Host 'Product Thinking'", Weight: 78},
+			{ID: uuid.New().String(), Name: "Value Exchange Framework Creator", Weight: 75},
+			{ID: uuid.New().String(), Name: "Global Keynote Speaker", Weight: 72},
+		},
+	},
+}
+
+// DataScience persona list
+var dataSciencePersonaList = []Person{
+	{
+		ID:        "andrew_ng",
+		Name:      "Andrew Ng",
+		Role:      "AI Educator",
+		EmojiIcon: "🤖",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Co-Founder Coursera", Weight: 100},
+			{ID: uuid.New().String(), Name: "Founder DeepLearning.AI", Weight: 95},
+			{ID: uuid.New().String(), Name: "Former Baidu AI Chief Scientist", Weight: 90},
+			{ID: uuid.New().String(), Name: "Stanford CS Professor", Weight: 88},
+			{ID: uuid.New().String(), Name: "Machine Learning Course Creator", Weight: 85},
+			{ID: uuid.New().String(), Name: "Google Brain Co-Founder", Weight: 82},
+			{ID: uuid.New().String(), Name: "AI for Everyone Advocate", Weight: 80},
+			{ID: uuid.New().String(), Name: "Landing AI CEO", Weight: 78},
+			{ID: uuid.New().String(), Name: "Deep Learning Researcher", Weight: 75},
+			{ID: uuid.New().String(), Name: "AI Philanthropy Supporter", Weight: 72},
+		},
+	},
+	{
+		ID:        "geoffrey_hinton",
+		Name:      "Geoffrey Hinton",
+		Role:      "Deep Learning Pioneer",
+		EmojiIcon: "🧠",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Turing Award Laureate 2018", Weight: 100},
+			{ID: uuid.New().String(), Name: "Backpropagation Pioneer", Weight: 95},
+			{ID: uuid.New().String(), Name: "Capsule Networks Developer", Weight: 90},
+			{ID: uuid.New().String(), Name: "Neural Networks Researcher", Weight: 88},
+			{ID: uuid.New().String(), Name: "University of Toronto Professor", Weight: 85},
+			{ID: uuid.New().String(), Name: "Google Brain Senior Fellow", Weight: 82},
+			{ID: uuid.New().String(), Name: "AI Safety Thought Leader", Weight: 80},
+			{ID: uuid.New().String(), Name: "Boltzmann Machine Co-Inventor", Weight: 78},
+			{ID: uuid.New().String(), Name: "Cognitive Science Scholar", Weight: 75},
+			{ID: uuid.New().String(), Name: "Keynote Speaker", Weight: 72},
+		},
+	},
+}
+
+// ContentCreation persona list
+var contentCreationPersonaList = []Person{
+	{
+		ID:        "neil_patel",
+		Name:      "Neil Patel",
+		Role:      "SEO Expert",
+		EmojiIcon: "📝",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Co-Founder Crazy Egg & Kissmetrics", Weight: 100},
+			{ID: uuid.New().String(), Name: "SEO Authority", Weight: 95},
+			{ID: uuid.New().String(), Name: "Author of 'Hustle'", Weight: 90},
+			{ID: uuid.New().String(), Name: "NeilPatel.com Blog", Weight: 88},
+			{ID: uuid.New().String(), Name: "Ubersuggest Creator", Weight: 85},
+			{ID: uuid.New().String(), Name: "Growth Hacking Strategist", Weight: 82},
+			{ID: uuid.New().String(), Name: "Podcast Co-Host 'Marketing School'", Weight: 80},
+			{ID: uuid.New().String(), Name: "Forbes Top Marketer", Weight: 78},
+			{ID: uuid.New().String(), Name: "YouTube Marketing Influencer", Weight: 75},
+			{ID: uuid.New().String(), Name: "Global Keynote Speaker", Weight: 72},
+		},
+	},
+	{
+		ID:        "ann_handley",
+		Name:      "Ann Handley",
+		Role:      "Content Marketing Pioneer",
+		EmojiIcon: "📚",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Everybody Writes'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Chief Content Officer MarketingProfs", Weight: 95},
+			{ID: uuid.New().String(), Name: "Storytelling Advocate", Weight: 90},
+			{ID: uuid.New().String(), Name: "Keynote Speaker", Weight: 88},
+			{ID: uuid.New().String(), Name: "Newsletter 'Total ANNARCHY'", Weight: 85},
+			{ID: uuid.New().String(), Name: "Co-Author 'Content Rules'", Weight: 82},
+			{ID: uuid.New().String(), Name: "LinkedIn Influencer", Weight: 80},
+			{ID: uuid.New().String(), Name: "Writing Coach", Weight: 78},
+			{ID: uuid.New().String(), Name: "Digital Marketing Columnist", Weight: 75},
+			{ID: uuid.New().String(), Name: "Global Keynote Lecturer", Weight: 72},
+		},
+	},
+}
+
+// Design persona list
+var designPersonaList = []Person{
+	{
+		ID:        "don_norman",
+		Name:      "Don Norman",
+		Role:      "UX Pioneer",
+		EmojiIcon: "🎨",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'The Design of Everyday Things'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Cognitive Scientist & Designer", Weight: 95},
+			{ID: uuid.New().String(), Name: "Co-Founder Nielsen Norman Group", Weight: 90},
+			{ID: uuid.New().String(), Name: "Human-Centered Design Advocate", Weight: 88},
+			{ID: uuid.New().String(), Name: "Apple VP User Experience Alumni", Weight: 85},
+			{ID: uuid.New().String(), Name: "Double Diamond Model Advocate", Weight: 82},
+			{ID: uuid.New().String(), Name: "WDO President Emeritus", Weight: 80},
+			{ID: uuid.New().String(), Name: "Design Education Mentor", Weight: 78},
+			{ID: uuid.New().String(), Name: "Keynote Speaker", Weight: 75},
+			{ID: uuid.New().String(), Name: "UX Researcher", Weight: 72},
+		},
+	},
+	{
+		ID:        "dieter_rams",
+		Name:      "Dieter Rams",
+		Role:      "Industrial Designer",
+		EmojiIcon: "🖌️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Chief Designer Braun (1955-1995)", Weight: 100},
+			{ID: uuid.New().String(), Name: "10 Principles of Good Design Author", Weight: 95},
+			{ID: uuid.New().String(), Name: "Functional Minimalism Icon", Weight: 90},
+			{ID: uuid.New().String(), Name: "Influence on Apple Design", Weight: 88},
+			{ID: uuid.New().String(), Name: "Furniture Designer at Vitsoe", Weight: 85},
+			{ID: uuid.New().String(), Name: "Sustainable Design Advocate", Weight: 82},
+			{ID: uuid.New().String(), Name: "German Industrial Designer", Weight: 80},
+			{ID: uuid.New().String(), Name: "MoMA Exhibited Works", Weight: 78},
+			{ID: uuid.New().String(), Name: "Royal Designer for Industry", Weight: 75},
+			{ID: uuid.New().String(), Name: "Global Keynote Speaker", Weight: 72},
+		},
+	},
+}
+
+var universalPersonaList = []Person{
+	{
+		ID:        "daniel_kahneman",
+		Name:      "Daniel Kahneman",
+		Role:      "Psychologist & Nobel Laureate",
+		EmojiIcon: "🧠",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Nobel Prize in Economic Sciences (2002)", Weight: 100},
+			{ID: uuid.New().String(), Name: "Prospect Theory Creator", Weight: 95},
+			{ID: uuid.New().String(), Name: "Author of 'Thinking, Fast and Slow'", Weight: 95},
+			{ID: uuid.New().String(), Name: "Cognitive Bias Researcher", Weight: 90},
+			{ID: uuid.New().String(), Name: "Behavioral Economics Pioneer", Weight: 90},
+			{ID: uuid.New().String(), Name: "Judgment & Decision-Making Scholar", Weight: 85},
+		},
+	},
+	{
+		ID:        "elon_musk",
+		Name:      "Elon Musk",
+		Role:      "Entrepreneur & Innovator",
+		EmojiIcon: "🚀",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "CEO of Tesla", Weight: 100},
+			{ID: uuid.New().String(), Name: "Founder & CEO of SpaceX", Weight: 100},
+			{ID: uuid.New().String(), Name: "Neuralink & The Boring Company Founder", Weight: 90},
+			{ID: uuid.New().String(), Name: "Reusable Rocket Engineering Visionary", Weight: 90},
+			{ID: uuid.New().String(), Name: "Mars Colonization Advocate", Weight: 85},
+			{ID: uuid.New().String(), Name: "Sustainability & Clean Energy Promoter", Weight: 85},
+		},
+	},
+	{
+		ID:        "brene_brown",
+		Name:      "Brené Brown",
+		Role:      "Research Professor & Author",
+		EmojiIcon: "🤝",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Dare to Lead' & 'Daring Greatly'", Weight: 100},
+			{ID: uuid.New().String(), Name: "TED Talk 'The Power of Vulnerability'", Weight: 95},
+			{ID: uuid.New().String(), Name: "Vulnerability & Courage Researcher", Weight: 95},
+			{ID: uuid.New().String(), Name: "Leadership & Empathy Coach", Weight: 90},
+			{ID: uuid.New().String(), Name: "Shame Resilience Theory Developer", Weight: 88},
+			{ID: uuid.New().String(), Name: "Atlas of the Heart Host", Weight: 80},
+		},
+	},
+	{
+		ID:        "tim_ferriss",
+		Name:      "Tim Ferriss",
+		Role:      "Author & Podcaster",
+		EmojiIcon: "⏱️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'The 4-Hour Workweek'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Lifestyle Design Advocate", Weight: 95},
+			{ID: uuid.New().String(), Name: "Host of 'The Tim Ferriss Show' Podcast", Weight: 95},
+			{ID: uuid.New().String(), Name: "Self-Experimentation & Optimization Expert", Weight: 90},
+			{ID: uuid.New().String(), Name: "Early-Stage Tech Investor", Weight: 85},
+			{ID: uuid.New().String(), Name: "Productivity & Time-Management Hacker", Weight: 85},
+		},
+	},
+}
+
+var GroupedTeamMembersPresets = map[string][]Person{
+	"Developers":        developersPersonaList,
+	"⭐ Universal":       universalPersonaList,
+	"Marketing":         marketingPersonaList,
+	"Sales":             salesPersonaList,
+	"CustomerSupport":   customerSupportPersonaList,
+	"Finance":           financePersonaList,
+	"ProductManagement": productManagementPersonaList,
+	"DataScience":       dataSciencePersonaList,
+	"Content Creation":  contentCreationPersonaList,
+	"Design":            designPersonaList,
 }
