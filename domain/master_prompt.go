@@ -155,7 +155,7 @@ func (m *MasterPrompt) FromBase64(input string) error {
 	return nil
 }
 
-// TODO: There are better ways to deal with it, first of all data should be stored by ID in order to identify it quicker
+// TODO: There are better ways to deal with it, first of all data should be stored by id in order to identify it quicker
 func (m *MasterPrompt) UpdateValueByID(id string, name *string, weight *int) {
 	// --- Style ---
 	for i := range m.StylePreset.Values {
@@ -279,6 +279,7 @@ func (m *MasterPrompt) RemoveTeamMemberByID(id string) {
 		}
 	}
 }
+
 func (m *MasterPrompt) AddOneEmptyField() {
 	// --- Rules ---
 	if n := len(m.RulePreset.Values); n == 0 ||
@@ -302,22 +303,32 @@ func (m *MasterPrompt) AddOneEmptyField() {
 		})
 	}
 
-	if n := len(m.TeamPreset.Values); n == 0 ||
-		m.TeamPreset.Values[n-1].Name != "" {
-
-		m.TeamPreset.Values = append(m.TeamPreset.Values, Person{
-			ID:        uuid.New().String(),
-			Name:      "",
-			EmojiIcon: "👨‍💻",
-			Role:      "",
-			Features: []Feature{{
-				ID:     uuid.New().String(),
-				Name:   "",
-				Weight: 100,
-			}},
-		})
+	// --- Team ---
+	// Filter out team members with empty names, keep only valid ones
+	validTeamMembers := make([]Person, 0)
+	for _, person := range m.TeamPreset.Values {
+		if person.Name != "" {
+			validTeamMembers = append(validTeamMembers, person)
+		}
 	}
 
+	// Add an empty team member
+	emptyMember := Person{
+		ID:        uuid.New().String(),
+		Name:      "",
+		EmojiIcon: "👨‍💻",
+		Role:      "",
+		Features: []Feature{{
+			ID:     uuid.New().String(),
+			Name:   "",
+			Weight: 100,
+		}},
+	}
+
+	// Set the team members to valid ones plus one empty
+	m.TeamPreset.Values = append(validTeamMembers, emptyMember)
+
+	// Add an empty feature to each team member if needed
 	for i := range m.TeamPreset.Values {
 		feat := m.TeamPreset.Values[i].Features
 		if len(feat) == 0 || feat[len(feat)-1].Name != "" {
@@ -328,4 +339,13 @@ func (m *MasterPrompt) AddOneEmptyField() {
 			})
 		}
 	}
+}
+
+func (m *MasterPrompt) FindMemberByID(id string) *Person {
+	for _, person := range m.TeamPreset.Values {
+		if person.ID == id {
+			return &person
+		}
+	}
+	return nil
 }
