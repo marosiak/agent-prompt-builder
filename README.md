@@ -1,5 +1,5 @@
-# Agent Prompt Builder
-The purpose is to provide tool for easy managemet of master prompts, it's all you need in order to create most usefull prompts
+# Prompt Composer
+The purpose is to provide tool for easy management of master prompts, it's all you need in order to create most usefull prompts
 
 
 ## Features

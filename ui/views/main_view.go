@@ -89,7 +89,7 @@ func (m *MainView) Render() app.UI {
 		app.Div().Class("w-1 h-1"), // no idea why it gets broken without it, doesnt look very harmfully
 		&NavbarComponent{
 			Class:          "py-2 mb-12",
-			StartComponent: app.P().Text("Agent Prompt Builder").Class("font-bold text-accent-content text-md hidden xl:inline"),
+			StartComponent: app.P().Text("Prompt Composer").Class("font-bold text-accent-content text-md hidden xl:inline"),
 			CenterComponent: &BreadcrumbsComponent{
 				Breadcrumbs: []Breadcrumb{
 					{Title: "Introduction", OnClick: func(ctx app.Context, e app.Event) { onClickBreadCrumb(ctx, 0) }, Active: m.CurrentPageIndex == 0, Completed: true},
