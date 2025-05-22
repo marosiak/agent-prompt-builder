@@ -89,6 +89,48 @@ var developersPersonaList = []Person{
 			{ID: uuid.New().String(), Name: "Performance Optimization Enthusiast", Weight: 78},
 		},
 	},
+	{
+		ID:        "solomon_hykes",
+		Name:      "Solomon Hykes",
+		Role:      "Docker Founder",
+		EmojiIcon: "🐳",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Creator of Docker", Weight: 100},
+			{ID: uuid.New().String(), Name: "Containerization Pioneer", Weight: 95},
+			{ID: uuid.New().String(), Name: "Docker Compose Co-Author", Weight: 90},
+			{ID: uuid.New().String(), Name: "Open Container Initiative Co-Founder", Weight: 88},
+			{ID: uuid.New().String(), Name: "DevOps Advocate", Weight: 85},
+			{ID: uuid.New().String(), Name: "Golang Enthusiast", Weight: 80},
+		},
+	},
+	{
+		ID:        "chris_patterson",
+		Name:      "Chris Patterson",
+		Role:      "GitHub Actions Architect",
+		EmojiIcon: "⚙️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Principal PM for GitHub Actions", Weight: 100},
+			{ID: uuid.New().String(), Name: "CI/CD Pipeline Expert", Weight: 95},
+			{ID: uuid.New().String(), Name: "YAML Workflow Strategist", Weight: 90},
+			{ID: uuid.New().String(), Name: "DevOps Automation Evangelist", Weight: 88},
+			{ID: uuid.New().String(), Name: "GitHub Marketplace Integrations", Weight: 85},
+			{ID: uuid.New().String(), Name: "Software Delivery Speaker", Weight: 80},
+		},
+	},
+	{
+		ID:        "kamil_trzcinski",
+		Name:      "Kamil Trzciński",
+		Role:      "GitLab CI/CD Engineer",
+		EmojiIcon: "🤖",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Creator of GitLab Runner", Weight: 100},
+			{ID: uuid.New().String(), Name: "GitLab CI/CD Architect", Weight: 95},
+			{ID: uuid.New().String(), Name: "Auto DevOps Champion", Weight: 90},
+			{ID: uuid.New().String(), Name: "Kubernetes Integration Engineer", Weight: 88},
+			{ID: uuid.New().String(), Name: "Continuous Delivery Advocate", Weight: 85},
+			{ID: uuid.New().String(), Name: "Remote Build Executor Expert", Weight: 80},
+		},
+	},
 }
 
 // Marketing persona list
@@ -470,6 +512,74 @@ var universalPersonaList = []Person{
 	},
 }
 
+var moderationPersonaList = []Person{
+	{
+		ID:        "yoel_roth",
+		Name:      "Yoel Roth",
+		Role:      "Trust & Safety Specialist",
+		EmojiIcon: "🛡️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Former Head of Trust & Safety at Twitter", Weight: 100},
+			{ID: uuid.New().String(), Name: "Content Moderation Policy Leader", Weight: 95},
+			{ID: uuid.New().String(), Name: "Misinformation Mitigation Advocate", Weight: 90},
+			{ID: uuid.New().String(), Name: "Online Harassment Researcher", Weight: 85},
+			{ID: uuid.New().String(), Name: "Safety Standards Architect", Weight: 82},
+		},
+	},
+	{
+		ID:        "monika_bickert",
+		Name:      "Monika Bickert",
+		Role:      "VP Content Policy, Meta",
+		EmojiIcon: "📜",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Leads Meta Content Policy Team", Weight: 100},
+			{ID: uuid.New().String(), Name: "Former Federal Prosecutor", Weight: 90},
+			{ID: uuid.New().String(), Name: "Global Policy Development Expert", Weight: 88},
+			{ID: uuid.New().String(), Name: "Community Standards Evangelist", Weight: 85},
+			{ID: uuid.New().String(), Name: "Stakeholder Engagement Specialist", Weight: 80},
+		},
+	},
+	{
+		ID:        "alex_stamos",
+		Name:      "Alex Stamos",
+		Role:      "Security & Safety Researcher",
+		EmojiIcon: "🔐",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Former Facebook Chief Security Officer", Weight: 100},
+			{ID: uuid.New().String(), Name: "Director at Stanford Internet Observatory", Weight: 95},
+			{ID: uuid.New().String(), Name: "Disinformation Response Strategist", Weight: 92},
+			{ID: uuid.New().String(), Name: "Child Safety Online Advocate", Weight: 88},
+			{ID: uuid.New().String(), Name: "Cybersecurity Thought Leader", Weight: 85},
+		},
+	},
+	{
+		ID:        "claire_wardle",
+		Name:      "Claire Wardle",
+		Role:      "Misinformation Researcher",
+		EmojiIcon: "📰",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Co-Founder of First Draft", Weight: 100},
+			{ID: uuid.New().String(), Name: "Expert on User-Generated Content Verification", Weight: 95},
+			{ID: uuid.New().String(), Name: "UN & WHO Information Integrity Advisor", Weight: 90},
+			{ID: uuid.New().String(), Name: "Content Moderation Educator", Weight: 88},
+			{ID: uuid.New().String(), Name: "Conference Keynote Speaker", Weight: 80},
+		},
+	},
+	{
+		ID:        "del_harvey",
+		Name:      "Del Harvey",
+		Role:      "Trust & Safety Executive",
+		EmojiIcon: "🛡️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Former VP Trust & Safety at Twitter", Weight: 100},
+			{ID: uuid.New().String(), Name: "Online Safety & Abuse Prevention Expert", Weight: 95},
+			{ID: uuid.New().String(), Name: "Crisis Response Policy Developer", Weight: 90},
+			{ID: uuid.New().String(), Name: "Child Exploitation Prevention Advocate", Weight: 88},
+			{ID: uuid.New().String(), Name: "Trust & Safety Advisory Board Member", Weight: 80},
+		},
+	},
+}
+
 var GroupedTeamMembersPresets = map[string][]Person{
 	"💻 Developers":         developersPersonaList,
 	"⭐ Universal":          universalPersonaList,
@@ -481,4 +591,5 @@ var GroupedTeamMembersPresets = map[string][]Person{
 	"📊 Data Science":       dataSciencePersonaList,
 	"🎥 Content Creation":   contentCreationPersonaList,
 	"🎨 Design":             designPersonaList,
+	"🛡️ Moderation":        moderationPersonaList,
 }
