@@ -1,0 +1,81 @@
+# .github/workflows/release.yml
+name: Test, Build & Deploy Pages
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: 🧪 Test & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+
+      - name: Run unit tests (race detector)
+        run: go test ./... -v -race
+
+  build:
+    name: 🔨 Build WASM & Tailwind
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y binaryen
+          sudo npm install -g tailwindcss@latest
+
+      - name: Cache tailwindcss artifacts
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/tailwindcss
+          key: ${{ runner.os }}-tailwind-${{ hashFiles('tailwind/**') }}
+          restore-keys: |
+            ${{ runner.os }}-tailwind-
+
+      - name: Run Make release
+        run: make release
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+  deploy:
+    name: 🚀 Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
