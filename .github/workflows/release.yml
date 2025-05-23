@@ -51,17 +51,18 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install Tailwind CSS CLI and build
+      - name: Install system dependencies
         run: |
-          npm install -g tailwindcss@latest
-          export PATH="$PATH:$(npm bin -g)"
-          tailwindcss --version
-          
-          # Install system dependencies
           sudo apt-get update
           sudo apt-get install -y binaryen
+
+      - name: Install Tailwind CSS and build
+        run: |
+          # Install tailwindcss locally
+          npm install tailwindcss@latest
           
-          # Run the release build with tailwind in PATH
+          # Run the release build using npx to execute tailwindcss
+          npx tailwindcss --version
           make release
 
       - name: Upload Pages artifact
