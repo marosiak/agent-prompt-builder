@@ -46,19 +46,19 @@ jobs:
           go-version: "1.22"
           cache: true
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install Tailwind CSS CLI
+        run: npm install -g tailwindcss@latest
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y binaryen
-          sudo npm install -g tailwindcss@latest
-
-      - name: Cache tailwindcss artifacts
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/tailwindcss
-          key: ${{ runner.os }}-tailwind-${{ hashFiles('tailwind/**') }}
-          restore-keys: |
-            ${{ runner.os }}-tailwind-
+          sudo apt-get install -y binaryen   # wasm-opt
 
       - name: Run Make release
         run: make release
