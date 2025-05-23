@@ -41,7 +41,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.22"
+          # Use a more specific cache key to avoid corruption
           cache: true
+          cache-dependency-path: "go.sum"
 
       - name: Run unit tests
         run: go test ./... -v
@@ -57,7 +59,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.22"
+          # Use a more specific cache key to avoid corruption
           cache: true
+          cache-dependency-path: "go.sum"
 
       - name: Set up Node
         uses: actions/setup-node@v4
