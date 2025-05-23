@@ -25,10 +25,6 @@ jobs:
     steps:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
-        with:
-          # This setting disables the automatic "pages build and deployment" workflow
-          source: "actions"
-          output_directory: "docs"
 
   test:
     name: 🧪 Test & Lint
