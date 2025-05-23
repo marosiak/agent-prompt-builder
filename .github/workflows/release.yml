@@ -56,13 +56,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y binaryen
 
-      - name: Install Tailwind CSS and build
+      - name: Download Tailwind CSS binary and build
         run: |
-          # Install tailwindcss locally
-          npm install tailwindcss@latest
+          # Download tailwindcss binary directly (specific version for stability)
+          curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v4.1.7/tailwindcss-linux-x64
+          chmod +x tailwindcss-linux-x64
+          mv tailwindcss-linux-x64 tailwindcss
           
-          # Run the release build using npx to execute tailwindcss
-          npx tailwindcss --version
+          # Verify the binary works
+          ./tailwindcss --version
+          
+          # Add to PATH for the build process
+          export PATH=$PATH:$PWD
           make release
 
       - name: Upload Pages artifact
