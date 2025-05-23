@@ -50,7 +50,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: npm
 
       - name: Install Tailwind CSS CLI
         run: npm install -g tailwindcss@latest
