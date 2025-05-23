@@ -77,7 +77,7 @@ func (m *MainView) Render() app.UI {
 
 	renderedMasterPrompt, err := m.MasterPrompt.String()
 	if err != nil {
-		slog.Error("Error rendering master prompt", err)
+		slog.Error("rendering master prompt", slog.Any("err", err))
 	}
 
 	onClickBreadCrumb := func(ctx app.Context, index int) {
@@ -251,7 +251,7 @@ func (m *MainView) copyLinkPressed() func(ctx app.Context, e app.Event) {
 	return func(ctx app.Context, e app.Event) {
 		recipeBase64, err := m.MasterPrompt.ToBase64()
 		if err != nil {
-			slog.Error("Error encoding master prompt to base64", err)
+			slog.Error("encoding master prompt to base64", slog.Any("err", err))
 			return
 		}
 
@@ -567,7 +567,7 @@ func (m *MainView) renderWeightControlledName(id string, name string, weight int
 				return func(ctx app.Context, e app.Event) {
 					newWeight, err := strconv.Atoi(ctx.JSSrc().Get("value").String())
 					if err != nil {
-						slog.Error("Error converting weight to int", err)
+						slog.Error("converting weight to int", slog.Any("err", err))
 						return
 					}
 					m.MasterPrompt.UpdateValueByID(capturedID, nil, &newWeight)
