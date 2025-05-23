@@ -181,7 +181,7 @@ func (m *MainView) renderWelcomeCard() *CardComponent {
 			app.H2().Text("Tutorial").Class("text-xl font-bold mb-4"),
 			app.P().Text("This is a tool to help you generate a master prompt for your LLM agent.").Class("text-md opacity-80 mb-1"),
 			app.P().Text("Data is stored in your browser, so you won't lose anything after refresh").Class("text-md opacity-80 mb-12"),
-			app.P().Text("Navigate by clicking links at top").Class("text-md opacity-80 mb-2"),
+			app.P().Text("Navigate by clicking links at top.").Class("text-md opacity-80 mb-2"),
 			app.P().Text("You can also use arrows via your keyboard!").Class("text-md opacity-80 font-bold mb-6"),
 			&StepsComponent{
 				IsVertical: true,
