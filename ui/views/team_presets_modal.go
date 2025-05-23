@@ -17,11 +17,9 @@ type TeamPresetsModal struct {
 }
 
 func (t *TeamPresetsModal) OnMount(ctx app.Context) {
-	ctx.Dispatch(func(ctx app.Context) {
-		var masterPrompt domain.MasterPrompt
-		ctx.GetState(state.MasterPromptKey(), &masterPrompt)
-		t.masterPrompt = &masterPrompt
-	})
+	var masterPrompt domain.MasterPrompt
+	ctx.GetState(state.MasterPromptKey(), &masterPrompt)
+	t.masterPrompt = &masterPrompt
 
 	var tmp domain.MasterPrompt
 	ctx.ObserveState(state.MasterPromptKey(), &tmp).OnChange(func() {
