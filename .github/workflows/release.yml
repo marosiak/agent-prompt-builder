@@ -8,6 +8,7 @@ on:
     branches: [ "master" ]
   workflow_dispatch:
 
+# Define permissions needed for GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -18,8 +19,20 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Configure GitHub Pages to use only this workflow for deployment
+  configure-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+        with:
+          # This setting disables the automatic "pages build and deployment" workflow
+          source: "actions"
+          output_directory: "docs"
+
   test:
     name: 🧪 Test & Lint
+    needs: configure-pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -1,0 +1,22 @@
+# This file tells GitHub to use GitHub Actions for Pages deployment exclusively
+# and disables the automatic "pages build and deployment" workflow
+
+name: GitHub Pages Config
+
+on:
+  push:
+    branches: [ "master" ]
+    # Only run this workflow once to configure Pages settings
+    paths:
+      - '.github/workflows/pages.yml'
+
+jobs:
+  configure-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+        with:
+          # This is the key setting that disables the automatic build and deploy
+          source: "actions"
+          output_directory: "docs"
