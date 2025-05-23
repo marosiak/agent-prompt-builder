@@ -183,17 +183,6 @@ func (m *MainView) renderWelcomeCard() *CardComponent {
 			app.P().Text("Data is stored in your browser, so you won't lose anything after refresh").Class("text-md opacity-80 mb-12"),
 			app.P().Text("Navigate by clicking links at top").Class("text-md opacity-80 mb-2"),
 			app.P().Text("You can also use arrows via your keyboard!").Class("text-md opacity-80 font-bold mb-6"),
-			&StepsComponent{
-				IsVertical: true,
-				Steps: []Step{
-					{Title: "Think about your needs", Active: true},
-					{Title: "Create 📜 Rules", Active: true},
-					{Title: "Define 🤌🏻Style guidelines", Active: true},
-					{Title: "Assign virtual 👨‍💻 Team", Active: true},
-					{Title: "Copy output", Active: true},
-					{Title: "Paste into Chat GPT / other LLM", Active: true},
-				},
-			},
 		},
 	}
 }
