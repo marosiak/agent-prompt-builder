@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/marosiak/agent-prompt-builder/config"
-	"github.com/marosiak/agent-prompt-builder/ui/views"
+	"github.com/marosiak/agent-prompt-builder/ui/pages"
 	"log"
 	"net/http"
 
+	"github.com/marosiak/agent-prompt-builder/config"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 )
 
@@ -15,10 +15,10 @@ import (
 func main() {
 
 	app.Route("/", func() app.Composer {
-		return &views.MainView{}
+		return &pages.MainPage{}
 	})
 	app.Route("/import", func() app.Composer {
-		return &views.ImportView{}
+		return &pages.ImportPage{}
 	})
 
 	config.RegisterRoutes()

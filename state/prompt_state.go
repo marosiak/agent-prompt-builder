@@ -44,7 +44,7 @@ func GetMasterPrompt(ctx app.Context) domain.MasterPrompt {
 
 func getDefaultMasterPrompt() domain.MasterPrompt {
 	return domain.MasterPrompt{
-		Template:    domain.CodingInUnityTemplate,
+		Template:    domain.CodingTemplate,
 		StylePreset: domain.StylePresetShortAndLazy,
 		RulePreset:  domain.RulePresetPerformanceOptimization,
 		TeamPreset:  domain.ExampleTeamPreset,

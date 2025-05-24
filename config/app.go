@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/google/uuid"
-	"github.com/marosiak/agent-prompt-builder/ui/views"
+	"github.com/marosiak/agent-prompt-builder/ui/pages"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 )
 
@@ -34,9 +34,9 @@ func GetAppHandler(isStatic bool) *app.Handler {
 
 func RegisterRoutes() {
 	app.Route("/", func() app.Composer {
-		return &views.MainView{}
+		return &pages.MainPage{}
 	})
 	app.Route("/import", func() app.Composer {
-		return &views.ImportView{}
+		return &pages.ImportPage{}
 	})
 }

@@ -16,30 +16,39 @@ import (
 type MasterPromptTemplate string
 
 func (m MasterPromptTemplate) SetStyle(style string) MasterPromptTemplate {
-	return MasterPromptTemplate(strings.ReplaceAll(string(m), "[[$$style$$]]", style))
+	return MasterPromptTemplate(strings.ReplaceAll(string(m), "$$style$$", style))
 }
 
 func (m MasterPromptTemplate) SetTeam(team string) MasterPromptTemplate {
-	return MasterPromptTemplate(strings.ReplaceAll(string(m), "[[$$team$$]]", team))
+	return MasterPromptTemplate(strings.ReplaceAll(string(m), "$$team$$", team))
 }
 
 func (m MasterPromptTemplate) SetRules(rules string) MasterPromptTemplate {
-	return MasterPromptTemplate(strings.ReplaceAll(string(m), "[[$$rules$$]]", rules))
+	return MasterPromptTemplate(strings.ReplaceAll(string(m), "$$rules$$", rules))
 }
 
-func (m MasterPromptTemplate) IsValid() (bool, error) {
+type PromptTemplateValidation struct {
+	StylePlaceholderMissing bool `json:"style_placeholder_missing"`
+	TeamPlaceholderMissing  bool `json:"team_placeholder_missing"`
+	RulesPlaceholderMissing bool `json:"rules_placeholder_missing"`
+}
+
+func (m MasterPromptTemplate) IsValid() (bool, *PromptTemplateValidation) {
 	str := string(m)
 
-	if !strings.Contains(str, "[[$$style$$]]") {
-		return false, fmt.Errorf("template is missing $$style$$ placeholder")
-	}
-	if !strings.Contains(str, "[[$$team$$]]") {
-		return false, fmt.Errorf("template is missing $$team$$ placeholder")
-	}
-	if !strings.Contains(str, "[[$$rules$$]]") {
-		return false, fmt.Errorf("template is missing $$rules$$ placeholder")
+	validation := &PromptTemplateValidation{
+		StylePlaceholderMissing: !strings.Contains(str, "$$style$$"),
+		TeamPlaceholderMissing:  !strings.Contains(str, "$$team$$"),
+		RulesPlaceholderMissing: !strings.Contains(str, "$$rules$$"),
 	}
 
+	if validation.StylePlaceholderMissing || validation.TeamPlaceholderMissing || validation.RulesPlaceholderMissing {
+		slog.Error("Master prompt template is invalid",
+			slog.Bool("style_placeholder_missing", validation.StylePlaceholderMissing),
+			slog.Bool("team_placeholder_missing", validation.TeamPlaceholderMissing),
+			slog.Bool("rules_placeholder_missing", validation.RulesPlaceholderMissing))
+		return false, validation
+	}
 	return true, nil
 }
 
@@ -57,7 +66,7 @@ func (f WeightedString) String() string {
 		}
 	}
 	if f.Weight == 0 {
-		return fmt.Sprintf("[WEIGHT: unspecified] %s", name)
+		return fmt.Sprintf("[WEIGHT: ?] %s", name)
 	}
 
 	return fmt.Sprintf("[WEIGHT: %d] %s", f.Weight, f.Name)
@@ -230,9 +239,9 @@ func (m *MasterPrompt) RemoveFeatureByID(featureID string) {
 func (m *MasterPrompt) String() (string, error) {
 	masterPrompt := m.Template
 
-	isValid, err := masterPrompt.IsValid()
+	isValid, _ := masterPrompt.IsValid()
 	if !isValid {
-		return "", fmt.Errorf("master prompt template is invalid: %w", err)
+		return "", fmt.Errorf("master prompt template is invalid")
 	}
 
 	styleString := ""

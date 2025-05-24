@@ -18,7 +18,7 @@ type BreadcrumbsComponent struct {
 }
 
 func (b *BreadcrumbsComponent) Render() app.UI {
-	ul := app.Ul().Class("breadcrumbs text-xl")
+	ul := app.Ul().Class("breadcrumbs text-md lg:text-xl")
 	var liList []app.UI
 	for _, breadcrumb := range b.Breadcrumbs {
 		li := app.Li()

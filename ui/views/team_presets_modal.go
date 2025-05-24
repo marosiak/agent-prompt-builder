@@ -12,24 +12,24 @@ import (
 
 type TeamPresetsModal struct {
 	app.Compo
-	modal        *components.ModalComponent
-	masterPrompt *domain.MasterPrompt
+	Modal        *components.ModalComponent
+	MasterPrompt *domain.MasterPrompt
 }
 
 func (t *TeamPresetsModal) OnMount(ctx app.Context) {
 	var masterPrompt domain.MasterPrompt
 	ctx.GetState(state.MasterPromptKey(), &masterPrompt)
-	t.masterPrompt = &masterPrompt
+	t.MasterPrompt = &masterPrompt
 
 	var tmp domain.MasterPrompt
 	ctx.ObserveState(state.MasterPromptKey(), &tmp).OnChange(func() {
-		t.masterPrompt = &tmp
+		t.MasterPrompt = &tmp
 	})
 }
 
 func (t *TeamPresetsModal) Render() app.UI {
-	t.modal = t.createModalComponent()
-	return t.modal
+	t.Modal = t.createModalComponent()
+	return t.Modal
 }
 func (t *TeamPresetsModal) renderPersonDelegate(member domain.Person) app.UI {
 	return app.Div().Class("bg-red-200").Text(member.Name)
@@ -61,11 +61,11 @@ func (t *TeamPresetsModal) renderActionButton(member domain.Person) app.UI {
 	icon := components.PlusIcon
 	iconColor := "darkgreen"
 
-	if t.masterPrompt == nil {
+	if t.MasterPrompt == nil {
 		return app.Div().Text("ERROR: Master prompt is nil")
 	}
 
-	if t.masterPrompt.FindMemberByID(member.ID) != nil {
+	if t.MasterPrompt.FindMemberByID(member.ID) != nil {
 		buttonText = "Remove"
 		buttonType = "btn-secondary"
 		icon = components.TrashIcon
@@ -134,7 +134,7 @@ func (t *TeamPresetsModal) createModalComponent() *components.ModalComponent {
 	}
 
 	return &components.ModalComponent{
-		ID:               "team-presets-modal",
+		ID:               "team-presets-Modal",
 		Title:            "Import pre-defined people",
 		Subtitle:         "They all have their common features",
 		ForceShowOnMount: true,
@@ -147,7 +147,7 @@ func (t *TeamPresetsModal) onActionPressed(ctx app.Context, e app.Event) {
 	id = strings.ReplaceAll(id, "preset-member-", "")
 
 	// If not found in the presets, check if it's present in prompt
-	memberFromPrompt := t.masterPrompt.FindMemberByID(id)
+	memberFromPrompt := t.MasterPrompt.FindMemberByID(id)
 	if memberFromPrompt != nil {
 		ctx.NewActionWithValue(actions.RemovePerson, *memberFromPrompt)
 		return
