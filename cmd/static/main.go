@@ -1,20 +1,20 @@
 package main
 
 import (
+	"github.com/marosiak/agent-prompt-builder/ui/pages"
 	"log"
 
 	"github.com/marosiak/agent-prompt-builder/config"
-	"github.com/marosiak/agent-prompt-builder/ui/views"
 	"github.com/maxence-charriere/go-app/v10/pkg/app"
 )
 
 func main() {
 	// TODO fix DRY
 	app.Route("/", func() app.Composer {
-		return &views.MainPage{}
+		return &pages.MainPage{}
 	})
 	app.Route("/import", func() app.Composer {
-		return &views.ImportPage{}
+		return &pages.ImportPage{}
 	})
 
 	app.RunWhenOnBrowser()
