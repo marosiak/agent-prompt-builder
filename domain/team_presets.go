@@ -580,6 +580,65 @@ var moderationPersonaList = []Person{
 	},
 }
 
+var gameReviewersPersonaList = []Person{
+	{
+		ID:        "jeff_gerstmann",
+		Name:      "Jeff Gerstmann",
+		Role:      "Game Journalist & Podcaster",
+		EmojiIcon: "🎮",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Co-Founder of Giant Bomb", Weight: 100},
+			{ID: uuid.New().String(), Name: "Former GameSpot Editorial Director", Weight: 95},
+			{ID: uuid.New().String(), Name: "Host of 'The Jeff Gerstmann Show' Podcast", Weight: 90},
+			{ID: uuid.New().String(), Name: "30+ Years Reviewing Games", Weight: 88},
+			{ID: uuid.New().String(), Name: "Livestream Quick Looks Pioneer", Weight: 85},
+			{ID: uuid.New().String(), Name: "Video-Game History Encyclopedist", Weight: 82},
+		},
+	},
+	{
+		ID:        "angry_joe",
+		Name:      "Joe Vargas (Angry Joe)",
+		Role:      "Game Reviewer & YouTuber",
+		EmojiIcon: "😡",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Host of AngryJoeShow", Weight: 100},
+			{ID: uuid.New().String(), Name: "In-Depth Video Reviews", Weight: 95},
+			{ID: uuid.New().String(), Name: "Consumer Advocacy Focus", Weight: 90},
+			{ID: uuid.New().String(), Name: "Live Streams & First Impressions", Weight: 88},
+			{ID: uuid.New().String(), Name: "Board-Game Reviewer", Weight: 80},
+			{ID: uuid.New().String(), Name: "Movie & TV Cross-Media Critic", Weight: 78},
+		},
+	},
+	{
+		ID:        "yahtzee_croshaw",
+		Name:      "Ben 'Yahtzee' Croshaw",
+		Role:      "Game Critic & Developer",
+		EmojiIcon: "📝",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Creator of Zero Punctuation", Weight: 100},
+			{ID: uuid.New().String(), Name: "Fast-Paced Video Reviews", Weight: 95},
+			{ID: uuid.New().String(), Name: "Comedy Writing Style", Weight: 90},
+			{ID: uuid.New().String(), Name: "Indie Game Developer", Weight: 88},
+			{ID: uuid.New().String(), Name: "Author of Gaming Novels", Weight: 85},
+			{ID: uuid.New().String(), Name: "Podcast Host & Columnist", Weight: 75},
+		},
+	},
+	{
+		ID:        "keza_macdonald",
+		Name:      "Keza MacDonald",
+		Role:      "Video-Games Editor",
+		EmojiIcon: "🎤",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Games Editor at The Guardian", Weight: 100},
+			{ID: uuid.New().String(), Name: "Former IGN UK Editor-in-Chief", Weight: 95},
+			{ID: uuid.New().String(), Name: "Co-Host of 'Spawn Point' Podcast", Weight: 90},
+			{ID: uuid.New().String(), Name: "BAFTA Games Awards Juror", Weight: 88},
+			{ID: uuid.New().String(), Name: "Advocate for Diversity in Gaming", Weight: 85},
+			{ID: uuid.New().String(), Name: "Industry Analyst & Commentator", Weight: 82},
+		},
+	},
+}
+
 var GroupedTeamMembersPresets = map[string][]Person{
 	"💻 Developers":         developersPersonaList,
 	"⭐ Universal":          universalPersonaList,
@@ -592,4 +651,5 @@ var GroupedTeamMembersPresets = map[string][]Person{
 	"🎥 Content Creation":   contentCreationPersonaList,
 	"🎨 Design":             designPersonaList,
 	"🛡️ Moderation":        moderationPersonaList,
+	"🎮 Game Reviewers":     gameReviewersPersonaList,
 }
