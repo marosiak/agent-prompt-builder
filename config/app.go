@@ -10,16 +10,16 @@ const PORT = ":8000"
 
 func GetAppHandler(isStatic bool) *app.Handler {
 	handler := &app.Handler{
-		Title:       "Master Prompt Builder",
-		Name:        "Master prompt builder",
-		Description: "Will help you with building agents",
+		Title:       "Prompt Composer",
+		Name:        "Prompt Composer",
+		Description: "Will help you with building master prompts",
 		Version:     uuid.New().String(),
 	}
 
 	styles := []string{"/bundle.css"}
 
 	if isStatic {
-		handler.Resources = app.GitHubPages("agent-prompt-builder")
+		handler.Resources = app.GitHubPages("prompt-composer")
 	} else {
 		var tmpStyles []string
 		for _, style := range styles {

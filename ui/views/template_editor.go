@@ -13,6 +13,11 @@ import (
 type TemplateEditorComponent struct {
 	app.Compo
 	MasterPrompt domain.MasterPrompt
+	currentText  string // mutable during lifecycle, loaded OnMount
+}
+
+func (t *TemplateEditorComponent) OnMount(ctx app.Context) {
+	t.currentText = string(t.MasterPrompt.Template)
 }
 
 func (t *TemplateEditorComponent) Render() app.UI {
@@ -63,7 +68,7 @@ func (t *TemplateEditorComponent) Render() app.UI {
 			}),
 			app.Textarea().Class("textarea textarea-bordered h-80 w-full").
 				Placeholder("Enter your master prompt template here").
-				Text(t.MasterPrompt.Template).
+				Text(t.currentText).
 				OnChange(onMasterPromptTemplateChanged).OnKeyUp(onMasterPromptTemplateChanged),
 		},
 	}
