@@ -1,5 +1,6 @@
 # Prompt Composer
 https://marosiak.github.io/prompt-composer/
+
 The purpose is to provide tool for easy management of master prompts, it's all you need in order to create most usefull prompts
 
 
