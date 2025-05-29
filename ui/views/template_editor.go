@@ -59,6 +59,7 @@ func (t *TemplateEditorComponent) Render() app.UI {
 						}
 
 						t.MasterPrompt.Template = domain.MasterPromptTemplate(value)
+						t.currentText = value
 						state.SetMasterPromptWithEmptyField(ctx, &t.MasterPrompt)
 					},
 				},

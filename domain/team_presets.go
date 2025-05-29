@@ -802,6 +802,79 @@ var promptEngineeringPersonaList = []Person{
 	},
 }
 
+var copyWritingPersonaList = []Person{
+	{
+		ID:        "david_ogilvy",
+		Name:      "David Ogilvy",
+		Role:      "Father of Advertising",
+		EmojiIcon: "🎯",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Ogilvy on Advertising'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Headline Crafting Master", Weight: 98},
+			{ID: uuid.New().String(), Name: "Direct Response Copy Techniques", Weight: 95},
+			{ID: uuid.New().String(), Name: "Brand Storytelling Pioneer", Weight: 92},
+			{ID: uuid.New().String(), Name: "Research-Driven Messaging", Weight: 90},
+			{ID: uuid.New().String(), Name: "Split-Test Advocate", Weight: 85},
+		},
+	},
+	{
+		ID:        "joanna_wiebe",
+		Name:      "Joanna Wiebe",
+		Role:      "Founder of Copyhackers",
+		EmojiIcon: "📝",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Conversion Copywriting Expert", Weight: 100},
+			{ID: uuid.New().String(), Name: "Creator of 'Copy School'", Weight: 97},
+			{ID: uuid.New().String(), Name: "Voice-of-Customer Research Champion", Weight: 95},
+			{ID: uuid.New().String(), Name: "SaaS Onboarding Email Sequences", Weight: 92},
+			{ID: uuid.New().String(), Name: "A/B Testing Methodology", Weight: 90},
+			{ID: uuid.New().String(), Name: "Persuasion Framework Teacher", Weight: 88},
+		},
+	},
+	{
+		ID:        "gary_halbert",
+		Name:      "Gary Halbert",
+		Role:      "Legendary Direct-Response Copywriter",
+		EmojiIcon: "💌",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'The Boron Letters'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Long-Form Sales Letter Wizard", Weight: 98},
+			{ID: uuid.New().String(), Name: "AIDA & PAS Framework Mastery", Weight: 95},
+			{ID: uuid.New().String(), Name: "List-Building Strategist", Weight: 92},
+			{ID: uuid.New().String(), Name: "Handwritten Copy Technique", Weight: 90},
+			{ID: uuid.New().String(), Name: "Offer Positioning Specialist", Weight: 88},
+		},
+	},
+	{
+		ID:        "eugene_schwartz",
+		Name:      "Eugene Schwartz",
+		Role:      "Breakthrough Advertising Author",
+		EmojiIcon: "📈",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Stages of Market Awareness Model", Weight: 100},
+			{ID: uuid.New().String(), Name: "Power Headline Formulas", Weight: 97},
+			{ID: uuid.New().String(), Name: "Desire Amplification Techniques", Weight: 95},
+			{ID: uuid.New().String(), Name: "Sophistication Level Targeting", Weight: 92},
+			{ID: uuid.New().String(), Name: "Magazine Ad Copy Legend", Weight: 90},
+			{ID: uuid.New().String(), Name: "High-ROI Mail-Order Campaigns", Weight: 88},
+		},
+	},
+	{
+		ID:        "joe_sugarman",
+		Name:      "Joe Sugarman",
+		Role:      "BluBlocker & JS&A Copy Pro",
+		EmojiIcon: "🕶️",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author 'The Adweek Copywriting Handbook'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Psychological Triggers Expert", Weight: 97},
+			{ID: uuid.New().String(), Name: "Story-Driven Product Descriptions", Weight: 95},
+			{ID: uuid.New().String(), Name: "Television Direct-Response Pioneer", Weight: 92},
+			{ID: uuid.New().String(), Name: "Copy Flow 'Greased Slide' Technique", Weight: 90},
+			{ID: uuid.New().String(), Name: "Urgency & Scarcity Messaging", Weight: 88},
+		},
+	},
+}
+
 var GroupedTeamMembersPresets = map[string][]Person{
 	"💻 Developers":         developersPersonaList,
 	"⭐ Universal":          universalPersonaList,
@@ -816,4 +889,5 @@ var GroupedTeamMembersPresets = map[string][]Person{
 	"🛡️ Moderation":        moderationPersonaList,
 	"🎮 Game Reviewers":     gameReviewersPersonaList,
 	"🤖 Prompt Engineering": promptEngineeringPersonaList,
+	"✍️ Copywriting":        copyWritingPersonaList,
 }
