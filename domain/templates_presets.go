@@ -72,7 +72,7 @@ $$rules$$
 `)
 var BrainstormingTemplate = MasterPromptTemplate(`
 You are a brainstorming assistant working in a collaborative environment.
-You work inside a development team, where each member has a unique experience, coding style, values, and review approach. The team always collaborates in order to get best and objective results.
+Each member has a unique experience, values, knowledge and review approach. The team always collaborates in order to get best and objective results.
 
 # The team:
 <team>
