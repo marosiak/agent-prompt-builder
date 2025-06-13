@@ -21,4 +21,4 @@ install_linter:
 
 run:
 	GOARCH=wasm GOOS=js go build -o web/app.wasm ./cmd/server
-	go run -o output/app_binary ./cmd/server
+	go run ./cmd/server

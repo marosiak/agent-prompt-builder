@@ -875,6 +875,62 @@ var copyWritingPersonaList = []Person{
 	},
 }
 
+// Vim / Neovim / LazyVim
+var vimPersonaList = []Person{
+	{
+		ID:        "bram_moolenaar",
+		Name:      "Bram Moolenaar",
+		Role:      "Creator of Vim",
+		EmojiIcon: "💻",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Original author of Vim (1991)", Weight: 100},
+			{ID: uuid.New().String(), Name: "Vimscript language architect", Weight: 95},
+			{ID: uuid.New().String(), Name: "Charityware licensing pioneer", Weight: 90},
+			{ID: uuid.New().String(), Name: "Ex mode & modal editing guru", Weight: 88},
+			{ID: uuid.New().String(), Name: "Optimization & portability expert", Weight: 85},
+		},
+	},
+	{
+		ID:        "tj_devries",
+		Name:      "TJ DeVries",
+		Role:      "Neovim Core Maintainer",
+		EmojiIcon: "💻",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Telescope.nvim creator", Weight: 100},
+			{ID: uuid.New().String(), Name: "Neovim Lua standard-bearer", Weight: 95},
+			{ID: uuid.New().String(), Name: "LSP client implementation lead", Weight: 92},
+			{ID: uuid.New().String(), Name: "Live-coding educator & speaker", Weight: 90},
+			{ID: uuid.New().String(), Name: "Plugin ecosystem evangelist", Weight: 88},
+		},
+	},
+	{
+		ID:        "christian_folke",
+		Name:      "Christian (folke)",
+		Role:      "LazyVim & Plugin Author",
+		EmojiIcon: "💻",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "lazy.nvim package manager author", Weight: 100},
+			{ID: uuid.New().String(), Name: "LazyVim starter template creator", Weight: 97},
+			{ID: uuid.New().String(), Name: "UI/UX plugin suite (lualine, which-key)", Weight: 94},
+			{ID: uuid.New().String(), Name: "Lua-first workflow promoter", Weight: 92},
+			{ID: uuid.New().String(), Name: "Color-scheme & aesthetics specialist", Weight: 88},
+		},
+	},
+	{
+		ID:        "drew_neil",
+		Name:      "Drew Neil",
+		Role:      "Practical Vim Author",
+		EmojiIcon: "💻",
+		Features: []Feature{
+			{ID: uuid.New().String(), Name: "Author of 'Practical Vim'", Weight: 100},
+			{ID: uuid.New().String(), Name: "Vimcasts tutorial founder", Weight: 97},
+			{ID: uuid.New().String(), Name: "Text-object & motion teaching", Weight: 94},
+			{ID: uuid.New().String(), Name: "Conference speaker & trainer", Weight: 92},
+			{ID: uuid.New().String(), Name: "Refactoring with macros expert", Weight: 88},
+		},
+	},
+}
+
 var GroupedTeamMembersPresets = map[string][]Person{
 	"💻 Developers":         developersPersonaList,
 	"⭐ Universal":          universalPersonaList,
@@ -889,5 +945,6 @@ var GroupedTeamMembersPresets = map[string][]Person{
 	"🛡️ Moderation":        moderationPersonaList,
 	"🎮 Game Reviewers":     gameReviewersPersonaList,
 	"🤖 Prompt Engineering": promptEngineeringPersonaList,
-	"✍️ Copywriting":        copyWritingPersonaList,
+	"✍️ Copywriting":       copyWritingPersonaList,
+	"🖥️  Vim/Neovim":       vimPersonaList,
 }
